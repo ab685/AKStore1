@@ -1,0 +1,84 @@
+﻿@model IEnumerable<AKStore.Models.CategoryModel>
+@{
+    ViewBag.Title = "Category";
+}
+<style>
+    img.thumbnail {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 100px; /* Set a small width */
+        max-height: 120px;
+    }
+
+    /* Add a hover effect (blue shadow) */
+    img.thumbnail:hover {
+        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+    }
+</style>
+<p>
+    <a href="@Url.Action("UpsertCategory")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Category</a>
+</p>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Category</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="success">
+                    <tr>
+                        <th>@Html.DisplayName("Category")</th>
+                        <th>@Html.DisplayName("Picture")</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td style="width:2%"><img class="thumbnail" src="@Url.Content("~/Documents/images/category/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
+                            <td style="display:flex">
+                                <a href="@Url.Action("UpsertCategory","Category",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label>Are you sure you want to delete category?</label>
+                <form method="post" action="@Url.Action("DeleteCompany","Company")">
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+      
+        function OpenDeleteModal(id) {
+            $("#DeleteModal").modal("show");
+            $("#hdnDelId").val(id);
+        }
+
+    </script>
+}

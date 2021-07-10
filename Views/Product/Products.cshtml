@@ -1,0 +1,95 @@
+﻿@model IEnumerable<AKStore.Models.ProductModel>
+
+@{
+    ViewBag.Title = "Products";
+}
+<style>
+    img.thumbnail {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 100px; /* Set a small width */
+        max-height: 120px;
+    }
+
+        /* Add a hover effect (blue shadow) */
+        img.thumbnail:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+<p>
+    <a href="@Url.Action("UpsertProduct")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Product</a>
+</p>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Products</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="success">
+                    <tr>
+                        <th>@Html.DisplayName("Product")</th>
+                        <th>@Html.DisplayName("Company")</th>
+                        <th>@Html.DisplayName("Category")</th>
+                        <th>@Html.DisplayName("Price")</th>
+                        <th>@Html.DisplayName("Quantity")</th>
+                        <th>@Html.DisplayName("Picture")</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@Html.DisplayFor(modelItem => item.Name)</td>
+                            <td>@Html.DisplayFor(modelItem => item.CompanyName) </td>
+                            <td>@Html.DisplayFor(modelItem => item.CategoryName) </td>
+                            <td>@Html.DisplayFor(modelItem => item.Price) </td>
+                            <td>@Html.DisplayFor(modelItem => item.Quantity) </td>
+                            <td style="width:2%"><img class="thumbnail" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
+                            <td style="display:flex">
+                                <a href="@Url.Action("UpsertProduct","Product",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="ProductDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label>Are you sure you want to delete product?</label>
+                <form method="post" action="@Url.Action("DeleteProduct","Product")">
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+        });
+
+        function OpenDeleteModal(id) {
+            $("#ProductDeleteModal").modal("show");
+            $("#hdnDelId").val(id);
+        }
+
+    </script>
+}

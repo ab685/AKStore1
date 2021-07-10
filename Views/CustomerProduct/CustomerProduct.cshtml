@@ -1,0 +1,122 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model IPagedList<AKStore.Models.ProductModel>
+
+@{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    ViewBag.Title = "Products";
+}
+<style>
+    .col.mb-5 {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .pagination {
+        margin: 0;
+    }
+
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            background-image: linear-gradient( 135deg, #667eea 0%, #764ba2 100%);
+        }
+</style>
+
+<div class="p-2">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-12 col-md-6">
+                <form method="get">
+                    <div class="input-group">
+                        <div class="form-outline">
+                            <input type="search" id="form1" name="search" class="form-control" placeholder="search" />
+                        </div>
+                        <button type="submit" class="btn btn-grad" style="margin-top:0px;">
+                            <i class="fas fa-search"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12 col-md-6">
+                @Html.PagedListPager(Model, page => Url.Action("CustomerProduct", new { search = Request.QueryString["search"], page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })
+            </div>
+        </div>
+    </div>
+    <section class="py-5">
+        <div class="container" style="padding:0 !important">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" style="padding:0!important">
+                @foreach (var item in Model)
+                {
+                    <div class="col mb-5">
+                        <div class="card h-100 shadow-sm border">
+                            <img class="card-img-top img-thumbnail" style="max-height:30vh !important;border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
+                            <div class="card-body p-4">
+                                <div class="text-center text-gray-700">
+                                    <h6 class="fw-bolder">@item.Name</h6>
+                                    £@item.Price
+                                </div>
+                            </div>
+                            <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                <div class="text-center">
+
+                                    @using (Html.BeginForm("AddOrder", "CustomerProduct", new { productId = item.Id }, FormMethod.Post))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <div class="input-group justify-content-center mb-3">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="quantity-left-minus btn btn-sm btn-grad btn-number" id="btnMinus_@item.Id" onclick="ChangeQuantity('@item.Id',false)" data-type="minus" data-field="">
+                                                    <i class="fas fa-minus"></i>
+                                                </button>
+                                            </span>
+                                            <input type="number" id="txtQuantity_@item.Id" style="max-width:70%;margin-right:1%;margin-right:1%;margin-left:1%;padding: 0 !important;" name="Quantity" class="form-control text-center" autocomplete="off" min="1">
+                                            <span class="input-group-btn">
+                                                <button type="button" class="quantity-right-plus btn btn-sm btn-grad btn-number" id="btnPlus_@item.Id" onclick="ChangeQuantity('@item.Id',true)" data-type="plus" data-field="">
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </span>
+                                        </div>
+                                        <button type="submit" class="btn btn-block btn-grad mt-auto mb-2">
+                                            <i class="fas fa-shopping-cart"></i>
+                                            Buy now
+                                        </button>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                }
+            </div>
+        </div>
+
+    </section>
+</div>
+@section scripts{
+    <script>
+        function ChangeQuantity(id, flag) {
+            var quantity=Number( $(`#txtQuantity_${id}`).val());
+            if (flag) {
+                quantity += 1;
+            } else if(!flag){
+                if(quantity>0)
+                quantity -= 1;
+            }
+            $(`#txtQuantity_${id}`).val(quantity);
+        }
+
+        var message= '@ViewBag.Messeage';
+        var IsError='@ViewBag.IsError' =='True' ?true :false;
+        if (message && IsError) {
+            setTimeout(() => {
+                toastr.warning(message);
+            }, 1000);
+
+        } else if (message && !IsError) {
+            setTimeout(() => {
+                toastr.success(message);
+            }, 1000);
+        }
+    </script>
+}

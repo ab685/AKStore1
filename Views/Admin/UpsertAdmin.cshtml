@@ -1,0 +1,100 @@
+﻿@model AKStore.Models.AdminModel
+
+@{
+    ViewBag.Title = "Add Admin";
+}
+
+<div class="container">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card mb-4 shadow">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Admin</h6>
+                </div>
+                <div class="card-body">
+
+                    @using (Html.BeginForm())
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "small mb-1" })
+                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter First Name" } })
+                                @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "text-danger" })
+                               
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "small mb-1" })
+                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Last Name" } })
+                                @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "text-danger" })
+                                
+                            </div>
+                        </div>
+
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Phone No 1", htmlAttributes: new { @class = "small mb-1" })
+                                @Html.EditorFor(model => model.PhNo1, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Phone no" } })
+                                @Html.ValidationMessageFor(model => model.PhNo1, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                @Html.Label("Phone No 2", htmlAttributes: new { @class = "small mb-1" })
+                                @Html.EditorFor(model => model.PhNo2, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Phone no" } })
+                                @Html.ValidationMessageFor(model => model.PhNo2, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        @if (Model.Id == 0)
+                        {
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.UserName, htmlAttributes: new { @class = "small mb-1" })
+                                    @Html.EditorFor(model => model.UserName, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter User Name" } })
+                                    @Html.ValidationMessageFor(model => model.UserName, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <div class="form-group">
+                                    @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "small mb-1" })
+                                    @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter Password" } })
+                                    @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            @Html.HiddenFor(model => model.UserName)
+                            @Html.HiddenFor(model => model.Password)
+                        }
+                        <div class="col-12 col-md-12">
+                            <div class="form-group">
+                                @Html.Label("Adress", htmlAttributes: new { @class = "small mb-1" })
+                                @Html.TextAreaFor(model => model.Address, new { @class = "form-control", placeholder = "Enter Address", @rows = 1 })
+                                @Html.ValidationMessageFor(model => model.Address, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <div class="form-group">
+                                <input type="submit" value="Save" class="btn btn-grad" />
+                                <a href='@Url.Action("Admins")' class="btn  btn-secondary ">Back to List</a>
+                            </div>
+                        </div>
+                    </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

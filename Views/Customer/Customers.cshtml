@@ -1,0 +1,84 @@
+﻿@model IEnumerable<AKStore.Models.CustomerModel>
+
+@{
+    ViewBag.Title = "Customers";
+}
+
+<p>
+    <a href="@Url.Action("UpsertCustomer")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Customer</a>
+</p>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table id="tblCustomer" class="table table-bordered">
+                <thead class="success">
+                    <tr>
+                        <th>@Html.DisplayName("No")</th>
+                        <th>@Html.DisplayName("UserName")</th>
+                        <th>@Html.DisplayName("StoreName")</th>
+                        <th>@Html.DisplayName("First Name")</th>
+                        <th>@Html.DisplayName("Last Name")</th>
+                        @*<th>@Html.DisplayName("Route Name")</th>*@
+                        <th>@Html.DisplayName("Phone No1")</th>
+                        <th>@Html.DisplayName("Phone No2")</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@Html.DisplayFor(modelItem => item.SerialNo)</td>
+                        <td>@Html.DisplayFor(modelItem => item.UserName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.StoreName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.FirstName)</td>
+                        <td>@Html.DisplayFor(modelItem => item.LastName)</td>
+                        @*<td>@Html.DisplayFor(modelItem => item.RouteName)</td>*@
+                        <td>@Html.DisplayFor(modelItem => item.PhNo1)</td>
+                        <td>@Html.DisplayFor(modelItem => item.PhNo2)</td>
+                        <td style="display:flex">
+                            <a href="@Url.Action("UpsertCustomer","Customer",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                            <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CustomerDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Customer</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label>Are you sure you want to delete customer?</label>
+                <form method="post" action="@Url.Action("DeleteCustomer","Customer")">
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+        });
+
+        function OpenDeleteModal(id) {
+            $("#CustomerDeleteModal").modal("show");
+            $("#hdnDelId").val(id);
+        }
+
+    </script>
+}

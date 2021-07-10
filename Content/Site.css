@@ -1,0 +1,247 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+
+.ui-datepicker {
+    background-color: #fff;
+}
+
+.ui-datepicker-header {
+    background-color: rgb(97, 110, 255);
+}
+
+.ui-datepicker-title {
+    color: white;
+}
+
+.ui-widget-content .ui-state-default {
+    border: 0px;
+    text-align: center;
+    background: #fff;
+    font-weight: normal;
+    color: #000;
+}
+
+    .ui-widget-content .ui-state-default:hover {
+        border: 0px;
+        text-align: center;
+        background: #000;
+        font-weight: normal;
+        color: #fff;
+    }
+
+.ui-widget-content .ui-state-active {
+    border: 0px;
+    background: #616eff;
+    color: #fff;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+.thEdit {
+    width: 50px
+}
+
+.custom-control-input:focus ~
+.custom-control-label::before {
+    border-color: #a8e063 !important;
+    box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
+}
+
+.custom-control-input:checked ~
+.custom-control-label::before {
+    border-color: #a8e063 !important;
+    background-color: #a8e063 !important;
+}
+
+.custom-control-input:active ~
+.custom-control-label::before {
+    background-color: #a8e063 !important;
+    border-color: #a8e063 !important;
+}
+
+
+.custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
+    border-color: #a8e063 !important;
+}
+
+a.navbar-brand {
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+.btn-circle {
+    border-radius: 100%;
+    height: 2.5rem;
+    width: 2.5rem;
+    font-size: 1rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-error {
+    color: red;
+}
+
+.btn-grad {
+    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+    .btn-grad:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+.btn-grad {
+    margin: 5px;
+    padding: 7px 15px;
+    text-align: center;
+    text-transform: capitalize;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white !important;
+    box-shadow: 0 0 20px #eee;
+    display: inline-block;
+}
+
+.btn-delete {
+    background-image: linear-gradient(to right, #e43a15 0%, #e65245 51%, #e43a15 100%)
+}
+
+.btn-delete {
+    margin: 5px;
+    padding: 5px 15px;
+    text-align: center;
+    text-transform: capitalize;
+    transition: 0.5s;
+    background-size: 200% auto;
+    color: white !important;
+    box-shadow: 0 0 20px #eee;
+    border-radius: 50px;
+    display: block;
+}
+
+    .btn-delete:hover {
+        background-position: right center; /* change the direction of the change here */
+        color: #fff;
+        text-decoration: none;
+    }
+
+
+
+
+
+
+
+
+/*//CustomeCSS//*/
+
+/*.btn-outline-success {
+    color: #4CAF50 ;
+    border-color: #4CAF50 ;
+}
+
+ .bg-success .border-success {
+    background-color: #4CAF50 !important;
+    border-color: #4CAF50 !important;
+}*/
+.deletebutton, .editbutton {
+    font-size: 0.6rem !important;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-border {
+    border-color: gray;
+}
+
+.success {
+    /*background-image: linear-gradient(to right, #7474BF 10%, #348AC7 51%, #7474BF 70%)*/
+    color: #0061f2 !important;
+}
+
+body {
+    background-color: #eef7f7;
+}
+/*///CustomeCSS///*/
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+   font-size: 12px;
+}
+
+@media (min-width: 768px) {
+    html {
+       font-size: 14px;
+    }
+}
+
+.border-top {
+    border-top: 1px solid #e5e5e5;
+}
+
+.border-bottom {
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+    font-size: 1rem;
+    line-height: inherit;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    /* Margin bottom by footer height */
+    margin-bottom: 60px;
+    font-family:Arial, Helvetica, sans-serif;
+}
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px; /* Vertically center the text there */
+}
+

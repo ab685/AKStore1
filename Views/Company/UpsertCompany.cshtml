@@ -1,0 +1,118 @@
+﻿@model AKStore.Models.CompanyModel
+
+@{
+    ViewBag.Title = "Add Company";
+}
+<style>
+    img {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 150px; /* Set a small width */
+        max-height: 150px;
+    }
+
+        /* Add a hover effect (blue shadow) */
+        img:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+<div class="container" style="margin:0px;padding:0px;">
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card shadow">
+                <div class="card-header">
+                    <h6 class="m-0 font-weight-bold text-primary">Company</h6>
+                </div>
+                <div class="card-body">
+
+                    @using (Html.BeginForm("UpsertCompany", "Company", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <div class="form-horizontal">
+
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="row">
+
+
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Company", htmlAttributes: new { @class = "mb-1" })
+                                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+
+                                <div class="col-12  col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Category", htmlAttributes: new { @class = "mb-1" })
+
+                                        @*@Html.EditorFor(model => model.RouteId, new { htmlAttributes = new { @class = "form-control" } })*@
+                                        @Html.DropDownListFor(model => model.CategoryId, Model.Category, "--Select--", new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.CategoryId, "", new { @class = "text-danger" })
+
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-12">
+                                    <div class="form-group">
+                                        @Html.Label("Description", htmlAttributes: new { @class = "mb-1" })
+                                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                                        @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Company Image", htmlAttributes: new { @class = "mb-1" })
+                                        <input type="file" class="form-control" id="file" name="file" accept="image/*" onchange="loadFile(event)" />
+                                        @Html.ValidationMessageFor(model => model.file, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        @if (!string.IsNullOrEmpty(Model.FilePath))
+                                        {
+                                            <img id="imgPreview" src="@Url.Content("~/Documents/images/company/"+Model.FilePath)" />
+                                        }
+                                        else
+                                        {
+                                            <img id="imgPreview" style="display:none" />
+                                        }
+                                    </div>
+                                </div>
+
+                                <div class="col-12 col-md-12">
+                                    <div class="form-group">
+                                        <div class="form-group">
+                                            <input type="submit" value="Save" class="btn btn-grad" />
+                                            <a href='@Url.Action("Company")' class="btn  btn-secondary ">Back to List</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+@section scripts {
+    <script>
+        var loadFile = function (event) {
+            var output = document.getElementById('imgPreview');
+            output.src = URL.createObjectURL(event.target.files[0]);
+            if (output.src) {
+                $("#imgPreview").show();
+            } else {
+                $("#imgPreview").hide();
+            }
+            output.onload = function () {
+                URL.revokeObjectURL(output.src) // free memory
+            }
+        };
+    </script>
+}

@@ -1,0 +1,251 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>@ViewBag.Title</title>
+    <link rel="stylesheet" href="~/Content/bootstrap/dist/css/bootstrap.min.css" />
+
+    <link href="~/Content/fontawesome-free/css/all.min.css" rel="stylesheet" />
+    <link href="~/Content/Vendor/DairyCRM.min.css" rel="stylesheet" />
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.2/css/bootstrap.css" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/1.10.23/css/dataTables.bootstrap4.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+          rel="stylesheet">
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/css/toastr.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/Content/Site.css" />
+</head>
+<body>
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled" id="accordionSidebar">
+            @*<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">*@
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
+                <div class="sidebar-brand-icon rotate-n-15 small">
+                    @*<i class="fas fa-laugh-wink"></i>*@
+                    Apex computers
+                </div>
+                <div class="sidebar-brand-text mx-3">Dairy CRM</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>@Html.DisplayName("Dashboard")</span>
+                </a>
+            </li>
+
+
+            @if (Convert.ToInt32(Session["RoleId"]) == 3)
+            {
+                <!-- Nav Item - Pages Collapse Menu -->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Products","Product")">
+                        <i class="fas fa-blender-phone"></i>
+                        <span>@Html.DisplayName("Products")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Customers","Customer")">
+                        <i class="fas fa-user-circle"></i>
+                        <span>@Html.DisplayName("Customers")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Category","Category")">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>@Html.DisplayName("Category")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Company","Company")">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>@Html.DisplayName("Company")</span>
+                    </a>
+                </li>
+            }
+            else if (Convert.ToInt32(Session["RoleId"]) == 5)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("CustomerProduct","CustomerProduct")">
+                        <i class="fas fa-blender-phone"></i>
+                        <span>@Html.DisplayName("Products")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("OrderedProducts","CustomerProduct")">
+                        <i class="fas fa-user-circle"></i>
+                        <span>@Html.DisplayName("Orders")</span>
+                    </a>
+                </li>
+            }
+            else if (Convert.ToInt32(Session["RoleId"]) == 2)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Distributors"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-people-carry"></i>
+                        <span>@Html.DisplayName("Distributors")</span>
+                    </a>
+                    <div id="Distributors" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @Html.ActionLink("Show Distributors", "Distributors", "Distributor", new { area = "" }, new { @class = "collapse-item" })
+                            @Html.ActionLink("Add Distributors", "UpsertDistributor", "Distributor", new { id = 0 }, new { @class = "collapse-item" })
+                        </div>
+                    </div>
+                </li>
+            }
+            else if (Convert.ToInt32(Session["RoleId"]) == 1)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Admins"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-users-cog"></i>
+                        <span>@Html.DisplayName("Admins")</span>
+                    </a>
+                    <div id="Admins" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @Html.ActionLink("Show Admins", "Admins", "Admin", new { area = "" }, new { @class = "collapse-item" })
+                            @Html.ActionLink("Add Admin", "UpsertAdmin", "Admin", new { id = 0 }, new { @class = "collapse-item" })
+                        </div>
+                    </div>
+                </li>
+            }
+            @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3 || Convert.ToInt32(Session["RoleId"]) == 4)
+            {
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("UserDetails","Common")">
+                        <i class="fas fa-user-circle"></i>
+                        <span>@Html.DisplayName("Profile")</span>
+                    </a>
+                </li>
+            }
+
+            <hr class="sidebar-divider my-0">
+
+            <li class="nav-item active">
+
+                <a class="nav-link collapsed" href="@Url.Action("Logout","Login")"
+                   aria-expanded="true" aria-controls="collapseTwo">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span> @Html.DisplayName("Logout")</span>
+                </a>
+
+
+
+            </li>
+            <hr class="sidebar-divider my-0">
+            <br />
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+        </ul>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+
+
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <ul class="navbar-nav ml-auto">
+
+
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a title="Language" class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-globe-americas"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="languageDropdown">
+                                @Html.ActionLink("English", "Language", "Login", new { lan = "en" }, new { @class = "dropdown-item" })
+                                @Html.ActionLink("Gujrati", "Language", "Login", new { lan = "gu-IN" }, new { @class = "dropdown-item" })
+                            </div>
+                        </li>
+
+                    </ul>
+                </nav>
+                <div class="container-fluid">
+                    @RenderBody()
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        @*<span>Copyright &copy; Your Website 2020</span>*@
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+
+    <script src="~/Content/jquery/dist/jquery.min.js"></script>
+    <script src="~/Content/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/Content/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+    <script src="~/Content/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.0.1/js/toastr.js"></script>
+    <script src="~/Content/Vendor/DairyCRM.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.23/js/dataTables.bootstrap4.min.js"></script>
+    @RenderSection("scripts", required: false)
+    <script>
+        $(document).ready(function () {
+
+            $('table').addClass("table-striped");
+            $('table').DataTable({
+                retrieve: true,
+                "pageLength": 50
+            });
+
+        });
+
+
+        function parseJsonDate(jsonDateString) {
+            return new Date(parseInt(jsonDateString.replace('/Date(', '')));
+        }
+        function parseJsonFormattedDate(jsonDateString) {
+            var date = new Date(parseInt(jsonDateString.replace('/Date(', '')));
+            return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();
+        }
+
+        function ConvertDateToDDMMYY(dateString) {
+            var dateArr = dateString.split('/');
+            return (dateArr[1] + '/' + dateArr[0] + '/' + dateArr[2]);
+        }
+        function GenrateDropDown(value, text) {
+            return "<option value=" + value + ">" + text + "</option>";
+        }
+    </script>
+</body>
+</html>

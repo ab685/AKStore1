@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AKStore", "AKStore.csproj", "{0CC2E28B-7986-440A-B170-02057101D03C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0CC2E28B-7986-440A-B170-02057101D03C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0CC2E28B-7986-440A-B170-02057101D03C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0CC2E28B-7986-440A-B170-02057101D03C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0CC2E28B-7986-440A-B170-02057101D03C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {563CFDAC-B9F1-4840-8426-397D89363798}
+	EndGlobalSection
+EndGlobal

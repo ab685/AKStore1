@@ -1,0 +1,138 @@
+﻿@model IEnumerable<AKStore.Models.OrderModels>
+
+@{
+    ViewBag.Title = "Ordered Products";
+}
+<style>
+    img.thumbnail {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 4px; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 100px; /* Set a small width */
+        max-height: 120px;
+    }
+
+        /* Add a hover effect (blue shadow) */
+        img.thumbnail:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+</style>
+<p>
+    <a href="@Url.Action("CustomerProduct")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Order</a>
+</p>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">My orders</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="success">
+                    <tr>
+                        
+                        <th>
+                            @Html.DisplayNameFor(model => model.ProductName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Price)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Quantity)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Total)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.OrderDate)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FilePath)
+                        </th>
+                        <th>
+
+                        </th>
+
+
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                       
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Total)
+                        </td>
+                        <td>
+                            @item.OrderDate.Value.ToString("d")
+                        </td>
+                        <td style="width:2%">
+                            <img class="thumbnail" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" />
+                        </td>
+                        @if (item.OrderStatusId == 1)
+                        {
+
+                            <td style="display:flex">
+                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td style="display:flex">
+                            </td>
+                        }
+                    </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Order</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label>Are you sure you want to cancel order?</label>
+                <form method="post" action="@Url.Action("CancelOrderByCustmer","CustomerProduct")">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <button type="submit" class="btn btn-delete">Yes</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">No</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+
+        function OpenDeleteModal(id) {
+            $("#DeleteModal").modal("show");
+            $("#hdnDelId").val(id);
+        }
+        var message = '@ViewBag.Messeage';
+
+       if (message) {
+            setTimeout(() => {
+                toastr.success(message);
+            }, 1000);
+        }
+    </script>
+}

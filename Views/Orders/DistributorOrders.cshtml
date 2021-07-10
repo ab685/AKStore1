@@ -1,0 +1,210 @@
+﻿<style>
+    img.thumbnail {
+        border: 1px solid #ddd; /* Gray border */
+        border-radius: 50%; /* Rounded border */
+        padding: 5px; /* Some padding */
+        width: 60px; /* Set a small width */
+        max-height: 60px;
+    }
+
+        /* Add a hover effect (blue shadow) */
+        img.thumbnail:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
+
+    .product-photo {
+        display: inline-block;
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background-size: 52px 55px;
+        background-position: center center;
+        vertical-align: middle;
+        line-height: 42px;
+        box-shadow: inset 0 0 1px #999, inset 0 0 10px rgb(0 0 0 / 20%);
+        margin-right: 5px;
+    }
+
+    .product-name {
+        display: inline;
+        vertical-align: middle;
+        line-height: 42px;
+        padding-left: 3px;
+    }
+</style>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <label>Customer</label>
+                    <select id="drpCustomers" class="form-control" onchange="GetOrderData()">
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label style="text-align:center">Order Status</label>
+                    <select id="drpOrderStatus" class="form-control" onchange="GetOrderData()">
+                        <option value="0">-Select-</option>
+                        <option value="1">Ordered</option>
+                        <option value="2">Confirmed</option>
+                        <option value="2">Confirmed</option>
+                        <option value="2">Delivered</option>
+                        <option value="2">Canceled</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="saleDate" style="display:block">From Date</label>
+                    <input type="text" id="FromDate" class="form-control datepicker" style="background-color: white;" readonly />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="saleDate" style="display:block">To Date</label>
+                    <input type="text" id="ToDate" class="form-control datepicker" style="background-color:white;" readonly />
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="col-12">
+                    <button class="btn btn-sm btn-outline-primary">Bill</button>
+                    <button class="btn btn-sm btn-outline-warning">Deliverd</button>
+                    <button class="btn btn-sm btn-outline-secondary">Cancel</button>
+                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                </div>
+                <div class="table-responsive" id="divOrder" style="margin:20px;">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+    $(document).ready(function () {
+        ConfigureDate();
+        GetCustomers();
+    });
+    function ConfigureDate() {
+            var today = new Date();
+            var previoisMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
+
+            $("#FromDate").datepicker({
+
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                maxDate: today
+            });
+
+            $("#FromDate").datepicker("setDate", previoisMonthDate)
+                .on("change", function () {
+                    GetOrderData();
+                });
+            $("#ToDate").datepicker({
+
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                maxDate: today
+
+            })
+            $("#ToDate").datepicker("setDate", today)
+                .on("change", function () {
+                    GetOrderData();
+                });
+        }
+    function GetCustomers() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCustomerData", "Customer")',
+                success: function (response) {
+                    if (response.Success) {
+
+                   var htmlRoute = "<option value=" + 0 + ">--Select--</option>";
+                        response.Data.filter(function (item) {
+                            htmlRoute += GenrateDropDown(item.Id, item.StoreName);
+                        });
+                        $("#drpCustomers").html(htmlRoute);
+                        GetOrderData();
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+         function GetOrderData() {
+             var customerId = $("#drpCustomers").val();
+             var orderStatusId = $("#drpOrderStatus").val();
+             var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
+             var toDate = ConvertDateToDDMMYY($("#ToDate").val());
+             var postData = {
+                 CustomerId: customerId,
+                 OrderStatusId: orderStatusId,
+                 FromDate: fromDate,
+                 ToDate: toDate
+             };
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("DistributorOrdersData", "Orders")',
+                data: postData,
+                success: function (response) {
+                    if (response.Success) {
+
+                        var strHtml = `<table class="table table-bordered" id="tblOrder">
+                                    <thead class="success">
+                                        <tr>
+                                            <th></th>
+                                            <th style='display:none'></th>
+                                            <th>Product</th>
+
+                                            <th>Store</th>
+                                            <th>Unit Price</th>
+                                            <th>Qty</th>
+                                            <th>Total</th>
+                                            <th>Date</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>`;
+                        response.data.forEach(function (item) {
+                            strHtml += `<tr>
+                                    <td><input type='checkbox' id=chk_${item.Id}_pr /></td>
+                                    <td style="display:none">${item.Id}</td>
+                                    <td>
+                                        <div class="product-photo" style="background-image:url('/Documents/images/product/${item.FilePath ?? "NoImage.png"}')" ></div>
+                                        <div class="product-name">${item.ProductName}</div>
+                                     </td>
+                                    <td>${item.StoreName}</td>
+                                    <td>${item.Price}</td>
+                                    <td>${item.Quantity}</td>
+                                    <td>${item.Total}</td>
+                                    <td>${parseJsonFormattedDate(item.OrderDate)}</td>
+                                    <td><button class='btn btn-sm btn-outline-warning'>Edit</button></td>
+                               </tr>`;
+                        });
+                        strHtml += `</table>`;
+                        $("#divOrder").html(strHtml);
+                        $('#tblOrder').addClass("table-striped");
+                        $('#tblOrder').DataTable({
+                            "pageLength": 50,
+                        });
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        //for (var i = 1; i <= $("#tblOrder > tbody > tr").length; i++) {
+        //    console.log($("#chk_" + i + "_pr").prop("checked"), i)
+        //}
+    </script>
+}

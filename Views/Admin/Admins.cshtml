@@ -1,0 +1,142 @@
+﻿@model IEnumerable<AKStore.Models.AdminModel>
+
+@{
+    ViewBag.Title = "Admins";
+}
+<p>
+    <a href="@Url.Action("UpsertAdmin")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Admin</a>
+</p>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Admins</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="success">
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.FirstName)
+                        </th> 
+                        <th>
+                            @Html.DisplayNameFor(model => model.LastName)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.UserName)
+                        </th>
+
+                        <th class="thEdit">Password</th>
+                        <th class="thEdit">Status</th>
+                        <th class="thEdit">Edit</th>
+                    </tr>
+                </thead>
+                @foreach (var item in Model)
+                {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    <a href="#" title="Set Password" id="defualt-password-@item.Id" onclick="OpenDefualtPasswordModal('@item.UserName')" class="editbutton btn btn-outline-warning"><i class="fas fa-key"></i></a>
+                </td>
+                <td>
+                    <div class="custom-control custom-switch ">
+                        <input type="checkbox" class="custom-control-input text-success" id="customSwitch_@item.Id" onchange="OpenDeleteModal(@item.Id,this)" checked="@item.IsActive">
+                        <label class="custom-control-label" for="customSwitch_@item.Id"></label>
+                    </div>
+                </td>
+                <td style="display:flex">
+                    <a href="@Url.Action("UpsertAdmin","Admin",new { id = item.Id })" class="editbutton btn btn-sm btn-outline-primary"><i class="fas fa-pen-alt"></i></a>
+                </td>
+            </tr>
+                }
+
+            </table>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="AdminDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Admin</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label id="lblDeleteText">Are you sure you want to delete admin?</label>
+                <form method="post" action="@Url.Action("DeleteAdmin","Admin")">
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <input type="hidden" name="isActive" id="hdnChkActive" hidden />
+                    <button type="submit" class="btn btn-delete">Yes</button>
+                    <button type="button" class="btn btn-secondary " onclick="CloseDeleteModal()">No</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="SetDefualtPassworModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel1">Set Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label id="lblPasswordText">Are you sure you want to set Phone No. as Password?</label>
+                <form method="post" action="@Url.Action("SetDefualtPassword","Common")">
+                    <input type="hidden" name="userName" id="hdnUserName" />
+                    <button type="submit" class="btn btn-warning text-white">Yes</button>
+                    <button type="button" class="btn btn-secondary " onclick="CloseDefualtPassworModal()">No</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+
+        function OpenDeleteModal(id, checkBox) {
+            if ($(checkBox).prop("checked")) {
+                $("#lblDeleteText").text("Are you sure you want to activate admin?");
+                $("#hdnChkActive").val(true);
+            } else {
+                $("#lblDeleteText").text("Are you sure you want to activate admin?");
+                $("#hdnChkActive").val(false);
+            }
+            $("#hdnDelId").val(id);
+            $("#AdminDeleteModal").modal("show");
+
+        }
+        function CloseDeleteModal() {
+            var id = $("#hdnDelId").val();
+            if ($("#hdnChkActive").val() == "true") {
+                $("#customSwitch_" + id).prop("checked", false);
+            } else {
+                $("#customSwitch_" + id).prop("checked", true);
+            }
+            $("#AdminDeleteModal").modal("hide");
+        }
+        function OpenDefualtPasswordModal(userName) {
+
+            $("#hdnUserName").val(userName);
+            $("#SetDefualtPassworModal").modal("show");
+
+        }
+        function CloseDefualtPassworModal() {
+            $("#hdnUserName").val("");
+            $("#SetDefualtPassworModal").modal("hide");
+        }
+    </script>
+}
