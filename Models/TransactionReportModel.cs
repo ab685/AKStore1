@@ -3,6 +3,7 @@
     public class TransactionReportModel
     {
         public int Id { get; set; }
+        public string StoreName { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int SerialNo { get; set; }

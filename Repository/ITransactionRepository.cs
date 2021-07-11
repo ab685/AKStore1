@@ -9,7 +9,7 @@ namespace AKStore.Repository
     {
         Tuple<bool, string> UpsertTransaction(TransactionMaster transaction);
         Tuple<bool, string> DeleteTransaction(int transactionId);
-        IEnumerable<TransactionModel> GetTransaction(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate);
+        IEnumerable<TransactionModel> GetTransaction(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate);
         IEnumerable<TransactionReportModel> GetTransactionReport(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate);
         TransactionModel GetTransactionById(int id);
     }

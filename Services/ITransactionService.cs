@@ -6,11 +6,11 @@ namespace AKStore.Services
 {
     public interface ITransactionService
     {
-        IEnumerable<TransactionModel> GetTransaction(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate);
+        IEnumerable<TransactionModel> GetTransaction(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate);
 
         Tuple<bool, string> UpsertTransaction(TransactionModel transactionModel);
         Tuple<bool, string> DeleteTransaction(int id);
         TransactionModel GetTransactionById(int id);
-        IEnumerable<TransactionReportModel> GetTransactionReport(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate);
+        IEnumerable<TransactionReportModel> GetTransactionReport(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate);
     }
 }

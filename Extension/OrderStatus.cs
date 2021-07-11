@@ -10,6 +10,7 @@ namespace AKStore.Extension
         Odered = 1,
         Confirmed = 2,
         Delivered = 3,
-        Canceled = 4
+        Canceled = 4,
+        Deleted=11
     }
 }

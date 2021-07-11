@@ -5,7 +5,7 @@ namespace AKStore.Entity
     public class TransactionMaster
     {
         public int Id { get; set; }
-        public int RetailerDetailsId { get; set; }
+        public int DistributorId { get; set; }
         public int CustomerId { get; set; }
         public decimal Amount { get; set; }
         public string Notes { get; set; }

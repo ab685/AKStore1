@@ -156,6 +156,7 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Entity\Admin.cs" />
     <Compile Include="Entity\Category.cs" />
     <Compile Include="Extension\OrderStatus.cs" />
@@ -2127,6 +2128,9 @@
     <Content Include="Views\CustomerProduct\CustomerProduct.cshtml" />
     <Content Include="Views\CustomerProduct\OrderedProducts.cshtml" />
     <Content Include="Views\Orders\DistributorOrders.cshtml" />
+    <Content Include="Views\Transaction\Transaction.cshtml" />
+    <Content Include="Views\Transaction\TransactionReport.cshtml" />
+    <Content Include="Views\Transaction\UpsertTransaction.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

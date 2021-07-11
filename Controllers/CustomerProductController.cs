@@ -74,9 +74,14 @@ namespace AKStore.Controllers
             if (id <= 0)
                 return new HttpNotFoundResult("Not found record");
 
-            var orderStatusId =Convert.ToInt32(OrderStatus.Canceled);
-            var tuple = orderService.UpdateOrderStatusById(id, orderStatusId);
-            TempData["Messeage"] =tuple.Item2;
+            var orderStatusId = Convert.ToInt32(OrderStatus.Canceled);
+            List<int> ids = new List<int>()
+            {
+                id
+            };
+
+            var tuple = orderService.UpdateOrderStatusById(ids, orderStatusId);
+            TempData["Messeage"] = tuple.Item2;
             return RedirectToAction(nameof(OrderedProducts));
         }
     }

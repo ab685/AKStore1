@@ -66,24 +66,38 @@ namespace AKStore.Services
         {
             return _orderRepository.CustomerDetailsReport(fromDate, toDate, customerId, retailerId);
         }
-        public Tuple<bool, string> UpdateOrderStatusById(int id, int orderStatusId)
+        public Tuple<bool, string> UpdateOrderStatusById(List<int> ids, int orderStatusId)
         {
-            var result = _orderRepository.UpdateOrderStatusById(id, orderStatusId);
+            var result = _orderRepository.UpdateOrderStatusById(ids, orderStatusId);
             string msg = string.Empty;
             bool status = false;
             if (result == 1)
             {
-                msg = "Order canceled successfully";
                 status = true;
-            }
-            else if (result == 2)
-            {
-                msg = "Order not canceled";
-                status = false;
+                if (orderStatusId == Convert.ToInt32(OrderStatus.Odered))
+                {
+                    msg = "Selected orders are changed to Ordered status";
+                }
+                else if (orderStatusId == Convert.ToInt32(OrderStatus.Confirmed))
+                {
+                    msg = "Selected orders are changed to Confirmed status";
+                }
+                else if (orderStatusId == Convert.ToInt32(OrderStatus.Delivered))
+                {
+                    msg = "Selected orders are changed to Delivered status";
+                }
+                else if (orderStatusId == Convert.ToInt32(OrderStatus.Canceled))
+                {
+                    msg = "Selected orders are changed to Canceled status";
+                }
+                else if (orderStatusId == Convert.ToInt32(OrderStatus.Deleted))
+                {
+                    msg = "Selected orders are deleted successfully";
+                }
             }
             else
             {
-                msg = "Something went wrong";
+                msg = "Some thing went wrong";
                 status = false;
             }
             return new Tuple<bool, string>(status, msg);

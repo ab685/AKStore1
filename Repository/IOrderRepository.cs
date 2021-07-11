@@ -16,7 +16,7 @@ namespace AKStore.Repository
         List<OrderModels> GetDailyOrdersData(int retailerId, int routeId, int shift, DateTime saleDate);
         DataSet CustomerDetailsReport(DateTime fromDate, DateTime toDate, int customerId, int retailerId);
         OrderMaster GetOrderById(int id);
-        int UpdateOrderStatusById(int id, int orderStatusId);
+        int UpdateOrderStatusById(List<int> ids, int orderStatusId);
         List<DistributorOrderDataModel> GetOrderDataForDistributor(DistributorOrderModel distributorOrderModel);
     }
 

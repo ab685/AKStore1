@@ -18,9 +18,9 @@ namespace AKStore.Services
            
         }
 
-        public IEnumerable<TransactionModel> GetTransaction(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate)
+        public IEnumerable<TransactionModel> GetTransaction(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate)
         {
-            var transactionModels = _transactionRepository.GetTransaction(retailerId, customerId, fromDate, toDate);
+            var transactionModels = _transactionRepository.GetTransaction(distributorId, customerId, fromDate, toDate);
             return transactionModels;
         }
         public TransactionModel GetTransactionById(int id)
@@ -38,6 +38,7 @@ namespace AKStore.Services
            // transaction.RetailerDetailsId = retailerDetails.Id;
             transaction.InsertedByUserId = LoggedInUserId;
             transaction.UpdatedByUserId = LoggedInUserId;
+            transaction.DistributorId= Convert.ToInt32(HttpContext.Current.Session["DistributorId"]);
             return _transactionRepository.UpsertTransaction(transaction);
         }
         public Tuple<bool, string> DeleteTransaction(int id)
@@ -45,9 +46,9 @@ namespace AKStore.Services
             return _transactionRepository.DeleteTransaction(id);
         }
 
-        public IEnumerable<TransactionReportModel> GetTransactionReport(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate)
+        public IEnumerable<TransactionReportModel> GetTransactionReport(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate)
         {
-            var transactionModels = _transactionRepository.GetTransactionReport(retailerId, customerId, fromDate, toDate);
+            var transactionModels = _transactionRepository.GetTransactionReport(distributorId, customerId, fromDate, toDate);
             return transactionModels;
         }
 

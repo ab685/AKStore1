@@ -153,13 +153,23 @@ namespace AKStore.Repository
             var orderMaster = CommonOperations.Query<OrderMaster>("GetOrderById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
             return orderMaster;
         }
-        public int UpdateOrderStatusById(int id, int orderStatusId)
+        public int UpdateOrderStatusById(List<int> ids, int orderStatusId)
         {
 
             var p = new DynamicParameters();
-            p.Add("@Id", id);
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Item", typeof(Int32));
+            ids.ForEach(x => dt.Rows.Add(x));
+
+
             p.Add("@OrderStatusId", orderStatusId);
-            var res = CommonOperations.Query<int>("UpdateOrderStatusById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            p.Add("@UpdatedByUserId", Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]));
+            p.Add("@ProductIds",dt.AsTableValuedParameter("IntList"));
+            var res = 0;
+            using (var con = CommonOperations.GetConnection())
+            {
+                res = con.Query<int>("UpdateOrderStatusById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            }
             return res;
         }
 
@@ -169,8 +179,8 @@ namespace AKStore.Repository
             p.Add("@OrderStatusId", distributorOrderModel.OrderStatusId);
             p.Add("@DistributorId", distributorOrderModel.DistributorId);
             p.Add("@CustomerId", distributorOrderModel.CustomerId);
-            p.Add("@FromDate", distributorOrderModel.FromDate?? DateTime.Now.AddDays(-2));
-            p.Add("@ToDate", distributorOrderModel.ToDate?? DateTime.Now);
+            p.Add("@FromDate", distributorOrderModel.FromDate ?? DateTime.Now.AddDays(-2));
+            p.Add("@ToDate", distributorOrderModel.ToDate ?? DateTime.Now);
             var res = CommonOperations.Query<DistributorOrderDataModel>("GetDistributorOrders", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             return res;
         }

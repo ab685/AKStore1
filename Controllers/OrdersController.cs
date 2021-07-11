@@ -34,9 +34,78 @@ namespace AKStore.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { data = new List<DistributorOrderDataModel>(), Success = false,Message=ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
+                return Json(new { data = new List<DistributorOrderDataModel>(), Success = false, Message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
 
             }
         }
+
+        [HttpPost]
+
+        public ActionResult ChangeOrderStatus(List<int> selectedIds, int orderStatusId, DistributorOrderModel distributorOrderModel)
+        {
+            try
+            {
+                if (selectedIds.Count() <= 0)
+                    return new HttpNotFoundResult("Not found record");
+
+
+                var tuple = _orderService.UpdateOrderStatusById(selectedIds, orderStatusId);
+                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                distributorOrderModel.DistributorId = DistributorId;
+                var distributorOrders = _orderService.GetOrderDataForDistributor(distributorOrderModel);
+                var message = tuple.Item2;
+
+                return Json(new { data = distributorOrders, Success = true, Message = message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = new List<DistributorOrderDataModel>(), Success = false, Message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
+
+        }
+
+        [HttpPost]
+
+        public ActionResult DeleteOrder(List<int> selectedIds, int orderStatusId, DistributorOrderModel distributorOrderModel)
+        {
+            try
+            {
+                if (selectedIds.Count() <= 0)
+                    return new HttpNotFoundResult("Not found record");
+
+
+                var tuple = _orderService.UpdateOrderStatusById(selectedIds, orderStatusId);
+                TempData["Messeage"] = tuple.Item2;
+                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                distributorOrderModel.DistributorId = DistributorId;
+                var distributorOrders = _orderService.GetOrderDataForDistributor(distributorOrderModel);
+                var message = string.Empty;
+                if (orderStatusId == 1)
+                {
+                    message = "Selected orders are changed to Ordered status";
+                }
+                else if (orderStatusId == 2)
+                {
+                    message = "Selected orders are changed to Confirmed status";
+                }
+                else if (orderStatusId == 3)
+                {
+                    message = "Selected orders are changed to Delivered status";
+                }
+                else if (orderStatusId == 4)
+                {
+                    message = "Selected orders are changed to Canceled status";
+                }
+                return Json(new { data = distributorOrders, Success = true, Message = message }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = new List<DistributorOrderDataModel>(), Success = false, Message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
+
+        }
+
     }
 }

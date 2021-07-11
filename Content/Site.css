@@ -130,8 +130,7 @@ a.navbar-brand {
     background-size: 200% auto;
     color: white !important;
     box-shadow: 0 0 20px #eee;
-    border-radius: 50px;
-    display: block;
+    
 }
 
     .btn-delete:hover {

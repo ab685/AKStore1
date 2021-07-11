@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewBag.Title = "Transaction Report";
+}
+<p>
+    <a href="@Url.Action("UpsertTransaction")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> New Transaction</a>
+</p>
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Transaction</h6>
+    </div>
+    <div class="card-body">
+
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display:block">From Date:</label>
+                        <input type="text" id="frmDate" class="form-control datepicker" style="max-width:80%;display:inline;margin-right:3px;background-color:white" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display:block">To Date:</label>
+                        <input type="text" id="toDate" name="toDate" class="form-control datepicker" style="max-width:80%;display:inline;margin-right:3px;background-color:white" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display:block">Name: </label>
+                        <input type="number" id="txtCustomerNo" onchange="ChangeCustomerSelection()" class="form-control" style="width:20%;display:inline" />
+                        <select id="drpCustomer" style="width:75%;float:right;display:inline" class="form-control" onchange="GetTransactionReportData()"></select>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+        <div class="table-responsive" id="divTransaction">
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="TransactionDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Transaction</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label>Are you sure you want to delete transaction?</label>
+                <form method="post" action="@Url.Action("DeleteTransaction","Transaction")">
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var today = new Date();
+            var previoisMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
+
+            $("#frmDate").datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+            });
+
+            $("#frmDate").datepicker("setDate", previoisMonthDate)
+                .on("change", function () {
+                      GetTransactionReportData();
+                });
+
+            $("#toDate").datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy'
+            })
+
+            $("#toDate").datepicker("setDate", today)
+              .on("change", function () {
+                      GetTransactionReportData();
+              });
+
+            GetCustomerData();
+        });
+        function OpenDeleteModal(id) {
+            $("#TransactionDeleteModal").modal("show");
+            $("#hdnDelId").val(id);
+        }
+        function GetTransactionReportData() {
+            var postData = {
+                fromDate: ConvertDateToDDMMYY($("#frmDate").val()),
+                toDate: ConvertDateToDDMMYY($("#toDate").val()),
+                customerId: $("#drpCustomer").val()
+            };
+           
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetTransactionReport", "Transaction")',
+                data: postData,
+                success: function (response) {
+                    if (response.Success) {
+
+                        var strHtml =`<table class="table table-bordered" id="tblTransaction">
+                                    <thead class="success">
+                                        <tr>
+                                            
+                                            <th>Store Name</th>
+                                            <th>OpenningBalance</th>
+                                            <th>PurchasedAmount</th>
+                                            <th>PaidAmount</th>
+                                            <th>OutStanding</th>
+                                          
+                                        </tr>
+                                    </thead>`;
+                        response.Data.forEach(function (item) {
+                            strHtml += `<tr>
+                                    
+                                    <td>${item.SerialNo +" "+item.StoreName}</td>
+                                    <td>${item.OpenningBalance}</td>
+                                    <td>${item.PurchasedAmount}</td>
+                                    <td>${item.PaidAmount}</td>
+                                    <td>${item.OutStanding}</td>
+                                   
+                               </tr>`;
+                        });
+                        strHtml += `</table>`;
+                        $("#divTransaction").html(strHtml);
+                        $('#tblTransaction').addClass("table-striped");
+                        $('#tblTransaction').DataTable({
+                            "pageLength": 50,
+
+                        });
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function GetCustomerData() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCustomers", "Transaction")',
+                success: function (response) {
+                    if (response.Success) {
+                        var htmlCustomers = "<option value=" + 0 + ">--Select--</option>";
+                        response.customers.filter(function (item) {
+                            htmlCustomers += GenrateDropDown(item.Id, (item.SerialNo + " " + item.StoreName));
+                        });
+                        $("#drpCustomer").html(htmlCustomers);
+
+
+                        GetTransactionReportData()
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            })
+        }
+        function GenrateDropDown(value, text) {
+            return "<option value=" + value + ">" + text + "</option>";
+        }
+        function ChangeCustomerSelection() {
+            var customerNo = $("#txtCustomerNo").val();
+            if (!isNaN(customerNo) && customerNo > 0) {
+
+                $.each($("#drpCustomer").children(), function (index, item) {
+                    var optionTextArr = item.innerText.split(' ');
+                    if (!isNaN(optionTextArr[0])) {
+                        if (optionTextArr[0] == customerNo) {
+                            $("#drpCustomer").val(item.value);
+                            GetTransactionReportData();
+                            return false;
+                        } else {
+                            $("#drpCustomer").val(0);
+                           // GetTransactionData();
+                        }
+                    }
+                });
+            } else {
+                $("#drpCustomer").val(0);
+                GetTransactionReportData();
+            }
+        }
+
+    </script>
+}
+

@@ -16,7 +16,7 @@ namespace AKStore.Services
         List<OrderModels> GetDailyOrdersData(int retailerId, int routeId, int shift, DateTime saleDate);
         DataSet CustomerDetailsReport(DateTime fromDate, DateTime toDate, int customerId, int retailerId);
         List<DistributorOrderDataModel> GetOrderDataForDistributor(DistributorOrderModel distributorOrderModel);
-        Tuple<bool, string> UpdateOrderStatusById(int id, int orderStatusId);
+        Tuple<bool, string> UpdateOrderStatusById(List<int> ids, int orderStatusId);
     }
 
 

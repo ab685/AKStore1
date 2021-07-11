@@ -17,7 +17,7 @@ namespace AKStore.Repository
             var success = false;
             var p = new DynamicParameters();
             p.Add("@Id", transaction.Id);
-            p.Add("@RetailerDetailsId", transaction.RetailerDetailsId);
+            p.Add("@DistributorId", transaction.DistributorId);
             p.Add("@CustomerId", transaction.CustomerId);
             p.Add("@Amount", transaction.Amount);
             p.Add("@Notes", transaction.Notes);
@@ -65,10 +65,10 @@ namespace AKStore.Repository
 
             return new Tuple<bool, string>(success, message);
         }
-        public IEnumerable<TransactionModel> GetTransaction(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate)
+        public IEnumerable<TransactionModel> GetTransaction(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate)
         {
             var p = new DynamicParameters();
-            p.Add("@retailerId", retailerId);
+            p.Add("@distributorId", distributorId);
             p.Add("@customerId", customerId);
             p.Add("@fromDate", fromDate);
             p.Add("@toDate", toDate);
@@ -84,10 +84,10 @@ namespace AKStore.Repository
         }
 
 
-        public IEnumerable<TransactionReportModel> GetTransactionReport(int retailerId, int customerId, DateTime? fromDate, DateTime? toDate)
+        public IEnumerable<TransactionReportModel> GetTransactionReport(int distributorId, int customerId, DateTime? fromDate, DateTime? toDate)
         {
             var p = new DynamicParameters();
-            p.Add("@RetailerId", retailerId);
+            p.Add("@DistributorId", distributorId);
             p.Add("@CustomerId", customerId);
             p.Add("@FromDate", fromDate);
             p.Add("@ToDate", toDate);

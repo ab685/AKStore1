@@ -47,12 +47,11 @@
                 <div class="col-12 col-md-3">
                     <label style="text-align:center">Order Status</label>
                     <select id="drpOrderStatus" class="form-control" onchange="GetOrderData()">
-                        <option value="0">-Select-</option>
                         <option value="1">Ordered</option>
+                        <option value="0">All</option>
                         <option value="2">Confirmed</option>
-                        <option value="2">Confirmed</option>
-                        <option value="2">Delivered</option>
-                        <option value="2">Canceled</option>
+                        <option value="3">Delivered</option>
+                        <option value="4">Canceled</option>
                     </select>
                 </div>
                 <div class="col-12 col-md-3">
@@ -68,10 +67,11 @@
                 <br />
                 <br />
                 <div class="col-12">
-                    <button class="btn btn-sm btn-outline-primary">Bill</button>
-                    <button class="btn btn-sm btn-outline-warning">Deliverd</button>
-                    <button class="btn btn-sm btn-outline-secondary">Cancel</button>
-                    <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="GenrateBill()">Bill</button>
+                    <button class="btn btn-sm btn-outline-info" onclick="ChangeOrderStatus(2)">Confirmed</button>
+                    <button class="btn btn-sm btn-outline-warning" onclick="ChangeOrderStatus(3)">Deliverd</button>
+                    <button class="btn btn-sm btn-outline-secondary" onclick="ChangeOrderStatus(4)">Cancel</button>
+                    <button class="btn btn-sm btn-outline-danger" onclick="ChangeOrderStatus(11)">Delete</button>
                 </div>
                 <div class="table-responsive" id="divOrder" style="margin:20px;">
                 </div>
@@ -81,11 +81,11 @@
 </div>
 @section scripts {
     <script>
-    $(document).ready(function () {
-        ConfigureDate();
-        GetCustomers();
-    });
-    function ConfigureDate() {
+        $(document).ready(function () {
+            ConfigureDate();
+            GetCustomers();
+        });
+        function ConfigureDate() {
             var today = new Date();
             var previoisMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
 
@@ -118,14 +118,15 @@
                     GetOrderData();
                 });
         }
-    function GetCustomers() {
+
+        function GetCustomers() {
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("GetCustomerData", "Customer")',
                 success: function (response) {
                     if (response.Success) {
 
-                   var htmlRoute = "<option value=" + 0 + ">--Select--</option>";
+                        var htmlRoute = "<option value=" + 0 + ">--All--</option>";
                         response.Data.filter(function (item) {
                             htmlRoute += GenrateDropDown(item.Id, item.StoreName);
                         });
@@ -138,17 +139,18 @@
                 }
             });
         }
-         function GetOrderData() {
-             var customerId = $("#drpCustomers").val();
-             var orderStatusId = $("#drpOrderStatus").val();
-             var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
-             var toDate = ConvertDateToDDMMYY($("#ToDate").val());
-             var postData = {
-                 CustomerId: customerId,
-                 OrderStatusId: orderStatusId,
-                 FromDate: fromDate,
-                 ToDate: toDate
-             };
+
+        function GetOrderData() {
+            var customerId = $("#drpCustomers").val();
+            var orderStatusId = $("#drpOrderStatus").val();
+            var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
+            var toDate = ConvertDateToDDMMYY($("#ToDate").val());
+            var postData = {
+                CustomerId: customerId,
+                OrderStatusId: orderStatusId,
+                FromDate: fromDate,
+                ToDate: toDate
+            };
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("DistributorOrdersData", "Orders")',
@@ -156,10 +158,70 @@
                 success: function (response) {
                     if (response.Success) {
 
-                        var strHtml = `<table class="table table-bordered" id="tblOrder">
+                        BindOrdersGrid(response);
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+
+        function ChangeOrderStatus(statusId) {
+            var selectedId = [];
+
+            $("#tblOrder > tbody > tr > td >input[type='checkbox']").each(function (index, ele) {
+                if ($(ele).prop("checked")) {
+                    var eleid = ele.id.split("_");
+                    selectedId.push(eleid[1]);
+                }
+            });
+            if (selectedId.length <= 0) {
+                return toastr.warning("Please select record");
+            }
+            var customerId = $("#drpCustomers").val();
+            var orderStatusId = $("#drpOrderStatus").val();
+            var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
+            var toDate = ConvertDateToDDMMYY($("#ToDate").val());
+            var distributorOrderModel = {
+                CustomerId: customerId,
+                OrderStatusId: orderStatusId,
+                FromDate: fromDate,
+                ToDate: toDate
+            };
+            var postData = {
+                selectedIds: selectedId,
+                orderStatusId: statusId,
+                distributorOrderModel: distributorOrderModel
+            }
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeOrderStatus", "Orders")',
+                data: postData,
+                success: function (response) {
+                    if (response.Success) {
+                        BindOrdersGrid(response);
+                        toastr.success(response.Message);
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+            selectedId = [];
+        }
+
+        function BindOrdersGrid(response) {
+            var strHtml = `<table class="table table-bordered" id="tblOrder">
                                     <thead class="success">
                                         <tr>
-                                            <th></th>
+                                            <th><input type='checkbox' id='chk_main' onchange='ChangeMainCheckBox(this)'/></th>
                                             <th style='display:none'></th>
                                             <th>Product</th>
 
@@ -168,11 +230,12 @@
                                             <th>Qty</th>
                                             <th>Total</th>
                                             <th>Date</th>
+                                            <th>Status</th>
                                             <th></th>
                                         </tr>
                                     </thead>`;
-                        response.data.forEach(function (item) {
-                            strHtml += `<tr>
+            response.data.forEach(function (item) {
+                strHtml += `<tr>
                                     <td><input type='checkbox' id=chk_${item.Id}_pr /></td>
                                     <td style="display:none">${item.Id}</td>
                                     <td>
@@ -184,27 +247,38 @@
                                     <td>${item.Quantity}</td>
                                     <td>${item.Total}</td>
                                     <td>${parseJsonFormattedDate(item.OrderDate)}</td>
+                                    <td>${GetOrderStatusFromId(item.OrderStatusId)}</td>
                                     <td><button class='btn btn-sm btn-outline-warning'>Edit</button></td>
                                </tr>`;
-                        });
-                        strHtml += `</table>`;
-                        $("#divOrder").html(strHtml);
-                        $('#tblOrder').addClass("table-striped");
-                        $('#tblOrder').DataTable({
-                            "pageLength": 50,
-                        });
-                    }
-                    else {
-                        toastr.error(response.Message);
-                    }
-                },
-                error: function (error) {
-                    alert(error);
-                }
+            });
+            strHtml += `</table>`;
+            $("#divOrder").html(strHtml);
+            $('#tblOrder').addClass("table-striped");
+            $('#tblOrder').DataTable({
+                "pageLength": 50,
+                order: [2, 'asc'],
             });
         }
-        //for (var i = 1; i <= $("#tblOrder > tbody > tr").length; i++) {
-        //    console.log($("#chk_" + i + "_pr").prop("checked"), i)
-        //}
+
+        function GetOrderStatusFromId(statusId) {
+            if (statusId == 1) {
+                return '<center><span style="background-color:#4e73df;color:white;padding:2px">Ordered</span></center>'
+            } else if (statusId == 2) {
+                return '<center><span style="background-color:#00adff;color:white;padding:2px">Confirmed</span></center>'
+            } else if (statusId == 3) {
+                return '<center><span style="background-color:#e7923b;color:white;padding:2px">Delivered</span></center>'
+            } else if (statusId == 4) {
+                return '<center><span style="background-color:#666;color:white;padding:2px">Canceled</span></center>'
+            } else {
+                return;
+            }
+        }
+        function ChangeMainCheckBox(chk) {
+            var flag = $(chk).prop("checked");
+            $("#tblOrder > tbody > tr > td >input[type='checkbox']").each(function (index, ele) {
+                $(ele).prop("checked", flag);
+            })
+        }
+       
     </script>
 }
