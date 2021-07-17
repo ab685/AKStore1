@@ -10,7 +10,7 @@
 </style>
 <br />
 <div style="text-align:center">
-    <h5>@Model.BillHeading</h5>
+    <span>@Model.BillHeading</span>
 </div>
 <div style="text-align:center">
     <h4>@Model.Title</h4>
@@ -19,13 +19,13 @@
 <div class="table-responsive">
     <table class="table table-bordered">
         <tr>
-            <th>
+            <th class="bg-warning text-white">
                 @Html.DisplayName("Customer")
             </th>
             <td>
                 @Html.DisplayFor(x => x.StoreName)
             </td>
-            <th>
+            <th class="bg-warning text-white">
                 @Html.DisplayName("Dilivery Address")
             </th>
             <td>
@@ -33,14 +33,14 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th class="bg-warning text-white">
                 @Html.DisplayName("Date")
             </th>
             <td>
                 @Model.BillDate.ToString("dd/MM/yyyy")
             </td>
 
-            <th>
+            <th class="bg-warning text-white">
                 @Html.DisplayName("Time")
             </th>
             <td>
@@ -48,14 +48,14 @@
             </td>
         </tr>
         <tr>
-            <th>
+            <th class="bg-warning text-white">
                 @Html.DisplayName("Cashier")
             </th>
             <td>
                 @Html.DisplayFor(x => x.Cashier)
             </td>
 
-            <th>
+            <th class="bg-warning text-white">
                 @Html.DisplayName("Delivery Note")
             </th>
             <td>
@@ -65,10 +65,11 @@
 
     </table>
 </div>
-<br /><br />
+<br />
+<br />
 <div class="table-responsive">
     <table class="table table-bordered">
-        <thead class="success">
+        <thead class="bg-warning text-white">
             <tr>
                 <th>
                     @Html.DisplayName("Item Name")
@@ -127,8 +128,9 @@
             </tr>*@
     </table>
 </div>
-
-<h3 style="text-align:left">Thank You</h3>
+<br /><br />
+<h4 style="text-align:left">Thank You</h4>
+<br />
 @section scripts{
     <script>
         document.querySelector("#content > nav").style.display = "none"

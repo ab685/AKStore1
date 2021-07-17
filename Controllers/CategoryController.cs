@@ -1,4 +1,6 @@
-﻿using AKStore.Models;
+﻿using AKStore.Extension;
+using AKStore.Filters;
+using AKStore.Models;
 using AKStore.Services;
 using System;
 using System.Collections.Generic;
@@ -9,6 +11,7 @@ using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
+    [CustomAuthorize(Role.Distributor)]
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;

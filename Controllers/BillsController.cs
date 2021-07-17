@@ -1,4 +1,6 @@
-﻿using AKStore.Models;
+﻿using AKStore.Extension;
+using AKStore.Filters;
+using AKStore.Models;
 using AKStore.Services;
 using Rotativa;
 using System;
@@ -9,6 +11,7 @@ using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
+    [CustomAuthorize(Role.Distributor)]
     public class BillsController : Controller
     {
         private readonly IOrderService _orderService;

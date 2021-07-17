@@ -118,7 +118,6 @@
                     GetOrderData();
                 });
         }
-
         function GetCustomers() {
             $.ajax({
                 type: "GET",
@@ -139,7 +138,6 @@
                 }
             });
         }
-
         function GetOrderData() {
             var customerId = $("#drpCustomers").val();
             var orderStatusId = $("#drpOrderStatus").val();
@@ -169,7 +167,6 @@
                 }
             });
         }
-
         function ChangeOrderStatus(statusId) {
             var selectedId = [];
 
@@ -216,7 +213,6 @@
             });
             selectedId = [];
         }
-
         function BindOrdersGrid(response) {
             var strHtml = `<table class="table table-bordered" id="tblOrder">
                                     <thead class="success">
@@ -242,7 +238,7 @@
                                         <div class="product-photo" style="background-image:url('/Documents/images/product/${item.FilePath ?? "NoImage.png"}')" ></div>
                                         <div class="product-name">${item.ProductName}</div>
                                      </td>
-                                    <td>${item.StoreName}</td>
+                                    <td id=store_${item.Id}_pr>${item.StoreName}</td>
                                     <td>${item.Price}</td>
                                     <td>${item.Quantity}</td>
                                     <td>${item.Total}</td>
@@ -259,7 +255,6 @@
                 order: [2, 'asc'],
             });
         }
-
         function GetOrderStatusFromId(statusId) {
             if (statusId == 1) {
                 return '<center><span style="background-color:#4e73df;color:white;padding:2px">Ordered</span></center>'
@@ -281,15 +276,23 @@
         }
         function GenerateBill() {
             var selectedId = [];
-
+            var storeName = [];
             $("#tblOrder > tbody > tr > td >input[type='checkbox']").each(function (index, ele) {
                 if ($(ele).prop("checked")) {
                     var eleid = ele.id.split("_");
                     selectedId.push(eleid[1]);
+                    if ($(`#store_${eleid[1]}_pr`).text()) {
+                        storeName.push($(`#store_${eleid[1]}_pr`).text());
+                    }
                 }
             });
+            
             if (selectedId.length <= 0) {
                 return toastr.warning("Please select record");
+            }
+            console.log(storeName);
+            if (!storeName.every(item => item === storeName[0])) {
+                return toastr.warning("Please select record of same store");
             }
             var postData = {
                 selectedIds: selectedId
@@ -330,7 +333,7 @@
             link.click();
             link.remove();
             // in case the Blob uses a lot of memory
-            setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+            setTimeout(() => URL.revokeObjectURL(link.href), 5000);
         };
     </script>
 }
