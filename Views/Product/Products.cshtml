@@ -34,7 +34,8 @@
                         <th>@Html.DisplayName("Company")</th>
                         <th>@Html.DisplayName("Category")</th>
                         <th>@Html.DisplayName("Price")</th>
-                        <th>@Html.DisplayName("Quantity")</th>
+                        <th>@Html.DisplayName("Avl Qty")</th>
+                        <th>@Html.DisplayName("Ordered Qty")</th>
                         <th>@Html.DisplayName("Picture")</th>
                         <th></th>
                     </tr>
@@ -48,6 +49,7 @@
                             <td>@Html.DisplayFor(modelItem => item.CategoryName) </td>
                             <td>@Html.DisplayFor(modelItem => item.Price) </td>
                             <td>@Html.DisplayFor(modelItem => item.Quantity) </td>
+                            <td>@Html.DisplayFor(modelItem => item.OrderedQuantity) </td>
                             <td style="width:2%"><img class="thumbnail" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
                             <td style="display:flex">
                                 <a href="@Url.Action("UpsertProduct","Product",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |

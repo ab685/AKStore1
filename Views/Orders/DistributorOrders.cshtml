@@ -67,7 +67,7 @@
                 <br />
                 <br />
                 <div class="col-12">
-                    <button class="btn btn-sm btn-outline-primary" onclick="GenrateBill()">Bill</button>
+                    <button class="btn btn-sm btn-outline-primary" onclick="GenerateBill()">Bill</button>
                     <button class="btn btn-sm btn-outline-info" onclick="ChangeOrderStatus(2)">Confirmed</button>
                     <button class="btn btn-sm btn-outline-warning" onclick="ChangeOrderStatus(3)">Deliverd</button>
                     <button class="btn btn-sm btn-outline-secondary" onclick="ChangeOrderStatus(4)">Cancel</button>
@@ -248,7 +248,7 @@
                                     <td>${item.Total}</td>
                                     <td>${parseJsonFormattedDate(item.OrderDate)}</td>
                                     <td>${GetOrderStatusFromId(item.OrderStatusId)}</td>
-                                    <td><button class='btn btn-sm btn-outline-warning'>Edit</button></td>
+                                    <td><a href="/Orders/EditDistributorOrders/${item.Id}" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a></td>
                                </tr>`;
             });
             strHtml += `</table>`;
@@ -279,6 +279,58 @@
                 $(ele).prop("checked", flag);
             })
         }
-       
+        function GenerateBill() {
+            var selectedId = [];
+
+            $("#tblOrder > tbody > tr > td >input[type='checkbox']").each(function (index, ele) {
+                if ($(ele).prop("checked")) {
+                    var eleid = ele.id.split("_");
+                    selectedId.push(eleid[1]);
+                }
+            });
+            if (selectedId.length <= 0) {
+                return toastr.warning("Please select record");
+            }
+            var postData = {
+                selectedIds: selectedId
+            }
+             $.ajax({
+                type: "POST",
+                url: '@Url.Action("BillsPDF", "Bills")',
+                data: postData,
+                xhr: function () {
+                     var xhr = new XMLHttpRequest();
+                     xhr.onreadystatechange = function () {
+                         if (xhr.readyState == 2) {
+                             if (xhr.status == 200) {
+                                 xhr.responseType = "blob";
+                             } else {
+                                 xhr.responseType = "text";
+                             }
+                         }
+                     };
+                     return xhr;
+                 },
+                success: function (response) {
+                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_"+new Date().toLocaleString()+".pdf");
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+            selectedId = [];
+        }
+        function downloadFile(blob, fileName) {
+            const link = document.createElement('a');
+            // create a blobURI pointing to our Blob
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            // some browser needs the anchor to be in the doc
+            document.body.append(link);
+            link.click();
+            link.remove();
+            // in case the Blob uses a lot of memory
+            setTimeout(() => URL.revokeObjectURL(link.href), 7000);
+        };
     </script>
 }

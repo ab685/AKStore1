@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web.Mvc;
 
 namespace AKStore.Models
 {
@@ -13,7 +14,9 @@ namespace AKStore.Models
         public int OrderStatusId { get; set; }
         public DateTime? OrderDate { get; set; }
         public string ProductName { get; set; }
+        public int ProductId { get; set; }
         public string FilePath { get; set; }
         public string StoreName { get; set; }
+        public SelectList Products { get; set; }
     }
 }

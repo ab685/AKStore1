@@ -164,7 +164,7 @@ namespace AKStore.Repository
 
             p.Add("@OrderStatusId", orderStatusId);
             p.Add("@UpdatedByUserId", Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]));
-            p.Add("@ProductIds",dt.AsTableValuedParameter("IntList"));
+            p.Add("@ProductIds", dt.AsTableValuedParameter("IntList"));
             var res = 0;
             using (var con = CommonOperations.GetConnection())
             {
@@ -183,6 +183,28 @@ namespace AKStore.Repository
             p.Add("@ToDate", distributorOrderModel.ToDate ?? DateTime.Now);
             var res = CommonOperations.Query<DistributorOrderDataModel>("GetDistributorOrders", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             return res;
+        }
+        public DistributorOrderDataModel GetOrderDataForDistributorByOrderId(int id)
+        {
+            var p = new DynamicParameters();
+            p.Add("@OrderId", id);
+            var res = CommonOperations.Query<DistributorOrderDataModel>("GetDistributorOrdersById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            return res;
+        }
+        public List<BillsItemModel> GetOrderBillsData(List<int> orderIds)
+        {
+            var p = new DynamicParameters();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Item", typeof(Int32));
+            orderIds.ForEach(x => dt.Rows.Add(x));
+
+            p.Add("@OrderIds", dt.AsTableValuedParameter("IntList"));
+            List<BillsItemModel> billsItemModels = new List<BillsItemModel>();
+            using (var con = CommonOperations.GetConnection())
+            {
+                billsItemModels = con.Query<BillsItemModel>("GetOrderBillsData", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+            return billsItemModels;
         }
     }
 }

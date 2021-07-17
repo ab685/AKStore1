@@ -18,6 +18,8 @@ namespace AKStore.Repository
         OrderMaster GetOrderById(int id);
         int UpdateOrderStatusById(List<int> ids, int orderStatusId);
         List<DistributorOrderDataModel> GetOrderDataForDistributor(DistributorOrderModel distributorOrderModel);
+        DistributorOrderDataModel GetOrderDataForDistributorByOrderId(int id);
+        List<BillsItemModel> GetOrderBillsData(List<int> orderIds);
     }
 
 }

@@ -19,7 +19,7 @@ namespace AKStore.Models
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        [MinLength(6, ErrorMessage = "Password length must be more than 6 character")]
+        [StringLength(12,MinimumLength =6, ErrorMessage = "Password length must be more than 6 character")]
         [RegularExpression(@"^.*\S.*$", ErrorMessage = "Password is required")]
         public string Password { get; set; }
 

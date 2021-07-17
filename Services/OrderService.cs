@@ -107,5 +107,30 @@ namespace AKStore.Services
         {
             return _orderRepository.GetOrderDataForDistributor(distributorOrderModel);
         }
+        public DistributorOrderDataModel GetOrderDataForDistributorById(int id)
+        {
+            return _orderRepository.GetOrderDataForDistributorByOrderId(id);
+        }
+
+        public Tuple<bool, string> UpsertOrderDistributor(DistributorOrderDataModel distributorOrderDataModel)
+        {
+            OrderModels orderModels = new OrderModels();
+            orderModels.Id = distributorOrderDataModel.Id;
+            orderModels.CustomerId = distributorOrderDataModel.CustomerId;
+            orderModels.ProductId = distributorOrderDataModel.ProductId;
+            orderModels.Quantity = distributorOrderDataModel.Quantity;
+            orderModels.OrderDate = distributorOrderDataModel.OrderDate;
+            orderModels.Price = distributorOrderDataModel.Price;
+            orderModels.Total = orderModels.Price * orderModels.Quantity;
+            orderModels.DistributorId = _customerRepository.GetCustomerById(distributorOrderDataModel.CustomerId).DistributorId;
+            orderModels.OrderStatusId = Convert.ToInt32(distributorOrderDataModel.OrderStatusId);
+            orderModels.IsActive = true;
+            var orderMaster = AutoMapper.Mapper.Map<OrderMaster>(orderModels);
+            return _orderRepository.UpsertOrder(orderMaster);
+        }
+        public List<BillsItemModel> GetOrderBillsData(List<int> orderIds)
+        {
+            return _orderRepository.GetOrderBillsData(orderIds);
+        }
     }
 }

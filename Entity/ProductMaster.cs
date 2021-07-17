@@ -17,6 +17,8 @@ namespace AKStore.Entity
         public string Description { get; set; }
         public decimal Price { get; set; }
         public int? Quantity { get; set; }
+        [NotMapped]
+        public int? OrderedQuantity { get; set; }
         public string FilePath { get; set; }
         public DateTime? InsertedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

@@ -27,7 +27,7 @@ namespace AKStore.Models
         [Range(0,10000000,ErrorMessage = "Please enter valid quantity")]
         [Required(AllowEmptyStrings = false, ErrorMessage="Please enter quantity")]
         public int? Quantity { get; set; }
-
+        public int? OrderedQuantity { get; set; }
 
         [MaxLength(100,ErrorMessage = "Description length should be maximum up to 100 characters.")]
         public string Description { get; set; }

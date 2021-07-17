@@ -11,9 +11,11 @@ namespace AKStore.Controllers
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly IProductService _productService;
         public OrdersController()
         {
             _orderService = new OrderService();
+            _productService = new ProductService();
         }
         public ActionResult DistributorOrders()
         {
@@ -25,8 +27,6 @@ namespace AKStore.Controllers
         {
             try
             {
-
-
                 var DistributorId = Convert.ToInt32(Session["DistributorId"]);
                 distributorOrderModel.DistributorId = DistributorId;
                 var distributorOrders = _orderService.GetOrderDataForDistributor(distributorOrderModel);
@@ -40,7 +40,6 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
-
         public ActionResult ChangeOrderStatus(List<int> selectedIds, int orderStatusId, DistributorOrderModel distributorOrderModel)
         {
             try
@@ -66,7 +65,6 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
-
         public ActionResult DeleteOrder(List<int> selectedIds, int orderStatusId, DistributorOrderModel distributorOrderModel)
         {
             try
@@ -105,6 +103,46 @@ namespace AKStore.Controllers
 
             }
 
+        }
+
+        [HttpGet]
+        public ActionResult EditDistributorOrders(int id)
+        {
+            try
+            {
+                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var products = _productService.GetProduct(DistributorId);
+                var distributorOrders = _orderService.GetOrderDataForDistributorById(id);
+                distributorOrders.Products = new SelectList(products, "Id", "Name", distributorOrders.ProductId);
+                return View(distributorOrders);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = new List<DistributorOrderDataModel>(), Success = false, Message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
+        }
+        [HttpPost]
+        public ActionResult EditDistributorOrders(DistributorOrderDataModel distributorOrderDataModel)
+        {
+            try
+            {
+                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var products = _productService.GetProduct(DistributorId);
+                distributorOrderDataModel.Products = new SelectList(products, "Id", "Name", distributorOrderDataModel.ProductId);
+                if (!ModelState.IsValid)
+                {
+                    return View(distributorOrderDataModel);
+                }
+
+                var distributorOrders = _orderService.UpsertOrderDistributor(distributorOrderDataModel);
+                return RedirectToAction(nameof(DistributorOrders));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = new List<DistributorOrderDataModel>(), Success = false, Message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
     }

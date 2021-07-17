@@ -1,0 +1,138 @@
+﻿@model AKStore.Models.BillsViewModel
+@{
+    ViewBag.Title = "Bills";
+
+}
+<style>
+    * {
+        font-family: Arial, Helvetica, sans-serif
+    }
+</style>
+<br />
+<div style="text-align:center">
+    <h5>@Model.BillHeading</h5>
+</div>
+<div style="text-align:center">
+    <h4>@Model.Title</h4>
+</div>
+<br />
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <tr>
+            <th>
+                @Html.DisplayName("Customer")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.StoreName)
+            </td>
+            <th>
+                @Html.DisplayName("Dilivery Address")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.DeliveryAddress)
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayName("Date")
+            </th>
+            <td>
+                @Model.BillDate.ToString("dd/MM/yyyy")
+            </td>
+
+            <th>
+                @Html.DisplayName("Time")
+            </th>
+            <td>
+                @Model.BillDate.ToString("hh:mm tt")
+            </td>
+        </tr>
+        <tr>
+            <th>
+                @Html.DisplayName("Cashier")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.Cashier)
+            </td>
+
+            <th>
+                @Html.DisplayName("Delivery Note")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.DeliveryNote)
+            </td>
+        </tr>
+
+    </table>
+</div>
+<br /><br />
+<div class="table-responsive">
+    <table class="table table-bordered">
+        <thead class="success">
+            <tr>
+                <th>
+                    @Html.DisplayName("Item Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Qty")
+                </th>
+                <th>
+                    @Html.DisplayName("Price")
+                </th>
+                <th>
+                    @Html.DisplayName("Amount")
+                </th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.BillsItemModels)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Amount)
+                </td>
+            </tr>
+        }
+        <tr>
+            <td colspan="3" style="text-align:right">Subtotal</td>
+            <td>@Html.DisplayFor(x => x.SubTotal)</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:right">Discount</td>
+            <td>@Html.DisplayFor(x => x.Discount)</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:right">Shipping Amount</td>
+            <td>@Html.DisplayFor(x => x.shippingAmount)</td>
+        </tr>
+        <tr>
+            <td colspan="3" style="text-align:right">Net amount</td>
+            <td>@Html.DisplayFor(x => x.NetAmount)</td>
+        </tr>
+        @*<tr>
+                <td colspan="3" style="text-align:right">Net amount</td>
+                <td>@Html.DisplayFor(x => x.PreviousBalance)</td>
+            </tr>*@
+        @*<tr>
+                <td colspan="3" style="text-align:right">Net amount</td>
+                <td>@Html.DisplayFor(x => x.BalanceToDate)</td>
+            </tr>*@
+    </table>
+</div>
+
+<h3 style="text-align:left">Thank You</h3>
+@section scripts{
+    <script>
+        document.querySelector("#content > nav").style.display = "none"
+        document.querySelector("#accordionSidebar").style.display = "none"
+    </script>
+
+}
