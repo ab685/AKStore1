@@ -25,6 +25,8 @@
                         @*<th>@Html.DisplayName("Route Name")</th>*@
                         <th>@Html.DisplayName("Phone No1")</th>
                         <th>@Html.DisplayName("Phone No2")</th>
+                        <th>Total Delivered Amount</th>
+                        <th>Total Paid Ammount</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -39,6 +41,8 @@
                         @*<td>@Html.DisplayFor(modelItem => item.RouteName)</td>*@
                         <td>@Html.DisplayFor(modelItem => item.PhNo1)</td>
                         <td>@Html.DisplayFor(modelItem => item.PhNo2)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TotalDeliveredAmount)</td>
+                        <td>@Html.DisplayFor(modelItem => item.TotalPaidAmmount)</td>
                         <td style="display:flex">
                             <a href="@Url.Action("UpsertCustomer","Customer",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
                             <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>

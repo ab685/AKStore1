@@ -12,10 +12,14 @@ namespace AKStore.Entity
         public int DistributorId { get; set; }
         public int UserId { get; set; }
         public int SerialNo { get; set; }
-        
+        [NotMapped]
+        public decimal? TotalPaidAmmount { get; set; }
+        [NotMapped]
+        public decimal? TotalDeliveredAmount { get; set; }
         public string StoreName { get; set; }
         [NotMapped]
         public string  UserName { get; set; }
+        
         [NotMapped]
         public string  Password { get; set; }
         [NotMapped]

@@ -18,5 +18,8 @@ namespace AKStore.Models
         [RegularExpression(@"^.*\S.*$", ErrorMessage = "Store Name is required")]
         public string StoreName { get; set; }
 
+        public decimal? TotalPaidAmmount { get; set; }
+        public decimal? TotalDeliveredAmount { get; set; }
+
     }
 }

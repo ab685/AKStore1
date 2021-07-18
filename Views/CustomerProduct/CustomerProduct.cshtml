@@ -22,17 +22,17 @@
 </style>
 
 <div class="p-2">
+
     <div class="container">
         <div class="row">
-
             <div class="col-12 col-md-6">
                 <form method="get">
                     <div class="input-group">
                         <div class="form-outline">
                             <input type="search" id="form1" name="search" class="form-control" placeholder="search" />
                         </div>
-                        <button type="submit" class="btn btn-grad" style="margin-top:0px;">
-                            <i class="fas fa-search"></i>
+                        <button type="submit" class="btn btn-outline-primary ml-2">
+                            Search
                         </button>
                     </div>
                 </form>
@@ -42,18 +42,19 @@
             </div>
         </div>
     </div>
+
     <section class="py-5">
         <div class="container" style="padding:0 !important">
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center" style="padding:0!important">
+            <div class="row" style="padding:0!important">
                 @foreach (var item in Model)
                 {
-                    <div class="col mb-5">
-                        <div class="card h-100 shadow-sm border">
-                            <img class="card-img-top img-thumbnail" style="max-height:30vh !important;border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
+                    <div class="col-12 col-md-6 col-lg-4 p-3">
+                        <div class="card h-100 shadow-lg border">
+                            <img class="card-img-top img-thumbnail" style="max-height:200px !important;border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
                             <div class="card-body p-4">
                                 <div class="text-center text-gray-700">
-                                    <h6 class="fw-bolder">@item.Name</h6>
-                                    £@item.Price
+                                    <spna class="font-weight-bold">@item.Name</spna>
+                                    <span class="d-block">£@item.Price</span>
                                 </div>
                             </div>
                             <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
@@ -68,14 +69,14 @@
                                                     <i class="fas fa-minus"></i>
                                                 </button>
                                             </span>
-                                            <input type="number" id="txtQuantity_@item.Id" style="max-width:70%;margin-right:1%;margin-right:1%;margin-left:1%;padding: 0 !important;" name="Quantity" class="form-control text-center" autocomplete="off" min="1">
+                                            <input type="number" id="txtQuantity_@item.Id" style="max-width:70%;margin-top:1.60%" name="Quantity" class="form-control text-center" autocomplete="off" min="1">
                                             <span class="input-group-btn">
                                                 <button type="button" class="quantity-right-plus btn btn-sm btn-grad btn-number" id="btnPlus_@item.Id" onclick="ChangeQuantity('@item.Id',true)" data-type="plus" data-field="">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </span>
                                         </div>
-                                        <button type="submit" class="btn btn-block btn-grad mt-auto mb-2">
+                                        <button type="submit" class="btn btn-block btn-grad ">
                                             <i class="fas fa-shopping-cart"></i>
                                             Buy now
                                         </button>
