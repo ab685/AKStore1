@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,5 +18,6 @@ namespace AKStore.Repository
         bool SetDefualtPassword(string userName);
         int UpdatePassword(UpdatePassword updatePassword,int userId);
         int UpdateProfile(UpdateProfileModel updateProfileModel, int userId);
+        DataSet GetDashBoardData(DateTime fromDate, DateTime toDate, int orderStatusId, int customerId, int distributorId);
     }
 }

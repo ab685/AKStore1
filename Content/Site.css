@@ -1,7 +1,31 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
+/*#########LoaderCssStart#####*/
+
+/*!  
+        // 3. Loader  
+        // --------------------------------------------------*/
+.loader {
+    top: 0;
+    left: 0;
+    position: fixed;
+    opacity: 0.8;
+    z-index: 10000000;
+    background: Black;
+    height: 100%;
+    width: 100%;
+    margin: auto;
+}
+.strip-holder {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
 
 
+/*#######LoaderCssStop#####*/
 .ui-datepicker {
     background-color: #fff;
 }

@@ -14,7 +14,7 @@ using AKStore.Services;
 
 namespace AKStore.Controllers
 {
-    [CustomAuthorize(Role.Distributor)]
+    
     public class ProductController : Controller
     {
 
@@ -26,6 +26,7 @@ namespace AKStore.Controllers
             productService = new ProductService();
             companyService = new CompanyService();
         }
+        [CustomAuthorize(Role.Distributor,Role.Admin)]
         public ActionResult Products()
         {
             try
@@ -53,6 +54,7 @@ namespace AKStore.Controllers
             }
         }
 
+        [CustomAuthorize( Role.Admin)]
         [HttpGet]
         public ActionResult UpsertProduct(int? id)
         {
@@ -75,6 +77,8 @@ namespace AKStore.Controllers
                 return View(productModel);
             }
         }
+
+        [CustomAuthorize(Role.Admin)]
         [HttpPost]
         public ActionResult UpsertProduct(ProductModel productModel)
         {
@@ -129,6 +133,7 @@ namespace AKStore.Controllers
             }
         }
 
+        [CustomAuthorize(Role.Admin)]
         [HttpPost]
         public ActionResult DeleteProduct(int id)
         {

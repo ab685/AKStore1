@@ -2,6 +2,7 @@
 using AKStore.Filters;
 using AKStore.Models;
 using AKStore.Services;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace AKStore.Controllers
         {
             _userService = new UserService();
         }
-        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Retailer)]
+        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpPost]
         public ActionResult SetDefualtPassword(string userName)
         {
@@ -25,7 +26,7 @@ namespace AKStore.Controllers
             return Redirect(Request.UrlReferrer.OriginalString);
         }
 
-        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Retailer)]
+        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         public ActionResult UserDetails()
         {
             int userId = Convert.ToInt32(Session["LoggedInUserId"]);
@@ -33,14 +34,14 @@ namespace AKStore.Controllers
             return View(usersModel);
         }
 
-        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Retailer)]
+        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpGet]
         public ActionResult UpdatePassword()
         {
 
             return View();
         }
-        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Retailer)]
+        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpPost]
         public ActionResult UpdatePassword(UpdatePassword updatePassword)
         {
@@ -71,7 +72,7 @@ namespace AKStore.Controllers
 
 
         }
-        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Retailer)]
+        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpGet]
         public ActionResult UpdateProfile()
         {
@@ -88,7 +89,7 @@ namespace AKStore.Controllers
             return View(updateProfileModel);
 
         }
-        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Retailer)]
+        [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpPost]
         public ActionResult UpdateProfile(UpdateProfileModel updateProfileModel)
         {
@@ -109,7 +110,19 @@ namespace AKStore.Controllers
 
 
         }
-
+        public ActionResult DashBoard()
+        {
+            return View();
+        }
+        public ActionResult DashBoardData(DateTime fromDate, DateTime toDate, int orderStatusId, int customerId)
+        {
+           
+            //cutomerId = Convert.ToInt32(Session["CustomerId"]);
+            int distributorId = Convert.ToInt32(Session["DistributorId"]);
+            var desData = _userService.GetDashBoardData(fromDate, toDate, orderStatusId, customerId, distributorId);
+            var jsonstr = JsonConvert.SerializeObject(desData, Formatting.Indented);
+            return Json(new { data = jsonstr, Success = true }, JsonRequestBehavior.AllowGet);
+        }
 
     }
 }

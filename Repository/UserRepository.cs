@@ -4,6 +4,7 @@ using AKStore.Models;
 using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -101,6 +102,18 @@ namespace AKStore.Repository
             p.Add("@UserId", userId);
             var isProfileUpdated = CommonOperations.Query<int>("UpdateProfile", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
             return isProfileUpdated;
+        }
+
+        public DataSet GetDashBoardData(DateTime fromDate, DateTime toDate, int orderStatusId, int customerId, int distributorId)
+        {
+            var p = new DynamicParameters();
+            p.Add("@OrderStatusId", orderStatusId);
+            p.Add("@FromDate", fromDate);
+            p.Add("@ToDate", toDate);
+            p.Add("@CustomerId", customerId);
+            p.Add("@DistributorId", distributorId);
+            var ds = CommonOperations.QuerySpecial("GetDashBoardData", p, CommandType.StoredProcedure);
+            return ds;
         }
     }
 }

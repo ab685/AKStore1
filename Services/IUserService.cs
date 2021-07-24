@@ -2,6 +2,7 @@
 using AKStore.Models;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Web;
 
@@ -17,7 +18,9 @@ namespace AKStore.Services
         UsersModel GetPredecessorOfUser(Users users);
         bool IsUserNameExists(string userName, int id = 0);
         bool SetDefualtPassword(string userName);
-        int UpdatePassword(UpdatePassword updatePassword,int userId);
+        int UpdatePassword(UpdatePassword updatePassword, int userId);
         int UpdateProfile(UpdateProfileModel updateProfileModel, int userId);
+        DataSet GetDashBoardData(DateTime? fromDate, DateTime? toDate, int orderStatusId = 3, int customerId = 0, int distributorId = 0);
+
     }
 }

@@ -6,6 +6,7 @@ using System.Web;
 using AutoMapper;
 using AKStore.Repository;
 using AKStore.Entity;
+using System.Data;
 
 namespace AKStore.Services
 {
@@ -57,14 +58,18 @@ namespace AKStore.Services
             return _userRepository.SetDefualtPassword(userName);
         }
 
-        public int UpdatePassword(UpdatePassword updatePassword,int userId)
+        public int UpdatePassword(UpdatePassword updatePassword, int userId)
         {
-            return _userRepository.UpdatePassword(updatePassword,userId);
+            return _userRepository.UpdatePassword(updatePassword, userId);
         }
 
         public int UpdateProfile(UpdateProfileModel updateProfileModel, int userId)
         {
             return _userRepository.UpdateProfile(updateProfileModel, userId);
+        }
+        public DataSet GetDashBoardData(DateTime? fromDate, DateTime? toDate, int orderStatusId = 3, int customerId = 0, int distributorId = 0)
+        {
+            return _userRepository.GetDashBoardData((fromDate ?? DateTime.Now.AddDays(-30)), (toDate ?? DateTime.Now), orderStatusId, customerId, distributorId);
         }
     }
 }

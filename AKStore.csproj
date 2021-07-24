@@ -2143,9 +2143,11 @@
     <Content Include="Views\Transaction\UpsertTransaction.cshtml" />
     <Content Include="Views\Orders\EditDistributorOrders.cshtml" />
     <Content Include="Views\Bills\Bills.cshtml" />
+    <Content Include="Views\Common\DashBoard.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Documents\Gifs\" />
     <Folder Include="Documents\images\category\" />
     <Folder Include="Documents\images\company\" />
     <Folder Include="Documents\images\product\" />

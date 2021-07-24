@@ -1,0 +1,235 @@
+﻿
+@{
+    ViewBag.Title = "DashBoard";
+}
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-12 col-md-3">
+                    <label>Customer</label>
+                    <select id="drpCustomers" class="form-control" onchange="GetDashboardData()">
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label style="text-align:center">Order Status</label>
+                    <select id="drpOrderStatus" class="form-control" onchange="GetDashboardData()">
+                        <option value="1">Ordered</option>
+                        <option value="0">All</option>
+                        <option value="2">Confirmed</option>
+                        <option value="3">Delivered</option>
+                        <option value="4">Canceled</option>
+                    </select>
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="saleDate" style="display:block">From Date</label>
+                    <input type="text" id="FromDate" class="form-control datepicker" style="background-color: white;" readonly />
+                </div>
+                <div class="col-12 col-md-3">
+                    <label for="saleDate" style="display:block">To Date</label>
+                    <input type="text" id="ToDate" class="form-control datepicker" style="background-color:white;" readonly />
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="col-12 col-md-6 table-responsive border" id="divProduct" style="margin-top:20px;padding-top:10px">
+                </div>
+                <div class="col-12 col-md-5 offset-md-1 table-responsive border" id="divCustomer" style="margin-top:20px;padding-top:10px">
+                </div>
+                <div class="col-12 col-md-6 table-responsive border" id="divTransaction" style="margin-top:20px;padding-top:10px">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            ConfigureDate();
+            GetCustomers();
+        })
+        function ConfigureDate() {
+            var today = new Date();
+            var previoisMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
+
+            $("#FromDate").datepicker({
+
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                maxDate: today
+            });
+
+            $("#FromDate").datepicker("setDate", previoisMonthDate)
+                .on("change", function () {
+                    GetDashboardData();
+                });
+            $("#ToDate").datepicker({
+
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                maxDate: today
+
+            })
+            $("#ToDate").datepicker("setDate", today)
+                .on("change", function () {
+                    GetDashboardData();
+                });
+        }
+        function GetCustomers() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCustomerData", "Customer")',
+                success: function (response) {
+                    if (response.Success) {
+
+                        var htmlRoute = "<option value=" + 0 + ">--All--</option>";
+                        response.Data.filter(function (item) {
+                            htmlRoute += GenrateDropDown(item.Id, item.StoreName);
+                        });
+                        $("#drpCustomers").html(htmlRoute);
+                        GetDashboardData();
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function GetDashboardData() {
+            var customerId = $("#drpCustomers").val();
+            var orderStatusId = $("#drpOrderStatus").val();
+            var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
+            var toDate = ConvertDateToDDMMYY($("#ToDate").val());
+            var postData = {
+                customerId: customerId,
+                orderStatusId: orderStatusId,
+                fromDate: fromDate,
+                toDate: toDate
+            };
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("DashBoardData", "Common")',
+                data: postData,
+                success: function (response) {
+                    if (response.Success) {
+                        console.log(JSON.parse(response.data));
+                       /* BindOrdersGrid(response);*/
+                        BindProductsReportGrid(JSON.parse(response.data).Table1)
+                        BindCustomerReportGrid(JSON.parse(response.data).Table2)
+                        BindTransactionReportGrid(JSON.parse(response.data).Table3)
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function BindProductsReportGrid(response) {
+            var strHtml = `<table class="table table-bordered" id="tblProductReport">
+                                    <thead class="success">
+                                        <tr>
+                                            <th>Product</th>
+                                            <th>Qty</th>
+                                        </tr>
+                                    </thead>`;
+            response.forEach(function (item) {
+                strHtml += `<tr>
+                                    <td>
+                                        <div class="product-photo" style="background-image:url('/Documents/images/product/${item.FilePath ?? "NoImage.png"}')" ></div>
+                                        <div class="product-name">${item.ProductName}</div>
+                                     </td>
+                                    <td>${item.Quantity}</td>
+                               </tr>`;
+            });
+            strHtml += `</table>`;
+            $("#divProduct").html(strHtml);
+            $('#tblProductReport').addClass("table-striped");
+            $('#tblProductReport').DataTable({
+                "pageLength": 50,
+                order: [1, 'desc'],
+            });
+        }
+        function BindCustomerReportGrid(response) {
+            var strHtml = `<table class="table table-bordered" id="tblCustomerReport">
+                                    <thead class="success">
+                                        <tr>
+                                            <th>Store Name</th>
+                                            <th>Product</th>
+                                            <th>Qty</th>
+                                        </tr>
+                                    </thead>`;
+            response.forEach(function (item) {
+                strHtml += `<tr>
+                                    <td>
+                                        ${item.StoreName}
+                                     </td>
+                                       <td>
+                                        <div class="product-photo" style="background-image:url('/Documents/images/product/${item.FilePath ?? "NoImage.png"}')" ></div>
+                                        <div class="product-name">${item.ProductName}</div>
+                                     </td>
+                                    <td>${item.Quantity}</td>
+                               </tr>`;
+            });
+            strHtml += `</table>`;
+            $("#divCustomer").html(strHtml);
+            $('#tblCustomerReport').addClass("table-striped");
+            $('#tblCustomerReport').DataTable({
+                "pageLength": 50,
+                order: [2, 'desc'],
+            });
+        }
+        function BindTransactionReportGrid(response) {
+            var strHtml = `<table class="table table-bordered" id="tblTransactionReport">
+                                    <thead class="success">
+                                        <tr>
+                                            <th>Customer</th>
+                                            <th>Openning Amount</th>
+                                            <th>Purchased Amount</th>
+                                            <th>Paid Amount</th>
+                                            <th>OutStanding</th>
+                                        </tr>
+                                    </thead>`;
+            response.forEach(function (item) {
+                strHtml += `<tr>
+                                    <td>
+                                        ${item.StoreName}
+                                     </td>
+                                      <td>
+                                        ${item.OpenningBalance}
+                                     </td>  
+                                      <td>
+                                        ${item.PurchasedAmount}
+                                     </td>
+                                       <td>
+                                        ${item.PaidAmount}
+                                     </td> 
+                                      <td>
+                                        ${item.OutStanding}
+                                     </td>
+                                      
+                                    
+                               </tr>`;
+            });
+            strHtml += `</table>`;
+            $("#divTransaction").html(strHtml);
+            $('#tblTransactionReport').addClass("table-striped");
+            $('#tblTransactionReport').DataTable({
+                "pageLength": 50,
+                order: [4, 'desc'],
+            });
+        }
+    </script>
+}
