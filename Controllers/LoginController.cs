@@ -106,16 +106,7 @@ namespace AKStore.Controllers
             }
         }
 
-        public ActionResult Language(string lan)
-        {
-            if (lan != null)
-            {
-                Session["lang"] = lan;
-            }
-
-            return Redirect(Request.UrlReferrer.OriginalString);
-        }
-
+      
 
         // [NoCache]
 

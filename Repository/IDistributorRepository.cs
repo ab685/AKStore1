@@ -8,6 +8,7 @@ namespace AKStore.Repository
     {
         IEnumerable<DistributorModel> GetDistributors();
         DistributorModel GetDistributorById(int id);
+        Distributor FirstDistributor();
     }
         
 

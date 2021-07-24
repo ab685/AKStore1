@@ -26,6 +26,10 @@ namespace AKStore.Repository
             var distributorModel = CommonOperations.Query<DistributorModel>("GetDistributorById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
             return distributorModel;
         }
+        public Distributor FirstDistributor()
+        {
+            return GetAll().FirstOrDefault();
+        }
 
 
     }

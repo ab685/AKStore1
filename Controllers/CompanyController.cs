@@ -11,33 +11,38 @@ using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
-    [CustomAuthorize(Role.Distributor)]
+
     public class CompanyController : Controller
     {
         private readonly ICompanyService _companyService;
         private readonly ICategoryService _categoryService;
-
+        private readonly IDistributorService distributorService;
         public CompanyController()
         {
             _companyService = new CompanyService();
             _categoryService = new CategoryService();
+            distributorService = new DistributorService();
         }
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         public ActionResult Company()
         {
-            var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            //var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            var DistributorId = distributorService.FirstDistributor().Id;
             var CompanyModels = _companyService.GetCompanyByDistributorId(DistributorId);
             return View(CompanyModels);
         }
+        [CustomAuthorize(Role.Admin)]
         [HttpGet]
         public ActionResult UpsertCompany(int? id)
         {
-            var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            // var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            var DistributorId = distributorService.FirstDistributor().Id;
             var categories = _categoryService.GetCategoryByDistributorId(DistributorId);
             if (id != null && id > 0)
             {
 
                 var companyModels = _companyService.GetCompanyById(Convert.ToInt32(id));
-               
+
                 companyModels.Category = new SelectList(categories, "Id", "Name", companyModels.CategoryId);
                 return View(companyModels);
             }
@@ -51,11 +56,13 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Role.Admin)]
         public ActionResult UpsertCompany(CompanyModel companyModel)
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                //  var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
                 var categories = _categoryService.GetCategoryByDistributorId(DistributorId);
                 companyModel.Category = new SelectList(categories, "Id", "Name", companyModel.CategoryId);
                 if (companyModel == null)

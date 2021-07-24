@@ -13,8 +13,8 @@ namespace AKStore.Repository
 
         public Tuple<bool, string> UpsertProduct(ProductMaster productMaster)
         {
-            var DistributorId = Convert.ToInt32(HttpContext.Current.Session["DistributorId"]);
-            productMaster.DistributorId = DistributorId;
+            DistributorRepository distributorRepository = new DistributorRepository();
+            productMaster.DistributorId = distributorRepository.GetAll().FirstOrDefault().Id;
         
             string message = string.Empty;
             bool success = false;

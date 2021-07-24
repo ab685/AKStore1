@@ -16,7 +16,9 @@ namespace AKStore.Repository
 
         public Tuple<bool, string> UpsertCustomer(Customer customer)
         {
-            var DistributorId = Convert.ToInt32(HttpContext.Current.Session["DistributorId"]);
+            DistributorRepository distributorRepository = new DistributorRepository();
+            var DistributorId = distributorRepository.FirstDistributor().Id;
+            // var DistributorId = Convert.ToInt32(HttpContext.Current.Session["DistributorId"]);
             var customerCount = 0;
             if (db.Customer.Where(x => x.DistributorId == DistributorId).Count() > 0)
             {
@@ -109,8 +111,5 @@ namespace AKStore.Repository
             return orders;
         }
 
-        
-
-       
     }
 }

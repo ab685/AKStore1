@@ -22,7 +22,7 @@
 <body>
     <div class="loader" id="AjaxLoader" style="display:none;">
         <div class="strip-holder">
-            <img src="~/Documents/Gifs/Loader.svg"  />
+            <img src="~/Documents/Gifs/Loader.svg" />
         </div>
     </div>
     <!-- Page Wrapper -->
@@ -118,6 +118,31 @@
                         </div>
                     </div>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Products","Product")">
+                        <i class="fas fa-blender-phone"></i>
+                        <span>@Html.DisplayName("Products")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Customers","Customer")">
+                        <i class="fas fa-user-circle"></i>
+                        <span>@Html.DisplayName("Customers")</span>
+                    </a>
+
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Category","Category")">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>@Html.DisplayName("Category")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Company","Company")">
+                        <i class="fas fa-fw fa-cog"></i>
+                        <span>@Html.DisplayName("Company")</span>
+                    </a>
+                </li>
             }
             else if (Convert.ToInt32(Session["RoleId"]) == 1)
             {
@@ -135,29 +160,11 @@
                     </div>
                 </li>
             }
-            @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3 || Convert.ToInt32(Session["RoleId"]) == 6)
-            {
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="@Url.Action("UserDetails","Common")">
-                        <i class="fas fa-user-circle"></i>
-                        <span>@Html.DisplayName("Profile")</span>
-                    </a>
-                </li>
-            }
+
 
             <hr class="sidebar-divider my-0">
 
-            <li class="nav-item active">
 
-                <a class="nav-link collapsed" href="@Url.Action("Logout","Login")"
-                   aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span> @Html.DisplayName("Logout")</span>
-                </a>
-
-
-
-            </li>
             <hr class="sidebar-divider my-0">
             <br />
             <!-- Sidebar Toggler (Sidebar) -->
@@ -184,17 +191,19 @@
 
                     <ul class="navbar-nav ml-auto">
 
-
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a title="Language" class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-globe-americas"></i>
-                            </a>
-                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="languageDropdown">
-                                @Html.ActionLink("English", "Language", "Login", new { lan = "en" }, new { @class = "dropdown-item" })
-                                @Html.ActionLink("Gujrati", "Language", "Login", new { lan = "gu-IN" }, new { @class = "dropdown-item" })
-                            </div>
-                        </li>
-
+                        @if (Convert.ToInt32(Session["RoleId"]) == 1 || Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3 || Convert.ToInt32(Session["RoleId"]) == 6)
+                        {
+                            <li class="nav-item dropdown no-arrow mx-1">
+                                <a title="Language" class="nav-link dropdown-toggle text-gray-700" href="#" id="languageDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <i class="fas fa-user"></i>
+                                    <label style="margin:5px;">@Session["LoggedInUsername"].ToString()</label>
+                                </a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="languageDropdown">
+                                    @Html.ActionLink("Profile", "UserDetails", "Common", null, new { @class = "dropdown-item" })
+                                    @Html.ActionLink("Logout", "Logout", "Login", null, new { @class = "dropdown-item" })
+                                </div>
+                            </li>
+                        }
                     </ul>
                 </nav>
                 <div class="container-fluid">

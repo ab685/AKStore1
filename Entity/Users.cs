@@ -23,5 +23,6 @@ namespace AKStore.Entity
         public DateTime? UpdatedDate { get; set; }
         public bool? IsActive { get; set; }
         public string Address { get; set; }
+        public string PostalCode { get; set; }
     }
 }

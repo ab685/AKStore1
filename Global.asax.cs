@@ -23,25 +23,16 @@ namespace AKStore
         protected void Session_Start(object sender, EventArgs e)
         {
 
-            HttpContext context = HttpContext.Current;
-
-            if (context != null && context.Session != null)
-            {
-                context.Session["lang"] = "en";
-                context.Session.Timeout = 2880;
-            }
         }
+        protected void Application_BeginRequest()
+        {
 
+            Response.Cache.SetCacheability(HttpCacheability.NoCache);
+            Response.Cache.SetNoStore();
+        }
         protected void Application_AcquireRequestState(Object sender, EventArgs e)
         {
-            HttpContext context = HttpContext.Current;
-            var languageSession = "en";
-            if (context != null && context.Session != null)
-            {
-                languageSession = context.Session["lang"] != null ? context.Session["lang"].ToString() : "en";
-            }
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo(languageSession);
-            Thread.CurrentThread.CurrentCulture = new CultureInfo(languageSession);
+          
         }
     }
 }

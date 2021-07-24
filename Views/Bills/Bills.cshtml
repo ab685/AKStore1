@@ -9,59 +9,70 @@
     }
 </style>
 <br />
-<div style="text-align:center">
-    <span>@Model.BillHeading</span>
-</div>
-<div style="text-align:center">
-    <h4>@Model.Title</h4>
+<br />
+<div style="text-align:center;text-decoration:underline">
+    <h4>@Model.DistributorName</h4>
 </div>
 <br />
 <div class="table-responsive">
     <table class="table table-bordered">
         <tr>
-            <th class="bg-warning text-white">
+            <th class="bg-gradient-secondary text-white">
                 @Html.DisplayName("Customer")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.CustomerName)
+            </td>
+            <th class="bg-gradient-secondary text-white">
+                @Html.DisplayName("Store")
             </th>
             <td>
                 @Html.DisplayFor(x => x.StoreName)
             </td>
-            <th class="bg-warning text-white">
+        </tr>
+        <tr>
+            <th class="bg-gradient-secondary text-white">
                 @Html.DisplayName("Dilivery Address")
             </th>
             <td>
-                @Html.DisplayFor(x => x.DeliveryAddress)
+                @Html.DisplayFor(x => x.Address)
+            </td>
+            <th class="bg-gradient-secondary text-white">
+                @Html.DisplayName("Postal code")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.PostalCode)
             </td>
         </tr>
         <tr>
-            <th class="bg-warning text-white">
+            <th class="bg-gradient-secondary text-white">
                 @Html.DisplayName("Date")
             </th>
             <td>
-                @Model.BillDate.ToString("dd/MM/yyyy")
+                @Model.BillDate.ToString("dd/MM/yyyy hh:mm tt")
             </td>
 
-            <th class="bg-warning text-white">
-                @Html.DisplayName("Time")
-            </th>
-            <td>
-                @Model.BillDate.ToString("hh:mm tt")
-            </td>
-        </tr>
-        <tr>
-            <th class="bg-warning text-white">
-                @Html.DisplayName("Cashier")
-            </th>
-            <td>
-                @Html.DisplayFor(x => x.Cashier)
-            </td>
-
-            <th class="bg-warning text-white">
+            @*<th class="bg-gradient-secondary text-white">
+                    @Html.DisplayName("Time")
+                </th>
+                <td>
+                    @Model.BillDate.ToString("hh:mm tt")
+                </td>*@
+            <th class="bg-gradient-secondary text-white">
                 @Html.DisplayName("Delivery Note")
             </th>
             <td>
                 @Html.DisplayFor(x => x.DeliveryNote)
             </td>
         </tr>
+        @*<tr>
+            <th class="bg-gradient-secondary text-white">
+                @Html.DisplayName("Delivery Note")
+            </th>
+            <td>
+                @Html.DisplayFor(x => x.DeliveryNote)
+            </td>
+        </tr>*@
 
     </table>
 </div>
@@ -69,7 +80,7 @@
 <br />
 <div class="table-responsive">
     <table class="table table-bordered">
-        <thead class="bg-warning text-white">
+        <thead class="bg-gradient-secondary text-white">
             <tr>
                 <th>
                     @Html.DisplayName("Item Name")
@@ -103,32 +114,14 @@
             </tr>
         }
         <tr>
-            <td colspan="3" style="text-align:right">Subtotal</td>
-            <td>@Html.DisplayFor(x => x.SubTotal)</td>
-        </tr>
-        <tr>
-            <td colspan="3" style="text-align:right">Discount</td>
-            <td>@Html.DisplayFor(x => x.Discount)</td>
-        </tr>
-        <tr>
-            <td colspan="3" style="text-align:right">Shipping Amount</td>
-            <td>@Html.DisplayFor(x => x.shippingAmount)</td>
-        </tr>
-        <tr>
             <td colspan="3" style="text-align:right">Net amount</td>
             <td>@Html.DisplayFor(x => x.NetAmount)</td>
         </tr>
-        @*<tr>
-                <td colspan="3" style="text-align:right">Net amount</td>
-                <td>@Html.DisplayFor(x => x.PreviousBalance)</td>
-            </tr>*@
-        @*<tr>
-                <td colspan="3" style="text-align:right">Net amount</td>
-                <td>@Html.DisplayFor(x => x.BalanceToDate)</td>
-            </tr>*@
+
     </table>
 </div>
-<br /><br />
+<br />
+<br />
 <h4 style="text-align:left">Thank You</h4>
 <br />
 @section scripts{

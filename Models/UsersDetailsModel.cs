@@ -19,7 +19,7 @@ namespace AKStore.Models
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Password is required")]
         [DataType(DataType.Password)]
-        [StringLength(12,MinimumLength =6, ErrorMessage = "Password length must be more than 6 character")]
+        [StringLength(12, MinimumLength = 6, ErrorMessage = "Password length must be more than 6 character")]
         [RegularExpression(@"^.*\S.*$", ErrorMessage = "Password is required")]
         public string Password { get; set; }
 
@@ -36,6 +36,11 @@ namespace AKStore.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Address is required")]
         [RegularExpression(@"^.*\S.*$", ErrorMessage = "Address is required")]
         public string Address { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Postal code is required")]
+        [RegularExpression(@"^.*\S.*$", ErrorMessage = "Postal code is required")]
+        [StringLength(10,ErrorMessage = "Postal code maximum length should be 10 characters")]
+        public string PostalCode { get; set; }
 
         public DateTime? InsertedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }

@@ -14,24 +14,27 @@ using AKStore.Services;
 
 namespace AKStore.Controllers
 {
-    
+
     public class ProductController : Controller
     {
 
         private readonly IProductService productService;
         private readonly ICompanyService companyService;
+        private readonly IDistributorService distributorService;
         public ProductController()
         {
 
             productService = new ProductService();
             companyService = new CompanyService();
+            distributorService = new DistributorService();
         }
-        [CustomAuthorize(Role.Distributor,Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         public ActionResult Products()
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                //var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
                 var products = productService.GetProduct(DistributorId);
                 return View(products);
             }
@@ -45,7 +48,7 @@ namespace AKStore.Controllers
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
                 return Json(new { Data = productService.GetProduct(DistributorId).ToList(), Success = true, Message = "Product fetched successfully." }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -54,12 +57,12 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize( Role.Admin)]
+        [CustomAuthorize(Role.Admin)]
         [HttpGet]
         public ActionResult UpsertProduct(int? id)
         {
 
-            var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            var DistributorId = distributorService.FirstDistributor().Id;
             var companies = companyService.GetCompanyByDistributorId(DistributorId);
 
             if (id != null && id > 0)
@@ -73,7 +76,7 @@ namespace AKStore.Controllers
             {
 
                 ProductModel productModel = new ProductModel();
-                productModel.Company = new SelectList(companies, "Id", "Name"); 
+                productModel.Company = new SelectList(companies, "Id", "Name");
                 return View(productModel);
             }
         }
@@ -84,7 +87,7 @@ namespace AKStore.Controllers
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
                 var companies = companyService.GetCompanyByDistributorId(DistributorId);
                 productModel.Company = new SelectList(companies, "Id", "Name", productModel.CompanyId);
 
@@ -167,6 +170,6 @@ namespace AKStore.Controllers
             }
         }
 
-        
+
     }
 }

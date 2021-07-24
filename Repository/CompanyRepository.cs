@@ -27,7 +27,9 @@ namespace AKStore.Repository
         }
         public Tuple<bool, string> UpsertCompany(Company company)
         {
-            var DistributorId = Convert.ToInt32(HttpContext.Current.Session["DistributorId"]);
+            DistributorRepository distributorRepository = new DistributorRepository();
+            var DistributorId = distributorRepository.FirstDistributor().Id;
+            //var DistributorId = Convert.ToInt32(HttpContext.Current.Session["DistributorId"]);
             company.DistributorId = DistributorId;
             string message = string.Empty;
             bool success = false;

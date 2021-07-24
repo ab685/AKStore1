@@ -12,7 +12,7 @@ using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
-    [CustomAuthorize(Role.Distributor)]
+   
     public class CustomerController : Controller
     {
 
@@ -20,19 +20,23 @@ namespace AKStore.Controllers
         private readonly IRouteService _routeService;
         private readonly IProductService _productService;
         private readonly IUserService _userService;
+        private readonly IDistributorService distributorService;
         public CustomerController()
         {
             _productService = new ProductService();
             _customerService = new CustomerService();
             _routeService = new RouteService();
             _userService = new UserService();
+            distributorService = new DistributorService();
         }
 
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         public ActionResult Customers()
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                //var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
                 var customers = _customerService.GetCustomerData(DistributorId);
                 return View(customers);
             }
@@ -41,12 +45,14 @@ namespace AKStore.Controllers
                 return Json(new { Data = new List<CustomerModel>(), Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpGet]
         public ActionResult GetCustomerData()
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                //var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
                 return Json(new { Data = _customerService.GetCustomerData(DistributorId).ToList(), Success = true, Message = "Customer fetched successfully." }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception ex)
@@ -55,10 +61,12 @@ namespace AKStore.Controllers
             }
         }
 
+        [CustomAuthorize(Role.Admin)]
         [HttpGet]
         public ActionResult UpsertCustomer(int? id)
         {
-            var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            //var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            var DistributorId = distributorService.FirstDistributor().Id;
             if (id != null && id > 0)
             {
                 var customer = _customerService.GetCustomerDataById(Convert.ToInt32(id));
@@ -74,12 +82,14 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Role.Admin)]
         [ValidateAntiForgeryToken]
         public ActionResult UpsertCustomer(CustomerModel customerModel)
         {
             try
             {
-                var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                //var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+                var DistributorId = distributorService.FirstDistributor().Id;
 
                 if (!ModelState.IsValid)
                 {
@@ -111,6 +121,7 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Role.Admin)]
         public ActionResult DeleteCustomer(int id)
         {
             try

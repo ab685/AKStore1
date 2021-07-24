@@ -1,4 +1,5 @@
-﻿using AKStore.Models;
+﻿using AKStore.Entity;
+using AKStore.Models;
 using System.Collections.Generic;
 
 namespace AKStore.Services
@@ -9,5 +10,6 @@ namespace AKStore.Services
         void UpsertDistributor(DistributorModel distributorModel);
         DistributorModel GetDistributorById(int distributorId);
         void DeleteDistributor(int distributorId, bool isActive);
+        Distributor FirstDistributor();
     }
 }

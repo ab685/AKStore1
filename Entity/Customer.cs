@@ -19,6 +19,8 @@ namespace AKStore.Entity
         public string StoreName { get; set; }
         [NotMapped]
         public string  UserName { get; set; }
+        [NotMapped]
+        public string PostalCode { get; set; }
         
         [NotMapped]
         public string  Password { get; set; }

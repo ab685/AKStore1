@@ -11,25 +11,29 @@ using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
-    [CustomAuthorize(Role.Distributor)]
+
     public class CategoryController : Controller
     {
         private readonly ICategoryService _categoryService;
-
+        private readonly IDistributorService distributorService;
         public CategoryController()
         {
             _categoryService = new CategoryService();
+            distributorService = new DistributorService();
         }
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         public ActionResult Category()
         {
-            var DistributorId = Convert.ToInt32(Session["DistributorId"]);
-            var categoryModels=_categoryService.GetCategoryByDistributorId(DistributorId);
+            var DistributorId = distributorService.FirstDistributor().Id;
+            // var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            var categoryModels = _categoryService.GetCategoryByDistributorId(DistributorId);
             return View(categoryModels);
         }
+        [CustomAuthorize(Role.Admin)]
         [HttpGet]
         public ActionResult UpsertCategory(int? id)
         {
-            
+
             if (id != null && id > 0)
             {
                 var categoryModels = _categoryService.GetCategoryById(Convert.ToInt32(id));
@@ -43,6 +47,7 @@ namespace AKStore.Controllers
             }
         }
 
+        [CustomAuthorize(Role.Admin)]
         [HttpPost]
         public ActionResult UpsertCategory(CategoryModel categoryModel)
         {

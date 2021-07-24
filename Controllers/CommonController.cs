@@ -83,6 +83,7 @@ namespace AKStore.Controllers
                 FirstName = usersModel.FirstName,
                 LastName = usersModel.LastName,
                 Address = usersModel.Address,
+                PostalCode = usersModel.PostalCode,
                 PhNo1 = usersModel.PhNo1,
                 PhNo2 = usersModel.PhNo2
             };

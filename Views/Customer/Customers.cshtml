@@ -4,9 +4,14 @@
     ViewBag.Title = "Customers";
 }
 
-<p>
-    <a href="@Url.Action("UpsertCustomer")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Customer</a>
-</p>
+
+@if (Convert.ToInt32(Session["RoleId"]) == 2)
+{
+    <p>
+        <a href="@Url.Action("UpsertCustomer")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Customer</a>
+    </p>
+}
+
 <div class="card shadow-lg">
     <div class="card-header">
         <h6 class="m-0 font-weight-bold text-primary">Customers</h6>
@@ -27,7 +32,10 @@
                         <th>@Html.DisplayName("Phone No2")</th>
                         <th>Total Delivered Amount</th>
                         <th>Total Paid Ammount</th>
-                        <th></th>
+                        @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                        {
+                            <th></th>
+                        }
                     </tr>
                 </thead>
                 @foreach (var item in Model)
@@ -43,10 +51,14 @@
                         <td>@Html.DisplayFor(modelItem => item.PhNo2)</td>
                         <td>@Html.DisplayFor(modelItem => item.TotalDeliveredAmount)</td>
                         <td>@Html.DisplayFor(modelItem => item.TotalPaidAmmount)</td>
-                        <td style="display:flex">
-                            <a href="@Url.Action("UpsertCustomer","Customer",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
-                            <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
-                        </td>
+
+                        @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                        {
+                            <td style="display:flex">
+                                <a href="@Url.Action("UpsertCustomer","Customer",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                            </td>
+                        }
                     </tr>
                 }
             </table>

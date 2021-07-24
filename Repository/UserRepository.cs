@@ -99,6 +99,7 @@ namespace AKStore.Repository
             p.Add("@PhNo1", updateProfileModel.PhNo1);
             p.Add("@PhNo2", updateProfileModel.PhNo2);
             p.Add("@Address", updateProfileModel.Address);
+            p.Add("@Postalcode", updateProfileModel.PostalCode);
             p.Add("@UserId", userId);
             var isProfileUpdated = CommonOperations.Query<int>("UpdateProfile", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
             return isProfileUpdated;

@@ -24,5 +24,9 @@ namespace AKStore.Models
         [Required(AllowEmptyStrings = false, ErrorMessage = "Address is required")]
         [RegularExpression(@"^.*\S.*$", ErrorMessage = "Address is required")]
         public string Address { get; set; }
+
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Postal code is required")]
+        [RegularExpression(@"^.*\S.*$", ErrorMessage = "Postal code is required")]
+        public string PostalCode { get; set; }
     }
 }

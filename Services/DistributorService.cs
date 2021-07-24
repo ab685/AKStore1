@@ -11,14 +11,14 @@ namespace AKStore.Services
     {
         private readonly IDistributorRepository _distributorRepository;
         private readonly IUserRepository _userRepository;
-        
+
         private HttpContextBase Context { get; set; }
         public DistributorService()
         {
 
             _distributorRepository = new DistributorRepository();
             _userRepository = new UserRepository();
-            
+
 
         }
         public IEnumerable<DistributorModel> GetDistributors()
@@ -44,6 +44,7 @@ namespace AKStore.Services
                     RoleId = 3,
                     IsActive = true,
                     Address = distributorModel.Address,
+                    PostalCode = distributorModel.PostalCode,
                     PhNo1 = distributorModel.PhNo1,
                     PhNo2 = distributorModel.PhNo2,
                     InsertedDate = DateTime.Now,
@@ -54,10 +55,11 @@ namespace AKStore.Services
                 {
                     Distributor distributor = new Distributor()
                     {
-                        
+
                         InsertedDate = DateTime.Now,
                         InsertedByUserId = Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]),
                         UserId = userId,
+                        Name = distributorModel.Name,
                         AdminId = Convert.ToInt32(HttpContext.Current.Session["AdminId"])
                     };
                     _distributorRepository.Create(distributor);
@@ -76,6 +78,7 @@ namespace AKStore.Services
                         user.LastName = distributorModel.LastName;
                         user.Password = distributorModel.Password;
                         user.IsActive = true;
+                        user.PostalCode = distributorModel.PostalCode;
                         user.Address = distributorModel.Address;
                         user.PhNo1 = distributorModel.PhNo1;
                         user.PhNo2 = distributorModel.PhNo2;
@@ -83,10 +86,11 @@ namespace AKStore.Services
                         _userRepository.UpsertUser(user);
                     }
 
-                    
+
                     distributor.UpdatedDate = DateTime.Now;
                     distributor.UpdatedByUserId = Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]);
                     distributor.AdminId = Convert.ToInt32(HttpContext.Current.Session["AdminId"]);
+                    distributor.Name = distributorModel.Name;
                     _distributorRepository.SaveChanges();
                 }
 
@@ -109,10 +113,14 @@ namespace AKStore.Services
 
                 if (isActive == false)
                 {
-                  
+
                 }
                 //_distributorRepository.Delete(distributor.Id);
             }
+        }
+        public Distributor FirstDistributor()
+        {
+            return _distributorRepository.FirstDistributor();
         }
     }
 }

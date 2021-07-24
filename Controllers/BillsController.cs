@@ -31,21 +31,18 @@ namespace AKStore.Controllers
                 return new HttpNotFoundResult("Not found record");
 
             BillsViewModel billsViewModel = new BillsViewModel();
-            billsViewModel.BalanceToDate = 236.60m;
-            billsViewModel.BillHeading = "Safasha ERP-Delivery Note Reciept";
-            billsViewModel.Title = "Customer Delivery Note";
-            billsViewModel.shippingAmount = 0;
-            billsViewModel.Discount = 0;
-
-            //billsViewModel.PreviousBalance = 147.10m;
             billsViewModel.BillDate = DateTime.Now;
-            billsViewModel.Cashier = "Y2-POS5";
-            billsViewModel.DeliveryNote = "DN-43486";
-            billsViewModel.DeliveryAddress = "WEMBLEY HIGH STREET London UK 0 UK";
+            var random = new Random();
+            billsViewModel.DeliveryNote = "DN-" + random.Next(5000, int.MaxValue);
+
             var billsItemModels = _orderService.GetOrderBillsData(selectedIds);
-            billsViewModel.SubTotal = billsItemModels.Sum(x => (x.Price * x.Quantity));
-            billsViewModel.NetAmount = Convert.ToDecimal(billsViewModel.SubTotal) - Convert.ToDecimal(billsViewModel.Discount) + Convert.ToDecimal(billsViewModel.shippingAmount);
+            billsViewModel.NetAmount = billsItemModels.Sum(x => (x.Price * x.Quantity));
             billsViewModel.StoreName = billsItemModels.FirstOrDefault()?.StoreName;
+            billsViewModel.CustomerName = billsItemModels.FirstOrDefault()?.CustomerName;
+            billsViewModel.Address = billsItemModels.FirstOrDefault()?.Address;
+            billsViewModel.PostalCode = billsItemModels.FirstOrDefault()?.PostalCode;
+            billsViewModel.DistributorName = billsItemModels.FirstOrDefault()?.DistributorName;
+
             billsViewModel.BillsItemModels = billsItemModels;
             var report = new ViewAsPdf("Bills", billsViewModel);
             report.FileName = "Bill_" + DateTime.Now.ToString() + ".pdf";

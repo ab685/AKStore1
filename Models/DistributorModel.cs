@@ -7,6 +7,7 @@ namespace AKStore.Models
     {
         public int Id { get; set; }
         public int AdminId { get; set; }
+        public string Name { get; set; }
        
     }
 }

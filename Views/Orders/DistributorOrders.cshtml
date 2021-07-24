@@ -244,7 +244,7 @@
                                     <td>${item.Quantity}</td>
                                     <td>${item.Total}</td>
                                     <td>${parseJsonFormattedDate(item.OrderDate)}</td>
-                                    <td>${GetOrderStatusFromId(item.OrderStatusId)}</td>
+                                    <td id=status_${item.Id}_pr>${GetOrderStatusFromId(item.OrderStatusId)}</td>
                                     <td><a href="/Orders/EditDistributorOrders/${item.Id}" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a></td>
                                </tr>`;
             });
@@ -278,12 +278,14 @@
         function GenerateBill() {
             var selectedId = [];
             var storeName = [];
+            var orderStatus = [];
             $("#tblOrder > tbody > tr > td >input[type='checkbox']").each(function (index, ele) {
                 if ($(ele).prop("checked")) {
                     var eleid = ele.id.split("_");
                     selectedId.push(eleid[1]);
                     if ($(`#store_${eleid[1]}_pr`).text()) {
                         storeName.push($(`#store_${eleid[1]}_pr`).text());
+                        orderStatus.push($(`#status_${eleid[1]}_pr`).text());
                     }
                 }
             });
@@ -291,9 +293,12 @@
             if (selectedId.length <= 0) {
                 return toastr.warning("Please select record");
             }
-            console.log(storeName);
+            
             if (!storeName.every(item => item === storeName[0])) {
                 return toastr.warning("Please select record of same store");
+            }
+            if (!orderStatus.every(item => item =="Delivered")) {
+                return toastr.warning("Please select record of Delivered status");
             }
             var postData = {
                 selectedIds: selectedId
@@ -316,7 +321,29 @@
                      return xhr;
                  },
                 success: function (response) {
-                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_"+new Date().toLocaleString()+".pdf");
+                    let date_ob = new Date();
+
+                    // adjust 0 before single digit date
+                    let date = ("0" + date_ob.getDate()).slice(-2);
+
+                    // current month
+                    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+                    // current year
+                    let year = date_ob.getFullYear();
+
+                    // current hours
+                    let hours = date_ob.getHours();
+
+                    // current minutes
+                    let minutes = date_ob.getMinutes();
+
+                    // current seconds
+                    let seconds = date_ob.getSeconds();
+
+                    // prints date & time in YYYY-MM-DD HH:MM:SS format
+                    date_format_str= year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_" + storeName[0]+"_" + date_format_str+".pdf");
                 },
                 error: function (error) {
                     alert(error);

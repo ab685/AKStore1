@@ -51,7 +51,8 @@ namespace AKStore.Services
                     LoggedInCount = 0,
                     PhNo1 = customerModel.PhNo1,
                     PhNo2 = customerModel.PhNo2,
-                    Address = customerModel.Address
+                    Address = customerModel.Address,
+                    PostalCode = customerModel.PostalCode
                 };
                 var userId = _userRepository.UpsertUser(user);
                 if (userId > 0)
@@ -82,6 +83,7 @@ namespace AKStore.Services
                         user.IsActive = true;
                         user.UpdatedDate = DateTime.Now;
                         user.Address = customerModel.Address;
+                        user.PostalCode = customerModel.PostalCode;
                         user.PhNo1 = customerModel.PhNo1;
                         user.PhNo2 = customerModel.PhNo2;
                         _userRepository.UpsertUser(user);

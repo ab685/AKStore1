@@ -11,14 +11,18 @@
         max-height: 120px;
     }
 
-    /* Add a hover effect (blue shadow) */
-    img.thumbnail:hover {
-        box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
-    }
+        /* Add a hover effect (blue shadow) */
+        img.thumbnail:hover {
+            box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
+        }
 </style>
-<p>
-    <a href="@Url.Action("UpsertCategory")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Category</a>
-</p>
+@if (Convert.ToInt32(Session["RoleId"]) == 2)
+{
+    <p>
+        <a href="@Url.Action("UpsertCategory")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Category</a>
+
+    </p>
+}
 <div class="card shadow-lg">
     <div class="card-header">
         <h6 class="m-0 font-weight-bold text-primary">Category</h6>
@@ -31,8 +35,11 @@
                     <tr>
                         <th>@Html.DisplayName("Category")</th>
                         <th>@Html.DisplayName("Picture")</th>
-                        <th></th>
-                    </tr>
+                        @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                        {
+                            <th></th>
+                        }
+                        </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
@@ -40,10 +47,13 @@
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
                             <td style="width:2%"><img class="thumbnail" src="@Url.Content("~/Documents/images/category/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
-                            <td style="display:flex">
-                                <a href="@Url.Action("UpsertCategory","Category",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
-                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
-                            </td>
+                            @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                            {
+                                <td style="display:flex">
+                                    <a href="@Url.Action("UpsertCategory", "Category", new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                                    <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                                </td>
+                            }
                         </tr>
                     }
                 </tbody>
@@ -74,7 +84,7 @@
 </div>
 @section scripts {
     <script>
-      
+
         function OpenDeleteModal(id) {
             $("#DeleteModal").modal("show");
             $("#hdnDelId").val(id);
