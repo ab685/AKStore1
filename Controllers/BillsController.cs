@@ -11,7 +11,7 @@ using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
-   // [CustomAuthorize(Role.Distributor)]
+    
     public class BillsController : Controller
     {
         private readonly IOrderService _orderService;
@@ -20,11 +20,14 @@ namespace AKStore.Controllers
             _orderService = new OrderService();
         }
         // GET: Bill
+        [CustomAuthorize(Role.Distributor,Role.Customer)]
         public ActionResult Bills(List<int> selectedIds)
         {
             BillsViewModel billsViewModel = new BillsViewModel();
             return View(billsViewModel);
         }
+
+        [CustomAuthorize(Role.Distributor)]
         public ActionResult BillsPDF(List<int> selectedIds)
         {
             if (selectedIds.Count() <= 0)
@@ -52,10 +55,13 @@ namespace AKStore.Controllers
             return report;
         }
 
+        [CustomAuthorize(Role.Distributor, Role.Customer)]
         public ActionResult BillsHistory()
         {
             return View();
         }
+
+        [CustomAuthorize(Role.Distributor, Role.Customer)]
         public ActionResult BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0)
         {
             try
@@ -65,15 +71,31 @@ namespace AKStore.Controllers
             }
             catch (Exception ex)
             {
-                return Json(new { Data = new List<BillsViewModel>(), Success = false,Message=ex.Message }, JsonRequestBehavior.AllowGet);
+                return Json(new { Data = new List<BillsViewModel>(), Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
+
+        [CustomAuthorize(Role.Distributor, Role.Customer)]
         public ActionResult BillsHistoryPDF(int id)
         {
-            var billsViewModel=_orderService.GetBillsHistoryPDF(id);
+            var billsViewModel = _orderService.GetBillsHistoryPDF(id);
             var report = new ViewAsPdf("Bills", billsViewModel);
             report.FileName = "Bill_" + DateTime.Now.ToString() + ".pdf";
             return report;
+        }
+
+        [CustomAuthorize(Role.Distributor)]
+        public ActionResult DeleteBill(int id)
+        {
+            try
+            {
+                _orderService.DeleteBills(id);
+                return RedirectToAction(nameof(BillsHistory));
+            }
+            catch(Exception ex)
+            {
+                return RedirectToAction(nameof(BillsHistory));
+            }
         }
     }
 }

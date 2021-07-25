@@ -8,6 +8,7 @@ using AKStore.Entity;
 using AKStore.Models;
 using AKStore.Repository;
 using AKStore.Extension;
+using Dapper;
 
 namespace AKStore.Services
 {
@@ -145,5 +146,27 @@ namespace AKStore.Services
         {
             return _orderRepository.GetBillsHistoryPDF(id);
         }
+
+        public Tuple<bool, string> DeleteBills(int id)
+        {
+            var message = string.Empty;
+            var success = false;
+            var p = new DynamicParameters();
+            p.Add("@Id", id);
+            p.Add("@TableName", "Bills");
+            var msg = CommonOperations.Query<string>("DeleteById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            if (msg == null)
+            {
+                success = true;
+                message = "Bills deleted successfully.";
+            }
+            else
+            {
+                success = true;
+                message = "Customer not found.";
+            }
+            return new Tuple<bool, string>(success, message);
+        }
+
     }
 }

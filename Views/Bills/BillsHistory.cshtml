@@ -9,7 +9,7 @@
     <div class="card-body">
         <div class="form-horizontal">
             <div class="row">
-                @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                @if (Convert.ToInt32(Session["RoleId"]) == 3)
                 {
                     <div class="col-12 col-md-4">
                         <label>Customer</label>
@@ -36,7 +36,27 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Bill</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <label>Are you sure you want to delete bill?</label>
+                <form method="post" action="@Url.Action("DeleteBill","Bills")">
+                    <input type="hidden" name="id" id="hdnDelId" />
+                    <button type="submit" class="btn btn-delete">Delete</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                </form>
 
+            </div>
+        </div>
+    </div>
+</div>
 @section scripts {
     <script>
         var roleId = '@Convert.ToInt32(Session["RoleId"])';
@@ -47,7 +67,7 @@
             } else {
                 GetBillsData();
             }
-           
+
         });
         function ConfigureDate() {
             var today = new Date();
@@ -103,7 +123,7 @@
             });
         }
         function GetBillsData() {
-            var customerId = (roleId==2? $("#drpCustomers").val():'@Convert.ToInt32(Session["CustomerId"])');
+            var customerId = (roleId==3? $("#drpCustomers").val():'@Convert.ToInt32(Session["CustomerId"])');
             var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
             var toDate = ConvertDateToDDMMYY($("#ToDate").val());
             var postData = {
@@ -129,6 +149,7 @@
             });
         }
         function BindBillsGrid(response) {
+
             var strHtml = `<table class="table table-bordered" id="tblBills">
                                     <thead class="success">
                                         <tr>
@@ -137,6 +158,7 @@
                                             <th>File Name</th>
                                             <th>Store</th>
                                             <th>Amount</th>
+                                           ${roleId==3? "<th>Delete</th>":""}
                                         </tr>
                                     </thead>`;
             response.Data.forEach(function (item) {
@@ -146,6 +168,7 @@
                                     <td style="color:blue;text-decoration:underline;cursor:pointer"><span onclick='GetBillsDetailsPDF(${item.BillsId},this)'> ${item.FileName}</span></td>
                                     <td id=store_${item.BillsId}_pr>${item.StoreName}</td>
                                     <td>${item.NetAmount}</td>
+                                    ${roleId == 3 ? "<td style='display:flex'><a onclick='OpenDeleteModal(" + item.BillsId + ")' href='#' class='btn btn-outline-primary deletebutton'><i class='fas fa-trash'></i></a></td>" : ""}
                                </tr>`;
             });
             strHtml += `</table>`;
@@ -198,6 +221,9 @@
             // in case the Blob uses a lot of memory
             setTimeout(() => URL.revokeObjectURL(link.href), 8000);
         };
-
+        function OpenDeleteModal(id) {
+            $("#DeleteModal").modal("show");
+            $("#hdnDelId").val(id);
+        }
     </script>
 }

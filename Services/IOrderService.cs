@@ -23,6 +23,7 @@ namespace AKStore.Services
         void InsertBillsData(BillsViewModel billsViewModel);
         List<BillsViewModel> BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0);
         BillsViewModel GetBillsHistoryPDF(int id);
+        Tuple<bool, string> DeleteBills(int id);
     }
 
 
