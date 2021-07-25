@@ -62,7 +62,7 @@
                 @Html.DisplayName("Delivery Note")
             </th>
             <td>
-                @Html.DisplayFor(x => x.DeliveryNote)
+                @Html.DisplayFor(x => x.BillNo)
             </td>
         </tr>
         @*<tr>
@@ -114,8 +114,8 @@
             </tr>
         }
         <tr>
-            <td colspan="3" style="text-align:right">Net amount</td>
-            <td>@Html.DisplayFor(x => x.NetAmount)</td>
+            <td colspan="3" style="text-align:right;font-weight:bold">Net amount</td>
+            <td style="font-weight:bold">@Html.DisplayFor(x => x.NetAmount)</td>
         </tr>
 
     </table>

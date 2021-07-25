@@ -1,0 +1,203 @@
+﻿
+@{
+    ViewBag.Title = "BillsHistory";
+}
+<div class="card shadow-lg">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="row">
+                @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                {
+                    <div class="col-12 col-md-4">
+                        <label>Customer</label>
+                        <select id="drpCustomers" class="form-control" onchange="GetBillsData()">
+                        </select>
+                    </div>
+                }
+                    <div class="col-12 col-md-4">
+                        <label for="saleDate" style="display:block">From Date</label>
+                        <input type="text" id="FromDate" class="form-control datepicker" style="background-color: white;" readonly />
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <label for="saleDate" style="display:block">To Date</label>
+                        <input type="text" id="ToDate" class="form-control datepicker" style="background-color:white;" readonly />
+                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+
+                    <div class="table-responsive" id="divBills" style="margin:20px;">
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var roleId = '@Convert.ToInt32(Session["RoleId"])';
+        $(document).ready(function () {
+            ConfigureDate();
+            if (roleId == 2) {
+                GetCustomers();
+            } else {
+                GetBillsData();
+            }
+           
+        });
+        function ConfigureDate() {
+            var today = new Date();
+            var previoisMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
+
+            $("#FromDate").datepicker({
+
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                maxDate: today
+            });
+
+            $("#FromDate").datepicker("setDate", previoisMonthDate)
+                .on("change", function () {
+                    GetBillsData();
+                });
+            $("#ToDate").datepicker({
+
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'dd/mm/yy',
+                maxDate: today
+
+            })
+            $("#ToDate").datepicker("setDate", today)
+                .on("change", function () {
+                    GetBillsData();
+                });
+        }
+        function GetCustomers() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCustomerData", "Customer")',
+                success: function (response) {
+                    if (response.Success) {
+                        var htmlRoute = "<option value=" + 0 + ">--All--</option>";
+                        response.Data.filter(function (item) {
+                            htmlRoute += GenrateDropDown(item.Id, item.StoreName);
+                        });
+                        $("#drpCustomers").html(htmlRoute);
+
+                        GetBillsData();
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function GetBillsData() {
+            var customerId = (roleId==2? $("#drpCustomers").val():'@Convert.ToInt32(Session["CustomerId"])');
+            var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
+            var toDate = ConvertDateToDDMMYY($("#ToDate").val());
+            var postData = {
+                customerId: customerId,
+                fromDate: fromDate,
+                toDate: toDate
+            };
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("BillsHistoryData", "Bills")',
+                data: postData,
+                success: function (response) {
+                    if (response.Success) {
+                        BindBillsGrid(response);
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function BindBillsGrid(response) {
+            var strHtml = `<table class="table table-bordered" id="tblBills">
+                                    <thead class="success">
+                                        <tr>
+                                            <th style="display:none">Id</th>
+                                            <th>Bill Date</th>
+                                            <th>File Name</th>
+                                            <th>Store</th>
+                                            <th>Amount</th>
+                                        </tr>
+                                    </thead>`;
+            response.Data.forEach(function (item) {
+                strHtml += `<tr>
+                                    <td style="display:none">${item.BillsId}</td>
+                                    <td>${parseJsonFormattedLongDate(item.BillDate)}</td>
+                                    <td style="color:blue;text-decoration:underline;cursor:pointer"><span onclick='GetBillsDetailsPDF(${item.BillsId},this)'> ${item.FileName}</span></td>
+                                    <td id=store_${item.BillsId}_pr>${item.StoreName}</td>
+                                    <td>${item.NetAmount}</td>
+                               </tr>`;
+            });
+            strHtml += `</table>`;
+            $("#divBills").html(strHtml);
+            $('#tblBills').addClass("table-striped");
+            $('#tblBills').DataTable({
+                "pageLength": 50,
+                order: [0, 'desc'],
+            });
+        }
+        function GetBillsDetailsPDF(id, ele) {
+
+            var fileName = $(ele).text() + ".pdf";
+            fileName = "Bills_"+fileName.replace(/ /g, '');
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("BillsHistoryPDF", "Bills")'+"/"+id,
+
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            } else {
+                                xhr.responseType = "text";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                success: function (response) {
+
+                    downloadFile(new Blob([response], { type: 'application/text' }), fileName);
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function downloadFile(blob, fileName) {
+            const link = document.createElement('a');
+            // create a blobURI pointing to our Blob
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            // some browser needs the anchor to be in the doc
+            document.body.append(link);
+            link.click();
+            link.remove();
+            // in case the Blob uses a lot of memory
+            setTimeout(() => URL.revokeObjectURL(link.href), 8000);
+        };
+
+    </script>
+}

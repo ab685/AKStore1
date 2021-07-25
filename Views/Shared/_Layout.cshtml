@@ -260,6 +260,10 @@
         function parseJsonDate(jsonDateString) {
             return new Date(parseInt(jsonDateString.replace('/Date(', '')));
         }
+        function parseJsonFormattedLongDate(jsonDateString) {
+            var date = new Date(parseInt(jsonDateString.replace('/Date(', '')));
+            return date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.toLocaleTimeString();
+        }
         function parseJsonFormattedDate(jsonDateString) {
             var date = new Date(parseInt(jsonDateString.replace('/Date(', '')));
             return date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear();

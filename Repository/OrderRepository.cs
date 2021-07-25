@@ -9,6 +9,7 @@ using System.Web;
 using Dapper;
 using AKStore.Extension;
 using System.Data;
+using AKStore.Extension;
 
 namespace AKStore.Repository
 {
@@ -205,6 +206,60 @@ namespace AKStore.Repository
                 billsItemModels = con.Query<BillsItemModel>("GetOrderBillsData", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             }
             return billsItemModels;
+        }
+        public void InsertBillsData(BillsViewModel billsViewModel)
+        {
+            var p = new DynamicParameters();
+            var BillDetailsTypeData = billsViewModel.BillsItemModels.Select(x => new { x.ProductName, x.Quantity, x.Price, x.Amount }).ToList();
+            var dt = ExtensionMethods.ToDataTable(BillDetailsTypeData);
+
+            p.Add("@BillDetails", dt.AsTableValuedParameter("BillDetailstype"));
+            p.Add("@BillNo", billsViewModel.BillNo);
+            p.Add("@CustomerId", billsViewModel.CustomerId);
+            p.Add("@DistributorId", billsViewModel.DistributorId);
+            p.Add("@BillDate", billsViewModel.BillDate);
+            p.Add("@FileName", billsViewModel.StoreName + "_" + billsViewModel.BillNo.ToString() + "_" + billsViewModel.BillDate.ToString("dd/MM/yyyy hh:mm:ss tt"));
+            p.Add("@InsertedByUserId", Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]));
+            p.Add("@BillTotal", billsViewModel.NetAmount);
+
+            List<BillsItemModel> billsItemModels = new List<BillsItemModel>();
+            using (var con = CommonOperations.GetConnection())
+            {
+                billsItemModels = con.Query<BillsItemModel>("InsertBillsData", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+
+        }
+
+        public List<BillsViewModel> BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0)
+        {
+            var p = new DynamicParameters();
+
+
+
+            p.Add("@CustomerId", customerId);
+            p.Add("@FromDate", fromDate);
+            p.Add("@ToDate", toDate);
+            List<BillsViewModel> billsViewModel = new List<BillsViewModel>();
+            using (var con = CommonOperations.GetConnection())
+            {
+                billsViewModel = con.Query<BillsViewModel>("GetBillsPDFData", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+            return billsViewModel;
+        }
+        public BillsViewModel GetBillsHistoryPDF(int id)
+        {
+            var p = new DynamicParameters();
+            p.Add("@id", id);
+            BillsViewModel billsViewModel = new BillsViewModel();
+            List<BillsItemModel> billsItemModels = new List<BillsItemModel>();
+            using (var con = CommonOperations.GetConnection())
+            {
+                var result = con.QueryMultiple("GetBillsHistoryPDF", p, commandType: System.Data.CommandType.StoredProcedure);
+                billsViewModel = result.Read<BillsViewModel>().FirstOrDefault();
+                billsItemModels = result.Read<BillsItemModel>().ToList();
+            }
+            billsViewModel.BillsItemModels = billsItemModels;
+            return billsViewModel;
         }
     }
 }

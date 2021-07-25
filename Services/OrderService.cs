@@ -132,5 +132,18 @@ namespace AKStore.Services
         {
             return _orderRepository.GetOrderBillsData(orderIds);
         }
+
+        public void InsertBillsData(BillsViewModel billsViewModel)
+        {
+            _orderRepository.InsertBillsData(billsViewModel);
+        }
+        public List<BillsViewModel> BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0)
+        {
+            return _orderRepository.BillsHistoryData(fromDate, toDate, customerId);
+        }
+        public BillsViewModel GetBillsHistoryPDF(int id)
+        {
+            return _orderRepository.GetBillsHistoryPDF(id);
+        }
     }
 }

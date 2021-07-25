@@ -20,6 +20,9 @@ namespace AKStore.Repository
         List<DistributorOrderDataModel> GetOrderDataForDistributor(DistributorOrderModel distributorOrderModel);
         DistributorOrderDataModel GetOrderDataForDistributorByOrderId(int id);
         List<BillsItemModel> GetOrderBillsData(List<int> orderIds);
+        void InsertBillsData(BillsViewModel billsViewModel);
+        List<BillsViewModel> BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0);
+        BillsViewModel GetBillsHistoryPDF(int id);
     }
 
 }

@@ -2144,6 +2144,7 @@
     <Content Include="Views\Orders\EditDistributorOrders.cshtml" />
     <Content Include="Views\Bills\Bills.cshtml" />
     <Content Include="Views\Common\DashBoard.cshtml" />
+    <Content Include="Views\Bills\BillsHistory.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

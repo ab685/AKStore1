@@ -20,6 +20,9 @@ namespace AKStore.Services
         DistributorOrderDataModel GetOrderDataForDistributorById(int id);
         Tuple<bool, string> UpsertOrderDistributor(DistributorOrderDataModel distributorOrderDataModel);
         List<BillsItemModel> GetOrderBillsData(List<int> orderIds);
+        void InsertBillsData(BillsViewModel billsViewModel);
+        List<BillsViewModel> BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0);
+        BillsViewModel GetBillsHistoryPDF(int id);
     }
 
 
