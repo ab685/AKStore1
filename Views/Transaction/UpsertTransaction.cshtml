@@ -135,11 +135,11 @@
                 success: function (response) {
                     if (response.Success) {
                         toastr.success(response.Message);
-                        if (response.Message == "Transation updated successfully") {
+                        /*if (response.Message == "Transation updated successfully") {*/
                             window.location.href ='@Url.Action("Transaction", "Transaction")';
-                        } else {
-                            ClearControls();
-                        }
+                        //} else {
+                        //    ClearControls();
+                        //}
 
                     } else {
                         toastr.error(response.Message);

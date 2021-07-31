@@ -4,31 +4,34 @@
 }
 <div class="card shadow-lg">
     <div class="card-header">
-        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+        <h6 class="m-0 font-weight-bold text-primary">DashBoard</h6>
     </div>
     <div class="card-body">
         <div class="form-horizontal">
             <div class="row">
-                <div class="col-12 col-md-3">
-                    <label>Customer</label>
-                    <select id="drpCustomers" class="form-control" onchange="GetDashboardData()">
-                    </select>
-                </div>
-                <div class="col-12 col-md-3">
+                @if (Convert.ToInt32(Session["RoleId"]) != 6)
+                {
+                    <div class="col-12 col-md-4">
+                        <label>Customer</label>
+                        <select id="drpCustomers" class="form-control" onchange="GetDashboardData()">
+                        </select>
+                    </div>
+                }
+                <div class="col-12 col-md-3" style="display:none">
                     <label style="text-align:center">Order Status</label>
                     <select id="drpOrderStatus" class="form-control" onchange="GetDashboardData()">
                         <option value="1">Ordered</option>
                         <option value="0">All</option>
                         <option value="2">Confirmed</option>
-                        <option value="3">Delivered</option>
+                        <option value="3" selected>Delivered</option>
                         <option value="4">Canceled</option>
                     </select>
                 </div>
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-md-4">
                     <label for="saleDate" style="display:block">From Date</label>
                     <input type="text" id="FromDate" class="form-control datepicker" style="background-color: white;" readonly />
                 </div>
-                <div class="col-12 col-md-3">
+                <div class="col-12 col-md-4">
                     <label for="saleDate" style="display:block">To Date</label>
                     <input type="text" id="ToDate" class="form-control datepicker" style="background-color:white;" readonly />
                 </div>
@@ -36,21 +39,54 @@
                 <br />
                 <br />
                 <br />
-                <div class="col-12 col-md-6 table-responsive border" id="divProduct" style="margin-top:20px;padding-top:10px">
+
+                <div class="col-12 col-md-6 mt-3">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold text-primary">Product</h6>
+                        </div>
+                        <div class="card-body table-responsive border" id="divProduct">
+
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 col-md-5 offset-md-1 table-responsive border" id="divCustomer" style="margin-top:20px;padding-top:10px">
+                <div class="col-12 col-md-6 mt-3" id="divCustomerParent">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold text-primary">Customer</h6>
+                        </div>
+                        <div class="card-body table-responsive border" id="divCustomer">
+
+                        </div>
+                    </div>
                 </div>
-                <div class="col-12 col-md-6 table-responsive border" id="divTransaction" style="margin-top:20px;padding-top:10px">
+                <br />
+                <div class="col-12 col-md-6 mt-3">
+                    <div class="card shadow-sm">
+                        <div class="card-header">
+                            <h6 class="m-0 font-weight-bold text-primary">Transaction</h6>
+                        </div>
+                        <div class="card-body table-responsive border" id="divTransaction">
+
+                        </div>
+                    </div>
                 </div>
+
             </div>
         </div>
     </div>
 </div>
 @section scripts{
     <script>
+        var roleId = '@Convert.ToInt32(Session["RoleId"])';
         $(document).ready(function () {
             ConfigureDate();
-            GetCustomers();
+            if (roleId != 6) {
+                GetCustomers();
+            } else {
+                GetDashboardData();
+            }
+          
         })
         function ConfigureDate() {
             var today = new Date();
@@ -106,7 +142,7 @@
             });
         }
         function GetDashboardData() {
-            var customerId = $("#drpCustomers").val();
+            var customerId = (roleId!=6? $("#drpCustomers").val():'@Convert.ToInt32(Session["CustomerId"])');
             var orderStatusId = $("#drpOrderStatus").val();
             var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
             var toDate = ConvertDateToDDMMYY($("#ToDate").val());
@@ -124,9 +160,14 @@
                     if (response.Success) {
                         console.log(JSON.parse(response.data));
                        /* BindOrdersGrid(response);*/
-                        BindProductsReportGrid(JSON.parse(response.data).Table1)
-                        BindCustomerReportGrid(JSON.parse(response.data).Table2)
-                        BindTransactionReportGrid(JSON.parse(response.data).Table3)
+                        BindProductsReportGrid(JSON.parse(response.data).Table1);
+                        if (roleId != 6) {
+                            BindCustomerReportGrid(JSON.parse(response.data).Table2);
+                        } else {
+                            $("#divCustomerParent").hide();
+                        }
+                        
+                        BindTransactionReportGrid(JSON.parse(response.data).Table3);
                     }
                     else {
                         toastr.error(response.Message);
@@ -158,7 +199,7 @@
             $("#divProduct").html(strHtml);
             $('#tblProductReport').addClass("table-striped");
             $('#tblProductReport').DataTable({
-                "pageLength": 50,
+                "pageLength": 5,
                 order: [1, 'desc'],
             });
         }
@@ -187,7 +228,7 @@
             $("#divCustomer").html(strHtml);
             $('#tblCustomerReport').addClass("table-striped");
             $('#tblCustomerReport').DataTable({
-                "pageLength": 50,
+                "pageLength": 5,
                 order: [2, 'desc'],
             });
         }
@@ -209,25 +250,25 @@
                                      </td>
                                       <td>
                                         ${item.OpenningBalance}
-                                     </td>  
+                                     </td>
                                       <td>
                                         ${item.PurchasedAmount}
                                      </td>
                                        <td>
                                         ${item.PaidAmount}
-                                     </td> 
+                                     </td>
                                       <td>
                                         ${item.OutStanding}
                                      </td>
-                                      
-                                    
+
+
                                </tr>`;
             });
             strHtml += `</table>`;
             $("#divTransaction").html(strHtml);
             $('#tblTransactionReport').addClass("table-striped");
             $('#tblTransactionReport').DataTable({
-                "pageLength": 50,
+                "pageLength": 5,
                 order: [4, 'desc'],
             });
         }

@@ -36,26 +36,23 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon rotate-n-15 small">
                     @*<i class="fas fa-laugh-wink"></i>*@
-                    Apex computers
+                    AK Store
                 </div>
                 <div class="sidebar-brand-text mx-3">Dairy CRM</div>
             </a>
 
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
-
-            <!-- Nav Item - Dashboard -->
             <li class="nav-item active">
-                <a class="nav-link" href="#">
+                <a class="nav-link collapsed" href="@Url.Action("Dashboard","Common")">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>@Html.DisplayName("Dashboard")</span>
                 </a>
             </li>
-
-
             @if (Convert.ToInt32(Session["RoleId"]) == 3)
             {
                 <!-- Nav Item - Pages Collapse Menu -->
+
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Products","Product")">
                         <i class="fas fa-blender-phone"></i>
@@ -64,29 +61,49 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("DistributorOrders","Orders")">
-                        <i class="fas fa-blender-phone"></i>
+                        <i class="fas fa-cart-arrow-down"></i>
                         <span>@Html.DisplayName("Orders")</span>
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Transaction"
+                       aria-expanded="true" aria-controls="collapseTwo">
+                        <i class="fas fa-money-bill-alt"></i>
+                        <span>@Html.DisplayName("Transaction")</span>
+                    </a>
+                    <div id="Transaction" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @Html.ActionLink("Show Transaction", "Transaction", "Transaction", new { area = "" }, new { @class = "collapse-item" })
+                            @Html.ActionLink("Transaction Report", "TransactionReport", "Transaction", new { area = "" }, new { @class = "collapse-item" })
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("BillsHistory","Bills")">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>@Html.DisplayName("Bills")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Customers","Customer")">
-                        <i class="fas fa-user-circle"></i>
+                        <i class="fas fa-users"></i>
                         <span>@Html.DisplayName("Customers")</span>
                     </a>
 
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Category","Category")">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fas fa-tags"></i>
                         <span>@Html.DisplayName("Category")</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Company","Company")">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fas fa-building"></i>
                         <span>@Html.DisplayName("Company")</span>
                     </a>
                 </li>
+
             }
             else if (Convert.ToInt32(Session["RoleId"]) == 6)
             {
@@ -98,17 +115,24 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("OrderedProducts","CustomerProduct")">
-                        <i class="fas fa-user-circle"></i>
+                        <i class="fas fa-cart-arrow-down"></i>
                         <span>@Html.DisplayName("Orders")</span>
                     </a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("BillsHistory","Bills")">
+                        <i class="fas fa-file-pdf"></i>
+                        <span>@Html.DisplayName("Bills")</span>
+                    </a>
+                </li>
+
             }
             else if (Convert.ToInt32(Session["RoleId"]) == 2)
             {
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#Distributors"
                        aria-expanded="true" aria-controls="collapseTwo">
-                        <i class="fas fa-people-carry"></i>
+                        <i class="fas fa-truck"></i>
                         <span>@Html.DisplayName("Distributors")</span>
                     </a>
                     <div id="Distributors" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
@@ -126,23 +150,25 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Customers","Customer")">
-                        <i class="fas fa-user-circle"></i>
+                        <i class="fas fa-users"></i>
                         <span>@Html.DisplayName("Customers")</span>
                     </a>
 
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Category","Category")">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fas fa-tags"></i>
                         <span>@Html.DisplayName("Category")</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("Company","Company")">
-                        <i class="fas fa-fw fa-cog"></i>
+                        <i class="fas fa-building"></i>
                         <span>@Html.DisplayName("Company")</span>
                     </a>
                 </li>
+
+
             }
             else if (Convert.ToInt32(Session["RoleId"]) == 1)
             {

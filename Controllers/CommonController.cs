@@ -14,9 +14,11 @@ namespace AKStore.Controllers
     public class CommonController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IDistributorService distributorService;
         public CommonController()
         {
             _userService = new UserService();
+            distributorService = new DistributorService();
         }
         [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpPost]
@@ -111,15 +113,19 @@ namespace AKStore.Controllers
 
 
         }
+
+        [CustomAuthorize(Role.Distributor, Role.Customer,Role.Admin)]
         public ActionResult DashBoard()
         {
             return View();
         }
+        [CustomAuthorize(Role.Distributor, Role.Customer,Role.Admin)]
         public ActionResult DashBoardData(DateTime fromDate, DateTime toDate, int orderStatusId, int customerId)
         {
-           
+
             //cutomerId = Convert.ToInt32(Session["CustomerId"]);
-            int distributorId = Convert.ToInt32(Session["DistributorId"]);
+            int distributorId = distributorService.FirstDistributor().Id;
+            // int distributorId = Convert.ToInt32(Session["DistributorId"]);
             var desData = _userService.GetDashBoardData(fromDate, toDate, orderStatusId, customerId, distributorId);
             var jsonstr = JsonConvert.SerializeObject(desData, Formatting.Indented);
             return Json(new { data = jsonstr, Success = true }, JsonRequestBehavior.AllowGet);
