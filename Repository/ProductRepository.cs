@@ -15,7 +15,7 @@ namespace AKStore.Repository
         {
             DistributorRepository distributorRepository = new DistributorRepository();
             productMaster.DistributorId = distributorRepository.GetAll().FirstOrDefault().Id;
-        
+
             string message = string.Empty;
             bool success = false;
             if (productMaster.Id == 0)
@@ -63,7 +63,7 @@ namespace AKStore.Repository
             p.Add("@Id", productId);
             p.Add("@TableName", "product");
             var msg = CommonOperations.Query<string>("DeleteById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
-            if (msg==null)
+            if (msg == null)
             {
                 message = "Product deleted successfully.";
                 success = true;
@@ -89,6 +89,16 @@ namespace AKStore.Repository
             p.Add("@Id", id);
             var productMaster = CommonOperations.Query<ProductMaster>("GetProductById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
             return productMaster;
+        }
+        public void ChangeProductData(int productId, decimal quantity, decimal price)
+        {
+            var p = new DynamicParameters();
+            p.Add("@Id", productId);
+            p.Add("@quantity", quantity);
+            p.Add("@price", price);
+            p.Add("@userId", Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]));
+            var msg = CommonOperations.Query<string>("ChangeProductData", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            
         }
     }
 }

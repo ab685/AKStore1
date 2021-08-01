@@ -9,5 +9,6 @@ namespace AKStore.Repository
         Company GetCompanyById(int id);
         Tuple<bool, string> UpsertCompany(Company company);
         IEnumerable<Company> GetCompanyByDistributorId(int distributorId);
+        Tuple<bool, string> DeleteCompany(int id);
     }
 }

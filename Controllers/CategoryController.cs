@@ -98,5 +98,24 @@ namespace AKStore.Controllers
                 return Json(new { Success = false, Message = ex.Message });
             }
         }
+
+        [CustomAuthorize(Role.Admin)]
+        [HttpPost]
+        public ActionResult DeleteCategory(int id)
+        {
+            try
+            {
+                if (id <= 0)
+                    return RedirectToAction(nameof(Category));
+
+                var tuple = _categoryService.DeleteCategory(id);
+                return RedirectToAction(nameof(Category));
+
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Success = false, Message = ex.Message });
+            }
+        }
     }
 }

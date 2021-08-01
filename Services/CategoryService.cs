@@ -32,6 +32,11 @@ namespace AKStore.Services
             var category1 = AutoMapper.Mapper.Map<Category>(category);
             return _categoryRepository.UpsertCategory(category1);
         }
+        public Tuple<bool, string> DeleteCategory(int id)
+        {
+            return _categoryRepository.DeleteCategory(id);
+        }
+       
     }
 
 }

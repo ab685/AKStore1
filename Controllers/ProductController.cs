@@ -156,20 +156,20 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChangeProductData(int productId)
+        public ActionResult ChangeProductData(int id, decimal quantity, decimal price)
         {
             try
             {
+                productService.ChangeProductData(id, quantity, price);
+                return RedirectToAction(nameof(Products));
 
-                var product = productService.GetProductById(productId);
-                return Json(new { Data = product, Success = true, Message = "Product Data fetched successfully" });
+                // return Json(new { Success = true, Message = "Product data changed successfully" });
             }
             catch (Exception ex)
             {
                 return Json(new { Data = new ProductModel(), Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
             }
         }
-
 
     }
 }

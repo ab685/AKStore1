@@ -9,6 +9,7 @@ namespace AKStore.Services
         IEnumerable<CategoryModel> GetCategoryByDistributorId(int distributorId);
         CategoryModel GetCategoryById(int id);
         Tuple<bool, string> UpsertCategory(CategoryModel category);
+        Tuple<bool, string> DeleteCategory(int id);
     }
 
 }

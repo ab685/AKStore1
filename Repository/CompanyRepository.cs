@@ -72,5 +72,27 @@ namespace AKStore.Repository
 
             return new Tuple<bool, string>(success, message);
         }
+
+        public Tuple<bool, string> DeleteCompany(int id)
+        {
+            var message = string.Empty;
+            var success = false;
+            var p = new DynamicParameters();
+            p.Add("@Id", id);
+            p.Add("@TableName", "company");
+            var msg = CommonOperations.Query<string>("DeleteById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            if (msg == null)
+            {
+                message = "Company deleted successfully.";
+                success = true;
+            }
+            else
+            {
+                message = "Company not found.";
+                success = false;
+            }
+
+            return new Tuple<bool, string>(success, message);
+        }
     }
 }

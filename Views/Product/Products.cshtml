@@ -41,10 +41,9 @@
                         <th>@Html.DisplayName("Avl Qty")</th>
                         <th>@Html.DisplayName("Ordered Qty")</th>
                         <th>@Html.DisplayName("Picture")</th>
-                        @if (Convert.ToInt32(Session["RoleId"]) == 2)
-                        {
-                            <th></th>
-                        }
+
+                        <th></th>
+
 
                     </tr>
                 </thead>
@@ -66,6 +65,13 @@
                                     <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
                                 </td>
                             }
+                            @if (Convert.ToInt32(Session["RoleId"]) == 3)
+                            {
+                                <td style="display:flex">
+                                    <a onclick="OpenChangeProductModal(@item.Id,@item.Quantity,@item.Price,'@item.Name')" href="#" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a>
+                                </td>
+                            }
+
 
                         </tr>
                     }
@@ -95,6 +101,31 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="ChangeProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-header">
+                <h5 class="modal-title" id="exampleModalLabel">Product</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body card-body">
+                <form method="post" action="@Url.Action("ChangeProductData","Product")">
+                    <input type="hidden" name="id" id="hdnProdId" />
+                    <label id="productName" style="display:block"></label>
+                    <input type="number" class="form-control mr-1" name="quantity" id="txtQuantity" min="0" required style="width:45%;float:left" onkeypress="return isNumber(event)"/>
+                    <input type="number" class="form-control" name="price" id="txtPrice" min="0" required  style="width:45%;" onkeypress="return isNumber(event)"/>
+                  <div class="mt-2">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
 @section scripts {
     <script>
         $(document).ready(function () {
@@ -104,6 +135,68 @@
             $("#ProductDeleteModal").modal("show");
             $("#hdnDelId").val(id);
         }
+        function OpenChangeProductModal(id, quantity, price,pname) {
+            $("#hdnProdId").val(id);
+            $("#txtQuantity").val(quantity);
+            $("#txtPrice").val(price);
+            $("#productName").text(pname);
+            $("#ChangeProductModal").modal("show");
+        }
+        function SaveProductChangeData() {
+            ClearControlsError();
+            var Id = $("#hdnId").val();
+            var quantity = $("#txtQuantity").val();
+            var price = $("#txtPrice").val();
+            var isValid = true;
+            if (!Id) {
+                isValid = false;
+            }
+            if (!quantity || Number(quantity)<  0) {
+                isValid = false;
+                $("#errorQuantity").text("Please enter quantity");
+            }
+            if (!price || Number(price)<  0) {
+                isValid = false;
+                $("#errorPrice").text("Please enter price");
+            }
 
+            if (!isValid) {
+                return;
+            }
+            var postedData = {
+                productId: Id,
+                quantity: quantity,
+                price: price
+            };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("ChangeProductData", "Product")',
+                data: postedData,
+                success: function (response) {
+                    if (response.Success) {
+                        toastr.success(response.Message);
+                        window.location.href = '@Url.Action("Products", "Product")';
+                    } else {
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    toastr.error(error.Message);
+
+                }
+            })
+        }
+        function ClearControlsError() {
+            $("#errorQuantity").text("");
+            $("#errorPrice").text("");
+        }
+        function isNumber(evt) {
+            debugger;
+            if (evt.charCode == 45 || evt.charCode == 101) {
+                return false;
+            } else {
+                return true;
+            }
+        }
     </script>
 }

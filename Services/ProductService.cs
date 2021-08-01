@@ -27,14 +27,18 @@ namespace AKStore.Services
 
         public Tuple<bool, string> UpsertProduct(ProductModel productModel)
         {
-            productModel.Quantity =Convert.ToInt32(productModel.Quantity);
+            productModel.Quantity = Convert.ToInt32(productModel.Quantity);
             var productMaster = AutoMapper.Mapper.Map<ProductMaster>(productModel);
-            productMaster.Quantity =Convert.ToInt32(productMaster.Quantity);
+            productMaster.Quantity = Convert.ToInt32(productMaster.Quantity);
             return _productRepository.UpsertProduct(productMaster);
         }
         public Tuple<bool, string> DeleteProduct(int productId)
         {
             return _productRepository.DeleteProduct(productId);
+        }
+        public void ChangeProductData(int productId, decimal quantity, decimal price)
+        {
+            _productRepository.ChangeProductData(productId, quantity, price);
         }
     }
 }

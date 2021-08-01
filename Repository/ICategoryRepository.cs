@@ -9,5 +9,6 @@ namespace AKStore.Repository
         IEnumerable<Category> GetCategoryByDistributorId(int distributorId);
         Category GetCategoryById(int id);
         Tuple<bool, string> UpsertCategory(Category category);
+        Tuple<bool, string> DeleteCategory(int id);
     } 
 }

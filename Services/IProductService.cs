@@ -13,5 +13,6 @@ namespace AKStore.Services
         Tuple<bool, string> UpsertProduct(ProductModel productModel);
         Tuple<bool, string> DeleteProduct(int productId);
         ProductModel GetProductById(int id);
+        void ChangeProductData(int productId, decimal quantity, decimal price);
     }
 }

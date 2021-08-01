@@ -30,6 +30,10 @@ namespace AKStore.Services
             var Company1 = AutoMapper.Mapper.Map<Company>(company);
             return _companyRepository.UpsertCompany(Company1);
         }
+        public Tuple<bool, string> DeleteCompany(int id)
+        {
+            return _companyRepository.DeleteCompany(id);
+        }
     }
 
 }

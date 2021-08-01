@@ -71,7 +71,27 @@ namespace AKStore.Repository
 
             return new Tuple<bool, string>(success, message);
         }
+        public Tuple<bool, string> DeleteCategory(int id)
+        {
+            var message = string.Empty;
+            var success = false;
+            var p = new DynamicParameters();
+            p.Add("@Id", id);
+            p.Add("@TableName", "category");
+            var msg = CommonOperations.Query<string>("DeleteById", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+            if (msg == null)
+            {
+                message = "Category deleted successfully.";
+                success = true;
+            }
+            else
+            {
+                message = "Category not found.";
+                success = false;
+            }
 
-        
+            return new Tuple<bool, string>(success, message);
+        }
+
     }
 }
