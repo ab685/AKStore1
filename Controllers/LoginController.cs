@@ -66,7 +66,7 @@ namespace AKStore.Controllers
                         {
                             var distributor = db.Distributor.Where(x => x.UserId == user.Id).FirstOrDefault();
                             Session["DistributorId"] = distributor.Id;
-                            return RedirectToAction("Customers", "Customer");
+                            return RedirectToAction("DistributorOrders", "Orders");
                         }
                         //else if (user.RoleId == 4)
                         //{

@@ -1,7 +1,7 @@
 ﻿@model AKStore.Models.BillsViewModel
 @{
     ViewBag.Title = "Bills";
-
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 <style>
     * {
@@ -17,13 +17,13 @@
 <div class="table-responsive">
     <table class="table table-bordered">
         <tr>
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Customer")
             </th>
             <td>
                 @Html.DisplayFor(x => x.CustomerName)
             </td>
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Store")
             </th>
             <td>
@@ -31,13 +31,13 @@
             </td>
         </tr>
         <tr>
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Dilivery Address")
             </th>
             <td>
                 @Html.DisplayFor(x => x.Address)
             </td>
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Postal code")
             </th>
             <td>
@@ -45,20 +45,20 @@
             </td>
         </tr>
         <tr>
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Date")
             </th>
             <td>
                 @Model.BillDate.ToString("dd/MM/yyyy hh:mm tt")
             </td>
 
-            @*<th class="bg-gradient-secondary text-white">
+            @*<th class="bg-secondary text-white">
                     @Html.DisplayName("Time")
                 </th>
                 <td>
                     @Model.BillDate.ToString("hh:mm tt")
                 </td>*@
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Delivery Note")
             </th>
             <td>
@@ -66,7 +66,7 @@
             </td>
         </tr>
         @*<tr>
-            <th class="bg-gradient-secondary text-white">
+            <th class="bg-secondary text-white">
                 @Html.DisplayName("Delivery Note")
             </th>
             <td>
@@ -80,7 +80,7 @@
 <br />
 <div class="table-responsive">
     <table class="table table-bordered">
-        <thead class="bg-gradient-secondary text-white">
+        <thead class="bg-secondary text-white">
             <tr>
                 <th>
                     @Html.DisplayName("Item Name")

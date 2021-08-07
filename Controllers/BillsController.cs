@@ -2,16 +2,17 @@
 using AKStore.Filters;
 using AKStore.Models;
 using AKStore.Services;
-using Rotativa;
+using SelectPdf;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
 namespace AKStore.Controllers
 {
-    
+
     public class BillsController : Controller
     {
         private readonly IOrderService _orderService;
@@ -20,7 +21,7 @@ namespace AKStore.Controllers
             _orderService = new OrderService();
         }
         // GET: Bill
-        [CustomAuthorize(Role.Distributor,Role.Customer)]
+        [CustomAuthorize(Role.Distributor, Role.Customer)]
         public ActionResult Bills(List<int> selectedIds)
         {
             BillsViewModel billsViewModel = new BillsViewModel();
@@ -50,9 +51,21 @@ namespace AKStore.Controllers
 
             billsViewModel.BillsItemModels = billsItemModels;
             _orderService.InsertBillsData(billsViewModel);
-            var report = new ViewAsPdf("Bills", billsViewModel);
-            report.FileName = "Bill_" + DateTime.Now.ToString() + ".pdf";
-            return report;
+            //var report = new ViewAsPdf("Bills", billsViewModel);
+            //report.FileName = "Bill_" + DateTime.Now.ToString() + ".pdf";
+            // return report;
+
+            HtmlToPdf converter = new HtmlToPdf();
+            var htmlPage = RenderRazorViewToString("~/Views/Bills/Bills.cshtml", billsViewModel);
+            converter.Options.ExternalLinksEnabled = true;
+            converter.Options.JavaScriptEnabled = true;
+            converter.Options.EmbedFonts = true;
+            converter.Options.PdfCompressionLevel = PdfCompressionLevel.NoCompression;
+            converter.Options.PdfPageSize = PdfPageSize.A4;
+            converter.Options.DrawBackground = true;
+            PdfDocument doc = converter.ConvertHtmlString(htmlPage);
+            var file = doc.Save();
+            return new FileContentResult(file, "application/octet-stream");
         }
 
         [CustomAuthorize(Role.Distributor, Role.Customer)]
@@ -79,9 +92,20 @@ namespace AKStore.Controllers
         public ActionResult BillsHistoryPDF(int id)
         {
             var billsViewModel = _orderService.GetBillsHistoryPDF(id);
-            var report = new ViewAsPdf("Bills", billsViewModel);
-            report.FileName = "Bill_" + DateTime.Now.ToString() + ".pdf";
-            return report;
+            //var report = new ViewAsPdf("Bills", billsViewModel);
+            //report.FileName = "Bill_" + DateTime.Now.ToString() + ".pdf";
+            HtmlToPdf converter = new HtmlToPdf();
+            var htmlPage = RenderRazorViewToString("~/Views/Bills/Bills.cshtml", billsViewModel);
+            converter.Options.ExternalLinksEnabled = true;
+            converter.Options.JavaScriptEnabled = true;
+            converter.Options.EmbedFonts = true;
+            converter.Options.PdfCompressionLevel = PdfCompressionLevel.NoCompression;
+            converter.Options.PdfPageSize = PdfPageSize.A4;
+            converter.Options.DrawBackground = true;
+            PdfDocument doc = converter.ConvertHtmlString(htmlPage);
+            var file = doc.Save();
+            return new FileContentResult(file, "application/octet-stream");
+            
         }
 
         [CustomAuthorize(Role.Distributor)]
@@ -92,9 +116,22 @@ namespace AKStore.Controllers
                 _orderService.DeleteBills(id);
                 return RedirectToAction(nameof(BillsHistory));
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 return RedirectToAction(nameof(BillsHistory));
+            }
+        }
+
+        public string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
             }
         }
     }

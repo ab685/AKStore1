@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using AKStore.Extension;
+using AKStore.Filters;
 using AKStore.Models;
 using AKStore.Services;
 namespace AKStore.Controllers
 {
-
+    [CustomAuthorize(Role.Distributor)]
     public class OrdersController : Controller
     {
         private readonly IOrderService _orderService;
