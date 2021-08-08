@@ -5,8 +5,10 @@ using System.Data;
 
 
 using System.Dynamic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using System.Web;
 
@@ -125,5 +127,6 @@ namespace AKStore.Extension
 			//put a breakpoint here and check datatable
 			return dataTable;
 		}
+	
 	}
 }

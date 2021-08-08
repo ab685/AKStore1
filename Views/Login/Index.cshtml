@@ -38,6 +38,11 @@
                                             @Html.LabelFor(model => model.Password, htmlAttributes: new { @class = "mb-1" })
                                             @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control", placeholder = "Enter password", type = "password", autocomplete = "off" } })
                                             @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+                                        </div>  
+                                        <div class="form-group">
+                                            @Html.CheckBoxFor(m => m.RememberMe)
+                                            @Html.LabelFor(model => model.RememberMe, htmlAttributes: new { @class = "mb-1" })
+
                                         </div>
 
                                         <div class="form-group">
