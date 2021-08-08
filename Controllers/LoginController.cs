@@ -25,7 +25,7 @@ namespace AKStore.Controllers
         public ActionResult Index()
         {
 
-            if (Request.Cookies["UserName"] != null && Request.Cookies["Password"] != null)
+            if (Request.Cookies["Asp.netAUK"] != null && Request.Cookies["Asp.netAPK"] != null)
             {
                 Login model = new Login();
                 var passPhraseEnct = ConfigurationManager.AppSettings["passPhraseEnct"];
