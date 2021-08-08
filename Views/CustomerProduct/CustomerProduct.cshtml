@@ -19,13 +19,38 @@
         .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
             background-image: linear-gradient( 135deg, #667eea 0%, #764ba2 100%);
         }
+    .btn-number {
+        background-image: linear-gradient( 135deg, #667eea 0%, #764ba2 100%);
+        margin-left:2px;
+        margin-right:2px;
+    }
+     @@media only screen and (device-width: 768px) {
+       /* default iPad screens */
+        .qtytext {
+            margin-top: 0.4% !important;
+        }
+    }
+     @@media only screen and (min-width: 960px) {
+        .qtytext {
+            margin-top: 0% !important;
+        }
+    }
+     @@media only screen and (min-width: 1440px) {
+        .qtytext {
+            margin-top: 0% !important;
+        }
+    }
+     @@media only screen and (max-device-width: 480px) {
+        .qtytext {
+            margin-top: -0.8% !important;
+        }
+    }
 </style>
-
 <div class="p-2">
 
     <div class="container">
         <div class="row">
-            <div class="col-12 col-md-6">
+            <div class="col-12 col-md-6 mt-3">
                 <form method="get">
                     <div class="input-group">
                         <div class="form-outline">
@@ -37,7 +62,8 @@
                     </div>
                 </form>
             </div>
-            <div class="col-12 col-md-6">
+
+            <div class="col-12 col-md-6 mt-3">
                 @Html.PagedListPager(Model, page => Url.Action("CustomerProduct", new { search = Request.QueryString["search"], page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded })
             </div>
         </div>
@@ -48,7 +74,7 @@
             <div class="row" style="padding:0!important">
                 @foreach (var item in Model)
                 {
-                    <div class="col-12 col-md-6 col-lg-4 p-3">
+                    <div class="col-6 col-md-6 col-lg-3 p-3">
                         <div class="card h-100 shadow-lg border">
                             <img class="card-img-top img-thumbnail" style="max-height:200px !important;border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
                             <div class="card-body p-4">
@@ -65,13 +91,13 @@
                                         @Html.AntiForgeryToken()
                                         <div class="input-group justify-content-center mb-3">
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-left-minus btn btn-sm btn-grad btn-number" id="btnMinus_@item.Id" onclick="ChangeQuantity('@item.Id',false)" data-type="minus" data-field="">
+                                                <button type="button" class="quantity-left-minus btn btn-sm btn-primary btn-number"  id="btnMinus_@item.Id" onclick="ChangeQuantity('@item.Id',false)" data-type="minus" data-field="">
                                                     <i class="fas fa-minus"></i>
                                                 </button>
                                             </span>
-                                            <input type="number" id="txtQuantity_@item.Id" style="max-width:70%;margin-top:1.60%" name="Quantity" class="form-control text-center" autocomplete="off" min="1" onkeypress="return isNumber(event)">
+                                            <input type="number" id="txtQuantity_@item.Id" style="max-width: 80%; height: 26px; padding: 0px !important; margin-top: -1.6%" name="Quantity" class="form-control text-center qtytext" autocomplete="off" min="1" required onkeypress="return isNumber(event)">
                                             <span class="input-group-btn">
-                                                <button type="button" class="quantity-right-plus btn btn-sm btn-grad btn-number" id="btnPlus_@item.Id" onclick="ChangeQuantity('@item.Id',true)" data-type="plus" data-field="">
+                                                <button type="button" class="quantity-right-plus btn btn-sm btn-primary btn-number" id="btnPlus_@item.Id" onclick="ChangeQuantity('@item.Id',true)" data-type="plus" data-field="">
                                                     <i class="fas fa-plus"></i>
                                                 </button>
                                             </span>

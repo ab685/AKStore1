@@ -111,7 +111,7 @@ namespace AKStore.Services
 
         public IPagedList<ProductModel> GetProductDataByCustomerId(int customerId, string search, int? page)
         {
-            return _customerRepository.GetProductDataByCustomerId(customerId, search).ToPagedList(page ?? 1, 200);
+            return _customerRepository.GetProductDataByCustomerId(customerId, search).ToPagedList(page ?? 1, 100);
         }
         public List<OrderModels> GetOrdersByCustomerId(int customerId)
         {
