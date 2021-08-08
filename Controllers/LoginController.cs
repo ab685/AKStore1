@@ -11,7 +11,7 @@ using System.Web;
 using AKStore.Extension;
 using System.Security.Cryptography;
 using System.Text;
-
+using System.Configuration;
 namespace AKStore.Controllers
 {
     public class LoginController : Controller
@@ -28,13 +28,9 @@ namespace AKStore.Controllers
             if (Request.Cookies["UserName"] != null && Request.Cookies["Password"] != null)
             {
                 Login model = new Login();
-                using (Rijndael myRijndael = Rijndael.Create())
-                {
-
-                    model.UserName = EncryptionHelper.Decrypt(Request.Cookies["UserName"].Value, "AkStoreAJFJ7232");
-                    model.Password = EncryptionHelper.Decrypt(Request.Cookies["Password"].Value, "AkStoreAJFJ7232");
-                }
-
+                var passPhraseEnct = ConfigurationManager.AppSettings["passPhraseEnct"];
+                model.UserName = EncryptionHelper.Decrypt(Request.Cookies["Asp.netAUK"].Value, passPhraseEnct);
+                model.Password = EncryptionHelper.Decrypt(Request.Cookies["Asp.netAPK"].Value, passPhraseEnct);
                 model.RememberMe = true;
                 return View(model);
             }
@@ -65,18 +61,18 @@ namespace AKStore.Controllers
                         }
                         if (model.RememberMe)
                         {
-                            Response.Cookies["UserName"].Expires = DateTime.Now.AddDays(30);
-                            Response.Cookies["Password"].Expires = DateTime.Now.AddDays(30);
+                            Response.Cookies["Asp.netAUK"].Expires = DateTime.Now.AddDays(30);
+                            Response.Cookies["Asp.netAPK"].Expires = DateTime.Now.AddDays(30);
                         }
                         else
                         {
-                            Response.Cookies["UserName"].Expires = DateTime.Now.AddDays(-1);
-                            Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
+
+                            Response.Cookies["Asp.netAUK"].Expires = DateTime.Now.AddDays(-1);
+                            Response.Cookies["Asp.netAPK"].Expires = DateTime.Now.AddDays(-1);
                         }
-
-
-                        Response.Cookies["UserName"].Value = EncryptionHelper.Encrypt(model.UserName, "AkStoreAJFJ7232");
-                        Response.Cookies["Password"].Value = EncryptionHelper.Encrypt(model.Password, "AkStoreAJFJ7232");
+                        var passPhraseEnct = ConfigurationManager.AppSettings["passPhraseEnct"];
+                        Response.Cookies["Asp.netAUK"].Value = EncryptionHelper.Encrypt(model.UserName, passPhraseEnct);
+                        Response.Cookies["Asp.netAPK"].Value = EncryptionHelper.Encrypt(model.Password, passPhraseEnct);
                         Session["LoggedInUserName"] = user.UserName;
 
                         //Session["UserId"] = user.Id;
@@ -92,7 +88,7 @@ namespace AKStore.Controllers
                         {
                             var admin = db.Admin.Where(x => x.UserId == user.Id).FirstOrDefault();
                             Session["AdminId"] = admin.Id;
-                            return RedirectToAction("UpsertDistributor", "Distributor");
+                            return RedirectToAction("Dashboard", "Common");
                         }
                         else if (user.RoleId == 3)
                         {
@@ -100,12 +96,6 @@ namespace AKStore.Controllers
                             Session["DistributorId"] = distributor.Id;
                             return RedirectToAction("DistributorOrders", "Orders");
                         }
-                        //else if (user.RoleId == 4)
-                        //{
-                        //    var retailerDetails = db.RetailerDetails.Where(x => x.UserId == user.Id).FirstOrDefault();
-                        //    Session["RetailerId"] = retailerDetails.RetailerId;
-                        //    return RedirectToAction("Customers", "Customer");
-                        //}
                         else if (user.RoleId == 6)
                         {
                             var customer = db.Customer.Where(x => x.UserId == user.Id).FirstOrDefault();
