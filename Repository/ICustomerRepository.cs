@@ -14,6 +14,6 @@ namespace AKStore.Repository
         IEnumerable<Customer> GetCustomers(int distributorId);
         Customer GetCustomerById(int id);
         List<ProductModel> GetProductDataByCustomerId(int customerId,string search);
-        List<OrderModels> GetOrdersByCustomerId(int customerId);
+        List<OrderModels> GetOrdersByCustomerId(int customerId, DateTime? fromDate, DateTime? toDate, int orderStatusId);
     }
 }

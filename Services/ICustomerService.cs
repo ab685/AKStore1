@@ -14,6 +14,6 @@ namespace AKStore.Services
         Tuple<bool, string> DeleteCustomer(int customerId);
         CustomerModel GetCustomerDataById(int id);
         IPagedList<ProductModel> GetProductDataByCustomerId(int customerId,string search, int? page);
-        List<OrderModels> GetOrdersByCustomerId(int customerId);
+        List<OrderModels> GetOrdersByCustomerId(int customerId, DateTime ?fromDate, DateTime? toDate, int orderStatusId);
     }
 }

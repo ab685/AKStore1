@@ -1,15 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using AKStore.Entity;
-using AKStore.AppContext;
 using AKStore.Models;
 using System.Web;
 using Dapper;
 using AKStore.Extension;
 using System.Data;
-using AKStore.Extension;
 
 namespace AKStore.Repository
 {

@@ -103,10 +103,13 @@ namespace AKStore.Repository
             var products = CommonOperations.Query<ProductModel>("GetProductDataByUserId", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             return products;
         }
-        public List<OrderModels> GetOrdersByCustomerId(int customerId)
+        public List<OrderModels> GetOrdersByCustomerId(int customerId, DateTime? fromDate, DateTime? toDate, int orderStatusId)
         {
             var p = new DynamicParameters();
             p.Add("@CustomerId", customerId);
+            p.Add("@FromDate", fromDate ?? DateTime.Now.AddDays(-30));
+            p.Add("@ToDate", toDate ?? DateTime.Now);
+            p.Add("@OrderStatusId", orderStatusId);
             var orders = CommonOperations.Query<OrderModels>("GetOrdersByCustomerId", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             return orders;
         }

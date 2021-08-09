@@ -113,9 +113,9 @@ namespace AKStore.Services
         {
             return _customerRepository.GetProductDataByCustomerId(customerId, search).ToPagedList(page ?? 1, 100);
         }
-        public List<OrderModels> GetOrdersByCustomerId(int customerId)
+        public List<OrderModels> GetOrdersByCustomerId(int customerId,DateTime? fromDate,DateTime? toDate,int orderStatusId)
         {
-            return _customerRepository.GetOrdersByCustomerId(customerId);
+            return _customerRepository.GetOrdersByCustomerId(customerId,fromDate,toDate,orderStatusId);
         }
     }
 }

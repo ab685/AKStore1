@@ -59,12 +59,32 @@ namespace AKStore.Controllers
 
         }
 
+
         public ActionResult OrderedProducts()
         {
             var customerId = Convert.ToInt32(Session["CustomerId"]);
-            var products = customerService.GetOrdersByCustomerId(customerId);
             ViewBag.Messeage = TempData["Messeage"];
-            return View(products);
+            return View();
+        }
+
+        public ActionResult OrderedProductsData(DistributorOrderModel distributorOrderModel)
+        {
+            try
+            {
+                var customerId = Convert.ToInt32(Session["CustomerId"]);
+                var products = customerService.GetOrdersByCustomerId(customerId, distributorOrderModel.FromDate, distributorOrderModel.ToDate, distributorOrderModel.OrderStatusId);
+                return Json(new { data = products, Success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new
+                {
+                    data = new List<OrderModels>(),
+                    Success = false,
+                    Message = ex.Message.ToString()
+                }, JsonRequestBehavior.AllowGet);
+
+            }
         }
 
         [HttpPost]
