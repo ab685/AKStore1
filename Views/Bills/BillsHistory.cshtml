@@ -62,7 +62,7 @@
         var roleId = '@Convert.ToInt32(Session["RoleId"])';
         $(document).ready(function () {
             ConfigureDate();
-            if (roleId == 2) {
+            if (roleId == 3) {
                 GetCustomers();
             } else {
                 GetBillsData();
@@ -182,7 +182,7 @@
         function GetBillsDetailsPDF(id, ele) {
 
             var fileName = $(ele).text() + ".pdf";
-            fileName = "Bills_"+fileName.replace(/ /g, '');
+            fileName = "Bills_"+fileName.replace(/ /g, '_');
             $.ajax({
                 type: "GET",
                 url: '@Url.Action("BillsHistoryPDF", "Bills")'+"/"+id,

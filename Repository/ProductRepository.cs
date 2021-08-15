@@ -45,6 +45,7 @@ namespace AKStore.Repository
                     product.UpdatedByUserId = Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]);
                     product.DistributorId = productMaster.DistributorId;
                     product.CompanyId = productMaster.CompanyId;
+                    product.HasDiscount = productMaster.HasDiscount;
                     //product.CategoryId = productMaster.CategoryId;
                     // db.ProductMaster.Update(product);
                     db.SaveChanges();

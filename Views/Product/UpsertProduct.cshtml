@@ -85,7 +85,7 @@
                                 </div>
                                 <div class="col-12 col-md-6">
                                     <div class="form-group">
-                                       
+
                                         @if (!string.IsNullOrEmpty(Model.FilePath))
                                         {
                                             <img id="imgPreview" src="@Url.Content("~/Documents/images/product/"+Model.FilePath)" />
@@ -94,6 +94,13 @@
                                         {
                                             <img id="imgPreview" style="display:none" />
                                         }
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-6">
+                                    <div class="form-group">
+                                        @Html.Label("Has Discount", htmlAttributes: new { @class = "mb-1" })
+                                        @Html.CheckBoxFor(model => model.HasDiscount)
+                                        @Html.ValidationMessageFor(model => model.HasDiscount, "", new { @class = "text-danger" })
                                     </div>
                                 </div>
 

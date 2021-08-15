@@ -35,9 +35,14 @@ namespace AKStore.Controllers
                 return new HttpNotFoundResult("Not found record");
 
             BillsViewModel billsViewModel = new BillsViewModel();
-            billsViewModel.BillDate = DateTime.Now;
-            var random = new Random();
+            var BritishZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 
+            DateTime dt = DateTime.SpecifyKind(DateTime.UtcNow, DateTimeKind.Unspecified);
+
+            DateTime DateTimeInBritishLocal = TimeZoneInfo.ConvertTime(dt, TimeZoneInfo.Utc, BritishZone);
+            billsViewModel.BillDate = DateTimeInBritishLocal;
+            var random = new Random();
+            
             var billsItemModels = _orderService.GetOrderBillsData(selectedIds);
             billsViewModel.NetAmount = billsItemModels.Sum(x => (x.Price * x.Quantity));
             billsViewModel.StoreName = billsItemModels.FirstOrDefault()?.StoreName;

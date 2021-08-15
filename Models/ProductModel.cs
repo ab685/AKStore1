@@ -36,7 +36,7 @@ namespace AKStore.Models
         public DateTime? UpdatedDate { get; set; }
         public HttpPostedFileBase file { get; set; }
         public string FilePath { get; set; }
-
+        public bool HasDiscount { get; set; }
 
         public SelectList Company { get; set; }
 

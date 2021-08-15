@@ -24,6 +24,7 @@ namespace AKStore.Entity
         public DateTime? UpdatedDate { get; set; }
         public int? InsertedByUserId { get; set; }
         public int? UpdatedByUserId { get; set; }
+        public bool? HasDiscount { get; set; }
     }  
 }      
        

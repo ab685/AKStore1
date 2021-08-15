@@ -31,7 +31,7 @@
     <div class="card-body">
 
         <div class="table-responsive">
-            <table class="table table-bordered">
+            <table id="tblProduct" class="table table-bordered">
                 <thead class="success">
                     <tr>
                         <th>@Html.DisplayName("Product")</th>
@@ -129,6 +129,10 @@
 @section scripts {
     <script>
         $(document).ready(function () {
+            $('#tblProduct').DataTable({
+                "pageLength": 50,
+                "order": [],
+            });
         });
 
         function OpenDeleteModal(id) {

@@ -324,8 +324,9 @@
                     let seconds = date_ob.getSeconds();
 
                     // prints date & time in YYYY-MM-DD HH:MM:SS format
-                    date_format_str= year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
-                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_" + storeName[0]+"_" + date_format_str+".pdf");
+                    date_format_str = date_ob.toLocaleDateString('en-UK', { hour: 'numeric', minute: 'numeric', hour12: true, second: 'numeric' })
+                    //date_format_str= year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_" + storeName[0] + "_" + date_format_str.replace(',', '_')+".pdf");
                 },
                 error: function (error) {
                     alert(error);
