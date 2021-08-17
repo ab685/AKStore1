@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using AKStore.Entity;
 using AKStore.Extension;
@@ -116,7 +117,11 @@ namespace AKStore.Controllers
                             ModelState.AddModelError("file", "Only image files are allowed");
                             return View(productModel);
                         }
-                        file.SaveAs(Path.Combine(pathToSave, filename));
+
+                        WebImage img = new WebImage(file.InputStream);
+                        img.Resize(240, 240,true,true);
+                        img.Save(Path.Combine(pathToSave, filename));
+                        //file.SaveAs(Path.Combine(pathToSave, filename));
                     }
                 }
                 productModel.FilePath = filename;
