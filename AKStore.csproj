@@ -168,6 +168,7 @@
     <Compile Include="Entity\Category.cs" />
     <Compile Include="Extension\EncryptionHelper.cs" />
     <Compile Include="Extension\OrderStatus.cs" />
+    <Compile Include="Filters\AllowCrossSiteJsonAttribute.cs" />
     <Compile Include="Models\BillsViewModel.cs" />
     <Compile Include="Models\CategoryModel.cs" />
     <Compile Include="Entity\Company.cs" />

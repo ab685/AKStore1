@@ -132,7 +132,8 @@ namespace AKStore.Controllers
             var jsonstr = JsonConvert.SerializeObject(desData, Formatting.Indented);
             return Json(new { data = jsonstr, Success = true }, JsonRequestBehavior.AllowGet);
         }
-
+      
+        [AllowCrossSiteJson]
         public ActionResult GetProducts()
         {
             try
