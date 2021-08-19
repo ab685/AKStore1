@@ -4,6 +4,7 @@ using AKStore.Models;
 using AKStore.Services;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Web;
@@ -82,7 +83,7 @@ namespace AKStore.Controllers
                     if (file.ContentLength != 0)
                     {
                         filename = Path.GetFileName(file.FileName);
-
+                        filename = filename.Replace("'","").Replace(" ","_");
                         string fileExtension = Path.GetExtension(filename);
                         var allowed = new string[] { ".png", ".jpg", ".jpeg", ".gif" };
                         if (!allowed.Contains(fileExtension))
@@ -90,7 +91,8 @@ namespace AKStore.Controllers
                             ModelState.AddModelError("file", "Only image files are allowed");
                             return View(companyModel);
                         }
-                        file.SaveAs(Path.Combine(pathToSave, filename));
+                        ExtensionMethods.ResizeImage(Image.FromStream(file.InputStream), 240, 240, Path.Combine(pathToSave, filename));
+                        // file.SaveAs(Path.Combine(pathToSave, filename));
                     }
                 }
                 companyModel.FilePath = filename;

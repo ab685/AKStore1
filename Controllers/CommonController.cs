@@ -14,11 +14,13 @@ namespace AKStore.Controllers
     public class CommonController : Controller
     {
         private readonly IUserService _userService;
+        private readonly IProductService productService;
         private readonly IDistributorService distributorService;
         public CommonController()
         {
             _userService = new UserService();
             distributorService = new DistributorService();
+            productService = new ProductService();
         }
         [CustomAuthorize(Role.SuperAdmin, Role.Admin, Role.Distributor, Role.Customer)]
         [HttpPost]
@@ -114,12 +116,12 @@ namespace AKStore.Controllers
 
         }
 
-        [CustomAuthorize(Role.Distributor, Role.Customer,Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Customer, Role.Admin)]
         public ActionResult DashBoard()
         {
             return View();
         }
-        [CustomAuthorize(Role.Distributor, Role.Customer,Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Customer, Role.Admin)]
         public ActionResult DashBoardData(DateTime fromDate, DateTime toDate, int orderStatusId, int customerId)
         {
 
@@ -129,6 +131,20 @@ namespace AKStore.Controllers
             var desData = _userService.GetDashBoardData(fromDate, toDate, orderStatusId, customerId, distributorId);
             var jsonstr = JsonConvert.SerializeObject(desData, Formatting.Indented);
             return Json(new { data = jsonstr, Success = true }, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult GetProducts()
+        {
+            try
+            {
+                var products = productService.GetProduct(1);
+                return Json(new { data = products, Success = true }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception ex)
+            {
+                return Json(new { data = new List<ProductModel>(), Success = false, Error = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+
         }
 
     }

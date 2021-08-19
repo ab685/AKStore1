@@ -24,7 +24,7 @@ namespace AKStore.Models
         public decimal Price { get; set; } 
 
         
-        [Range(0,10000000,ErrorMessage = "Please enter valid quantity")]
+      
         [Required(AllowEmptyStrings = false, ErrorMessage="Please enter quantity")]
         public int? Quantity { get; set; }
         public int? OrderedQuantity { get; set; }

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Web;
 using System.Web.Helpers;
 using System.Web.Mvc;
@@ -11,7 +11,6 @@ using AKStore.Extension;
 using AKStore.Filters;
 using AKStore.Models;
 using AKStore.Services;
-
 
 namespace AKStore.Controllers
 {
@@ -109,7 +108,7 @@ namespace AKStore.Controllers
                     if (file.ContentLength != 0)
                     {
                         filename = Path.GetFileName(file.FileName);
-
+                        filename = filename.Replace("'", "").Replace(" ", "_");
                         string fileExtension = Path.GetExtension(filename);
                         var allowed = new string[] { ".png", ".jpg", ".jpeg", ".gif" };
                         if (!allowed.Contains(fileExtension))
@@ -117,11 +116,9 @@ namespace AKStore.Controllers
                             ModelState.AddModelError("file", "Only image files are allowed");
                             return View(productModel);
                         }
-
-                        WebImage img = new WebImage(file.InputStream);
-                        img.Resize(240, 240,true,true);
-                        img.Save(Path.Combine(pathToSave, filename));
                         //file.SaveAs(Path.Combine(pathToSave, filename));
+                        ExtensionMethods.ResizeImage(Image.FromStream(file.InputStream), 240, 240, Path.Combine(pathToSave, filename));
+
                     }
                 }
                 productModel.FilePath = filename;
