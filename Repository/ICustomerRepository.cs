@@ -13,7 +13,7 @@ namespace AKStore.Repository
         Tuple<bool, string> DeleteCustomer(int customerId);
         IEnumerable<Customer> GetCustomers(int distributorId);
         Customer GetCustomerById(int id);
-        List<ProductModel> GetProductDataByCustomerId(int customerId,string search);
+        List<ProductModel> GetProductDataByCustomerId(int customerId,string search,string company, string category);
         List<OrderModels> GetOrdersByCustomerId(int customerId, DateTime? fromDate, DateTime? toDate, int orderStatusId);
     }
 }

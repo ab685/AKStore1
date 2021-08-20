@@ -13,7 +13,7 @@ namespace AKStore.Services
         Tuple<bool, string> UpsertCustomer(CustomerModel customerModel);
         Tuple<bool, string> DeleteCustomer(int customerId);
         CustomerModel GetCustomerDataById(int id);
-        IPagedList<ProductModel> GetProductDataByCustomerId(int customerId,string search, int? page);
+        IPagedList<ProductModel> GetProductDataByCustomerId(int customerId,string search,string company, string category, int? page);
         List<OrderModels> GetOrdersByCustomerId(int customerId, DateTime ?fromDate, DateTime? toDate, int orderStatusId);
     }
 }

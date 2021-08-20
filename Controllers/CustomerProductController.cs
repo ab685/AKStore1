@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.UI;
 
 namespace AKStore.Controllers
 {
@@ -15,17 +16,28 @@ namespace AKStore.Controllers
     {
         private readonly ICustomerService customerService;
         private readonly IOrderService orderService;
-
+        private readonly ICompanyService companyService;
+        private readonly ICategoryService categoryService;
+        private readonly IDistributorService distributorService;
         public CustomerProductController()
         {
             customerService = new CustomerService();
             orderService = new OrderService();
+            companyService = new CompanyService();
+            categoryService = new CategoryService();
+            distributorService = new DistributorService();
         }
         [HttpGet]
-        public ActionResult CustomerProduct(string search, int? page)
+        public ActionResult CustomerProduct(string search, string company, string category, int? page)
         {
             var customerId = Convert.ToInt32(Session["CustomerId"]);
-            var products = customerService.GetProductDataByCustomerId(customerId, search, page);
+            var products = customerService.GetProductDataByCustomerId(customerId, search, company, category, page);
+            var distributor = distributorService.FirstDistributor();
+            ViewBag.CompanyModels = companyService.GetCompanyByDistributorId(distributor.Id).OrderBy(x => x.Name).ToList();
+            ViewBag.CategoryModels = categoryService.GetCategoryByDistributorId(distributor.Id).OrderBy(x => x.Name).ToList();
+            ViewBag.search = search;
+            ViewBag.company = company;
+            ViewBag.category = category;
             ViewBag.Messeage = TempData["Messeage"];
             ViewBag.IsError = TempData["IsError"];
             return View(products);

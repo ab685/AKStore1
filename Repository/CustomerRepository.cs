@@ -95,11 +95,13 @@ namespace AKStore.Repository
 
         }
 
-        public List<ProductModel> GetProductDataByCustomerId(int customerId, string search)
+        public List<ProductModel> GetProductDataByCustomerId(int customerId, string search,string company,string category)
         {
             var p = new DynamicParameters();
             p.Add("@CustomerId", customerId);
-            p.Add("@Search", search);
+            p.Add("@Search",string.IsNullOrEmpty(search) ?null :search);
+            p.Add("@Company", string.IsNullOrEmpty(company) ? null : company);
+            p.Add("@Category", string.IsNullOrEmpty(category) ? null : category);
             var products = CommonOperations.Query<ProductModel>("GetProductDataByUserId", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             return products;
         }
