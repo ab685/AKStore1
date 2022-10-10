@@ -12,6 +12,9 @@ using AKStore.Extension;
 using System.Security.Cryptography;
 using System.Text;
 using System.Configuration;
+using Dapper;
+using AKStore.Entity;
+
 namespace AKStore.Controllers
 {
     public class LoginController : Controller
@@ -45,9 +48,14 @@ namespace AKStore.Controllers
                 if (ModelState.IsValid)
                 {
 
-                    AppContext.AKStoreContext db = new AppContext.AKStoreContext();
-                    var user = db.Users.Where(x => x.UserName.Trim() == model.UserName.Trim() && x.Password == model.Password.Trim()).FirstOrDefault();
+                   
+                    // var user = db.Users.Where(x => x.UserName.Trim() == model.UserName.Trim() && x.Password == model.Password.Trim()).FirstOrDefault();
 
+
+                    var p = new DynamicParameters();
+                    p.Add("@UserName", model.UserName);
+                    p.Add("@Password", model.Password);
+                    var user = CommonOperations.Query<Users>("usp_GetUserForLogin", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
                     if (user != null)
                     {
                         if (user.IsActive == false)
@@ -79,27 +87,30 @@ namespace AKStore.Controllers
                         Session["LoggedInUserId"] = user.Id;
                         Session["RoleId"] = user.RoleId;
 
-
+                        var p1 = new DynamicParameters();
+                        p1.Add("@TableName", model.UserName);
+                        p1.Add("@UserId", user.Id);
+                        var tableId = CommonOperations.Query<int>("usp_GetTableIdsForLogin", p1, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
                         if (user.RoleId == 1)
                         {
                             return RedirectToAction("UpsertAdmin", "Admin");
                         }
                         else if (user.RoleId == 2)
                         {
-                            var admin = db.Admin.Where(x => x.UserId == user.Id).FirstOrDefault();
-                            Session["AdminId"] = admin.Id;
+                           // var admin = db.Admin.Where(x => x.UserId == user.Id).FirstOrDefault();
+                            Session["AdminId"] = tableId;
                             return RedirectToAction("Dashboard", "Common");
                         }
                         else if (user.RoleId == 3)
                         {
-                            var distributor = db.Distributor.Where(x => x.UserId == user.Id).FirstOrDefault();
-                            Session["DistributorId"] = distributor.Id;
+                            //var distributor = db.Distributor.Where(x => x.UserId == user.Id).FirstOrDefault();
+                            Session["DistributorId"] = tableId;
                             return RedirectToAction("DistributorOrders", "Orders");
                         }
                         else if (user.RoleId == 6)
                         {
-                            var customer = db.Customer.Where(x => x.UserId == user.Id).FirstOrDefault();
-                            Session["CustomerId"] = customer.Id;
+                           // var customer = db.Customer.Where(x => x.UserId == user.Id).FirstOrDefault();
+                            Session["CustomerId"] = tableId;
                             return RedirectToAction("CustomerProduct", "CustomerProduct");
                         }
                         else
