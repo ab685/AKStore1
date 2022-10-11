@@ -14,20 +14,17 @@ using System.Text;
 using System.Configuration;
 using Dapper;
 using AKStore.Entity;
-
 namespace AKStore.Controllers
 {
     public class LoginController : Controller
     {
         private readonly IUserService _userService;
-
         public LoginController()
         {
             _userService = new UserService();
         }
         public ActionResult Index()
         {
-
             if (Request.Cookies["Asp.netAUK"] != null && Request.Cookies["Asp.netAPK"] != null)
             {
                 Login model = new Login();
@@ -39,7 +36,6 @@ namespace AKStore.Controllers
             }
             return View();
         }
-
         [HttpPost, AllowAnonymous]
         public ActionResult Index(Login model)
         {
@@ -47,11 +43,7 @@ namespace AKStore.Controllers
             {
                 if (ModelState.IsValid)
                 {
-
-                   
                     // var user = db.Users.Where(x => x.UserName.Trim() == model.UserName.Trim() && x.Password == model.Password.Trim()).FirstOrDefault();
-
-
                     var p = new DynamicParameters();
                     p.Add("@UserName", model.UserName);
                     p.Add("@Password", model.Password);
@@ -74,7 +66,6 @@ namespace AKStore.Controllers
                         }
                         else
                         {
-
                             Response.Cookies["Asp.netAUK"].Expires = DateTime.Now.AddDays(-1);
                             Response.Cookies["Asp.netAPK"].Expires = DateTime.Now.AddDays(-1);
                         }
@@ -82,34 +73,37 @@ namespace AKStore.Controllers
                         Response.Cookies["Asp.netAUK"].Value = EncryptionHelper.Encrypt(model.UserName, passPhraseEnct);
                         Response.Cookies["Asp.netAPK"].Value = EncryptionHelper.Encrypt(model.Password, passPhraseEnct);
                         Session["LoggedInUserName"] = user.UserName;
-
                         //Session["UserId"] = user.Id;
                         Session["LoggedInUserId"] = user.Id;
                         Session["RoleId"] = user.RoleId;
-
-                        var p1 = new DynamicParameters();
-                        p1.Add("@TableName", model.UserName);
-                        p1.Add("@UserId", user.Id);
-                        var tableId = CommonOperations.Query<int>("usp_GetTableIdsForLogin", p1, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
                         if (user.RoleId == 1)
                         {
                             return RedirectToAction("UpsertAdmin", "Admin");
                         }
                         else if (user.RoleId == 2)
                         {
-                           // var admin = db.Admin.Where(x => x.UserId == user.Id).FirstOrDefault();
+                            var p1 = new DynamicParameters();
+                            p1.Add("@TableName", "Admin");
+                            p1.Add("@UserId", user.Id);
+                            var tableId = CommonOperations.Query<int>("usp_GetTableIdsForLogin", p1, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
                             Session["AdminId"] = tableId;
                             return RedirectToAction("Dashboard", "Common");
                         }
                         else if (user.RoleId == 3)
                         {
-                            //var distributor = db.Distributor.Where(x => x.UserId == user.Id).FirstOrDefault();
+                            var p1 = new DynamicParameters();
+                            p1.Add("@TableName", "Distributor");
+                            p1.Add("@UserId", user.Id);
+                            var tableId = CommonOperations.Query<int>("usp_GetTableIdsForLogin", p1, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
                             Session["DistributorId"] = tableId;
                             return RedirectToAction("DistributorOrders", "Orders");
                         }
                         else if (user.RoleId == 6)
                         {
-                           // var customer = db.Customer.Where(x => x.UserId == user.Id).FirstOrDefault();
+                            var p1 = new DynamicParameters();
+                            p1.Add("@TableName", "Customer");
+                            p1.Add("@UserId", user.Id);
+                            var tableId = CommonOperations.Query<int>("usp_GetTableIdsForLogin", p1, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
                             Session["CustomerId"] = tableId;
                             return RedirectToAction("CustomerProduct", "CustomerProduct");
                         }
@@ -117,11 +111,9 @@ namespace AKStore.Controllers
                         {
                             return View("Index", model);
                         }
-
                     }
                     else
                     {
-
                         ModelState.AddModelError("", "Invalid username or password.");
                         return View("Index", model);
                     }
@@ -138,11 +130,7 @@ namespace AKStore.Controllers
                 return View("Index", model);
             }
         }
-
-
-
         // [NoCache]
-
         public ActionResult Logout()
         {
             Session["LoggedInUserName"] = null;
