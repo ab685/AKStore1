@@ -91,7 +91,7 @@ namespace AKStore.Controllers
                             ModelState.AddModelError("file", "Only image files are allowed");
                             return View(companyModel);
                         }
-                        ExtensionMethods.ResizeImage(Image.FromStream(file.InputStream), 240, 240, Path.Combine(pathToSave, filename));
+                        ExtensionMethods.ResizeImage(Image.FromStream(file.InputStream), 500, 500, Path.Combine(pathToSave, filename));
                         // file.SaveAs(Path.Combine(pathToSave, filename));
                     }
                 }

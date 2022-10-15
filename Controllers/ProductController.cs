@@ -117,7 +117,7 @@ namespace AKStore.Controllers
                             return View(productModel);
                         }
                         //file.SaveAs(Path.Combine(pathToSave, filename));
-                        ExtensionMethods.ResizeImage(Image.FromStream(file.InputStream), 240, 240, Path.Combine(pathToSave, filename));
+                        ExtensionMethods.ResizeImage(Image.FromStream(file.InputStream), 500, 500, Path.Combine(pathToSave, filename));
 
                     }
                 }

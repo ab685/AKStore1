@@ -130,6 +130,12 @@ namespace AKStore.Extension
         }
         public static void ResizeImage(Image image, int width, int height, string filePath)
         {
+            height = 400;
+            double ratio = (double)height / image.Height;
+            width = (int)(image.Width * ratio);
+            height = (int)(image.Height * ratio);
+
+
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 

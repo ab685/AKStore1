@@ -101,9 +101,9 @@
             <div class="row" style="padding:0!important">
                 @foreach (var item in Model)
                 {
-                    <div class="col-6 col-md-6 col-lg-3 p-3" data-category="@item.CategoryName" data-company="@item.CompanyName">
+                    <div class="col-12 col-md-6 col-lg-4 p-3" data-category="@item.CategoryName" data-company="@item.CompanyName">
                         <div class="card h-100 shadow-lg border">
-                            <img class="card-img-top img-thumbnail" style="max-height:200px !important;border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
+                            <img class="card-img-top img-thumbnail" style="border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
                             <div class="card-body p-4">
                                 <div class="text-center text-gray-700">
                                     <spna class="font-weight-bold">@item.Name @item.CategoryName @item.CompanyName</spna>
