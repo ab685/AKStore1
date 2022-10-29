@@ -47,7 +47,7 @@
                 <br />
                 <br />
                 <div class="col-12">
-                    <button class="btn btn-sm btn-outline-dark" onclick="PrintOrders()">Print</button>
+                    <button class="btn btn-sm btn-outline-dark" onclick="PrintOrders()">Print Orders</button>
                     <button class="btn btn-sm btn-outline-primary" onclick="GenerateBill()">Bill</button>
                     <button class="btn btn-sm btn-outline-success" onclick="ChangeOrderStatus(1)">Ordered</button>
                     <button class="btn btn-sm btn-outline-info" onclick="ChangeOrderStatus(2)">Confirmed</button>
@@ -408,7 +408,7 @@
                     // prints date & time in YYYY-MM-DD HH:MM:SS format
                     date_format_str = date_ob.toLocaleDateString('en-UK', { hour: 'numeric', minute: 'numeric', hour12: true, second: 'numeric' })
                     //date_format_str= year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
-                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_" + date_format_str.replace(',', '_') + ".pdf");
+                    downloadFile(new Blob([response], { type: 'application/text' }), "Orders_" + date_format_str.replace(',', '_') + ".pdf");
                 },
                 error: function (error) {
                     alert(error);
