@@ -339,3 +339,10 @@ body {
         background-color: #6f42c1;
         border-color: #855eca;
     }
+.form-control:focus {
+    color: #495057;
+    background-color: #fff;
+    border-color: #6e707e;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem #f8f9fc;
+}
