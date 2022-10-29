@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-12 col-md-3">
                     <label style="text-align:center">Order Status</label>
-                    <select id="drpOrderStatus" class="form-control" onchange="GetOrderData()" >
+                    <select id="drpOrderStatus" class="form-control" onchange="GetOrderData()">
                         <option value="0">All</option>
                         <option value="1" selected>Ordered</option>
                         <option value="2">Confirmed</option>
@@ -47,6 +47,7 @@
                 <br />
                 <br />
                 <div class="col-12">
+                    <button class="btn btn-sm btn-outline-dark" onclick="PrintOrders()">Print</button>
                     <button class="btn btn-sm btn-outline-primary" onclick="GenerateBill()">Bill</button>
                     <button class="btn btn-sm btn-outline-success" onclick="ChangeOrderStatus(1)">Ordered</button>
                     <button class="btn btn-sm btn-outline-info" onclick="ChangeOrderStatus(2)">Confirmed</button>
@@ -346,5 +347,73 @@
             // in case the Blob uses a lot of memory
             setTimeout(() => URL.revokeObjectURL(link.href), 5000);
         };
+        function PrintOrders() {
+           var customerId = $("#drpCustomers").val();
+            var orderStatusId = $("#drpOrderStatus").val();
+            var fromDate = ConvertDateToDDMMYY($("#FromDate").val());
+            var toDate = ConvertDateToDDMMYY($("#ToDate").val());
+            var postData = {
+                CustomerId: customerId,
+                OrderStatusId: orderStatusId,
+                FromDate: fromDate,
+                ToDate: toDate
+            };
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintOrders", "Orders")',
+                data: postData,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            } else {
+                                xhr.responseType = "text";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                success: function (response) {
+                    if (response.Success) {
+
+                        BindOrdersGrid(response);
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                success: function (response) {
+                    let date_ob = new Date();
+
+                    // adjust 0 before single digit date
+                    let date = ("0" + date_ob.getDate()).slice(-2);
+
+                    // current month
+                    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+                    // current year
+                    let year = date_ob.getFullYear();
+
+                    // current hours
+                    let hours = date_ob.getHours();
+
+                    // current minutes
+                    let minutes = date_ob.getMinutes();
+
+                    // current seconds
+                    let seconds = date_ob.getSeconds();
+
+                    // prints date & time in YYYY-MM-DD HH:MM:SS format
+                    date_format_str = date_ob.toLocaleDateString('en-UK', { hour: 'numeric', minute: 'numeric', hour12: true, second: 'numeric' })
+                    //date_format_str= year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+                    downloadFile(new Blob([response], { type: 'application/text' }), "Bills_" + date_format_str.replace(',', '_') + ".pdf");
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
     </script>
 }

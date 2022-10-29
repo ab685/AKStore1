@@ -283,3 +283,8 @@ body {
     outline: 0;
     box-shadow: 0 0 0 0.2rem #f8f9fc;
 }
+.btn-link {
+    font-weight: 400;
+    color: #855eca;
+    text-decoration: none;
+}

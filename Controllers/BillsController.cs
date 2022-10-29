@@ -65,7 +65,7 @@ namespace AKStore.Controllers
             converter.Options.ExternalLinksEnabled = true;
             converter.Options.JavaScriptEnabled = true;
             converter.Options.EmbedFonts = true;
-            converter.Options.PdfCompressionLevel = PdfCompressionLevel.NoCompression;
+            converter.Options.PdfCompressionLevel = PdfCompressionLevel.Normal;
             converter.Options.PdfPageSize = PdfPageSize.A4;
             converter.Options.DrawBackground = true;
             PdfDocument doc = converter.ConvertHtmlString(htmlPage);

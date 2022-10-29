@@ -15,7 +15,7 @@ namespace AKStore.Models
 
         [Required]
         [Range(1,1000000,ErrorMessage ="Please enter valid quantity")]
-        public decimal? Quantity { get; set; }
+        public int? Quantity { get; set; }
       
         public DateTime? OrderDate { get; set; }
     }

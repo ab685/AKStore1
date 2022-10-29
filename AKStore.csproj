@@ -1937,6 +1937,7 @@
     <Content Include="Content\Vendor\DairyCRM.js" />
     <Content Include="Content\Vendor\DairyCRM.min.css" />
     <Content Include="Content\Vendor\DairyCRM.min.js" />
+    <Content Include="Documents\Gifs\Loader.svg" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -2143,10 +2144,10 @@
     <Content Include="Views\Bills\Bills.cshtml" />
     <Content Include="Views\Common\DashBoard.cshtml" />
     <Content Include="Views\Bills\BillsHistory.cshtml" />
+    <Content Include="Views\Orders\PrintOrders.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Documents\Gifs\" />
     <Folder Include="Documents\images\category\" />
     <Folder Include="Documents\images\company\" />
     <Folder Include="Documents\images\product\" />

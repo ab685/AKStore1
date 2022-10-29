@@ -1,0 +1,74 @@
+﻿@model IEnumerable<AKStore.Models.DistributorOrderDataModel>
+
+@{
+    ViewBag.Title = "Bills";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table-responsive small">
+    <table class="table table-bordered small">
+        <tr>
+            <th>
+                @Html.DisplayName("Picture")
+            </th>
+            <th>
+                @Html.DisplayName("Product")
+            </th>
+            <th>
+                @Html.DisplayName("Store")
+            </th>
+            <th>
+                @Html.DisplayName("Unit Price")
+            </th>
+            <th>
+                @Html.DisplayName("Qty")
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Total)
+            </th>
+            <th>
+                @Html.DisplayName("Date")
+            </th>
+            <th>
+                @Html.DisplayName("Status")
+            </th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <img class="thumbnail" src='/Documents/images/product/${((@item.FilePath == "" || @item.FilePath == null) ?"NoImage.png":@item.FilePath)}' />
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProductName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StoreName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Quantity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Total)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderDate)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.OrderStatusId)
+                </td>
+            </tr>
+        }
+
+    </table>
+</div>
+@section scripts{
+    <script>
+        document.querySelector("#content > nav").style.display = "none"
+        document.querySelector("#accordionSidebar").style.display = "none"
+    </script>
+
+}

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +8,8 @@ using AKStore.Extension;
 using AKStore.Filters;
 using AKStore.Models;
 using AKStore.Services;
+using SelectPdf;
+
 namespace AKStore.Controllers
 {
     [CustomAuthorize(Role.Distributor)]
@@ -144,6 +147,37 @@ namespace AKStore.Controllers
             {
                 return Json(new { data = new List<DistributorOrderDataModel>(), Success = false, Message = ex.Message.ToString() }, JsonRequestBehavior.AllowGet);
 
+            }
+        }
+
+        public ActionResult PrintOrders(DistributorOrderModel distributorOrderModel)
+        {
+            var DistributorId = Convert.ToInt32(Session["DistributorId"]);
+            distributorOrderModel.DistributorId = DistributorId;
+            var distributorOrders = _orderService.GetOrderDataForDistributor(distributorOrderModel);
+            HtmlToPdf converter = new HtmlToPdf();
+            var htmlPage = RenderRazorViewToString("~/Views/Orders/PrintOrders.cshtml", distributorOrders);
+            converter.Options.ExternalLinksEnabled = true;
+            converter.Options.JavaScriptEnabled = true;
+            converter.Options.EmbedFonts = true;
+            converter.Options.PdfCompressionLevel = PdfCompressionLevel.Normal;
+            converter.Options.PdfPageSize = PdfPageSize.A4;
+            converter.Options.DrawBackground = true;
+            PdfDocument doc = converter.ConvertHtmlString(htmlPage);
+            var file = doc.Save();
+            return new FileContentResult(file, "application/octet-stream");
+        }
+
+        public string RenderRazorViewToString(string viewName, object model)
+        {
+            ViewData.Model = model;
+            using (var sw = new StringWriter())
+            {
+                var viewResult = ViewEngines.Engines.FindPartialView(ControllerContext, viewName);
+                var viewContext = new ViewContext(ControllerContext, viewResult.View, ViewData, TempData, sw);
+                viewResult.View.Render(viewContext, sw);
+                viewResult.ViewEngine.ReleaseView(ControllerContext, viewResult.View);
+                return sw.GetStringBuilder().ToString();
             }
         }
 
