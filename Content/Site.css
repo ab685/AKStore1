@@ -16,6 +16,7 @@ for details on configuring this project to bundle and minify static web assets. 
     width: 100%;
     margin: auto;
 }
+
 .strip-holder {
     position: absolute;
     left: 50%;
@@ -120,7 +121,8 @@ a.navbar-brand {
 }
 
 .btn-grad {
-    background-image: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #6f42c1 linear-gradient(180deg,#855eca,#6f42c1) repeat-x !important;
+    color: #fff;
 }
 
     .btn-grad:hover {
@@ -154,7 +156,6 @@ a.navbar-brand {
     background-size: 200% auto;
     color: white !important;
     box-shadow: 0 0 20px #eee;
-    
 }
 
     .btn-delete:hover {
@@ -194,7 +195,7 @@ a.navbar-brand {
 
 .success {
     /*background-image: linear-gradient(to right, #7474BF 10%, #348AC7 51%, #7474BF 70%)*/
-    color: #0061f2 !important;
+    color: #855eca !important;
 }
 
 
@@ -219,12 +220,12 @@ a {
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
-   font-size: 12px;
+    font-size: 12px;
 }
 
 @media (min-width: 768px) {
     html {
-       font-size: 14px;
+        font-size: 14px;
     }
 }
 
@@ -255,7 +256,7 @@ html {
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
-    font-family:Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
 .footer {
@@ -266,3 +267,75 @@ body {
     line-height: 60px; /* Vertically center the text there */
 }
 
+.text-primary {
+    color: #855eca !important;
+}
+
+.card-purple.card-outline {
+    border-top: 3px solid #6f42c1;
+}
+
+.btn-outline-primary {
+    color: #855eca;
+    border-color: #855eca;
+}
+
+    .btn-outline-primary:hover {
+        color: #fff;
+        background-color: #855eca;
+        border-color: #855eca;
+    }
+
+    .btn-outline-primary:focus, .btn-outline-primary.focus {
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
+    }
+
+    .btn-outline-primary.disabled, .btn-outline-primary:disabled {
+        color: #855eca;
+        background-color: transparent;
+    }
+
+    .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .show > .btn-outline-primary.dropdown-toggle {
+        color: #fff;
+        background-color: #855eca;
+        border-color: #855eca;
+    }
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #855eca;
+    border-color: #855eca;
+}
+
+.page-link {
+    position: relative;
+    display: block;
+    padding: 0.5rem 0.75rem;
+    margin-left: -1px;
+    line-height: 1.25;
+    color: #855eca;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+    .page-link:hover {
+        z-index: 2;
+        color: #fff;
+        text-decoration: none;
+        background-color: #855eca;
+        border-color: #855eca;
+    }
+
+.btn-primary {
+    color: #fff;
+    background-color: #855eca;
+    border-color: #6f42c1;
+}
+
+    .btn-primary:hover {
+        color: #fff;
+        background-color: #6f42c1;
+        border-color: #855eca;
+    }
