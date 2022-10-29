@@ -1,7 +1,6 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
 for details on configuring this project to bundle and minify static web assets. */
 /*#########LoaderCssStart#####*/
-
 /*!  
         // 3. Loader  
         // --------------------------------------------------*/
@@ -16,7 +15,6 @@ for details on configuring this project to bundle and minify static web assets. 
     width: 100%;
     margin: auto;
 }
-
 .strip-holder {
     position: absolute;
     left: 50%;
@@ -24,21 +22,16 @@ for details on configuring this project to bundle and minify static web assets. 
     -webkit-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
 }
-
-
 /*#######LoaderCssStop#####*/
 .ui-datepicker {
     background-color: #fff;
 }
-
 .ui-datepicker-header {
-    background-color: rgb(97, 110, 255);
+    background-color: #855eca;
 }
-
 .ui-datepicker-title {
     color: white;
 }
-
 .ui-widget-content .ui-state-default {
     border: 0px;
     text-align: center;
@@ -46,7 +39,6 @@ for details on configuring this project to bundle and minify static web assets. 
     font-weight: normal;
     color: #000;
 }
-
     .ui-widget-content .ui-state-default:hover {
         border: 0px;
         text-align: center;
@@ -54,58 +46,47 @@ for details on configuring this project to bundle and minify static web assets. 
         font-weight: normal;
         color: #fff;
     }
-
 .ui-widget-content .ui-state-active {
     border: 0px;
-    background: #616eff;
+    background: #6f42c1;
     color: #fff;
 }
-
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
 }
-
 /* Firefox */
 input[type=number] {
     -moz-appearance: textfield;
 }
-
 .thEdit {
     width: 50px
 }
-
 .custom-control-input:focus ~
 .custom-control-label::before {
     border-color: #a8e063 !important;
     box-shadow: 0 0 0 0rem rgba(0, 0, 0, 0) !important;
 }
-
 .custom-control-input:checked ~
 .custom-control-label::before {
     border-color: #a8e063 !important;
     background-color: #a8e063 !important;
 }
-
 .custom-control-input:active ~
 .custom-control-label::before {
     background-color: #a8e063 !important;
     border-color: #a8e063 !important;
 }
-
-
 .custom-control-input:focus:not(:checked) ~ .custom-control-label::before {
     border-color: #a8e063 !important;
 }
-
 a.navbar-brand {
     white-space: normal;
     text-align: center;
     word-break: break-all;
 }
-
 .btn-circle {
     border-radius: 100%;
     height: 2.5rem;
@@ -115,22 +96,18 @@ a.navbar-brand {
     align-items: center;
     justify-content: center;
 }
-
 .form-error {
     color: red;
 }
-
 .btn-grad {
     background: #6f42c1 linear-gradient(180deg,#855eca,#6f42c1) repeat-x !important;
     color: #fff;
 }
-
     .btn-grad:hover {
         background-position: right center; /* change the direction of the change here */
         color: #fff;
         text-decoration: none;
     }
-
 .btn-grad {
     margin: 5px;
     padding: 7px 15px;
@@ -142,11 +119,9 @@ a.navbar-brand {
     box-shadow: 0 0 20px #eee;
     display: inline-block;
 }
-
 .btn-delete {
     background-image: linear-gradient(to right, #e43a15 0%, #e65245 51%, #e43a15 100%)
 }
-
 .btn-delete {
     margin: 5px;
     padding: 5px 15px;
@@ -157,27 +132,16 @@ a.navbar-brand {
     color: white !important;
     box-shadow: 0 0 20px #eee;
 }
-
     .btn-delete:hover {
         background-position: right center; /* change the direction of the change here */
         color: #fff;
         text-decoration: none;
     }
-
-
-
-
-
-
-
-
 /*//CustomeCSS//*/
-
 /*.btn-outline-success {
     color: #4CAF50 ;
     border-color: #4CAF50 ;
 }
-
  .bg-success .border-success {
     background-color: #4CAF50 !important;
     border-color: #4CAF50 !important;
@@ -188,77 +152,62 @@ a.navbar-brand {
     align-items: center;
     justify-content: center;
 }
-
 .success-border {
     border-color: gray;
 }
-
 .success {
     /*background-image: linear-gradient(to right, #7474BF 10%, #348AC7 51%, #7474BF 70%)*/
     color: #855eca !important;
 }
-
-
 /*///CustomeCSS///*/
 /* Provide sufficient contrast against white background */
 a {
     color: #0366d6;
 }
-
 .btn-primary {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
-
 .nav-pills .nav-link.active, .nav-pills .show > .nav-link {
     color: #fff;
     background-color: #1b6ec2;
     border-color: #1861ac;
 }
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
     font-size: 12px;
 }
-
 @media (min-width: 768px) {
     html {
         font-size: 14px;
     }
 }
-
 .border-top {
     border-top: 1px solid #e5e5e5;
 }
-
 .border-bottom {
     border-bottom: 1px solid #e5e5e5;
 }
-
 .box-shadow {
     box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
-
 button.accept-policy {
     font-size: 1rem;
     line-height: inherit;
 }
-
 /* Sticky footer styles
 -------------------------------------------------- */
 html {
     position: relative;
     min-height: 100%;
 }
-
 body {
     /* Margin bottom by footer height */
     margin-bottom: 60px;
     font-family: Arial, Helvetica, sans-serif;
 }
-
 .footer {
     position: absolute;
     bottom: 0;
@@ -266,49 +215,40 @@ body {
     white-space: nowrap;
     line-height: 60px; /* Vertically center the text there */
 }
-
 .text-primary {
     color: #855eca !important;
 }
-
 .card-purple.card-outline {
     border-top: 3px solid #6f42c1;
 }
-
 .btn-outline-primary {
     color: #855eca;
     border-color: #855eca;
 }
-
     .btn-outline-primary:hover {
         color: #fff;
         background-color: #855eca;
         border-color: #855eca;
     }
-
     .btn-outline-primary:focus, .btn-outline-primary.focus {
         box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
     }
-
     .btn-outline-primary.disabled, .btn-outline-primary:disabled {
         color: #855eca;
         background-color: transparent;
     }
-
     .btn-outline-primary:not(:disabled):not(.disabled):active, .btn-outline-primary:not(:disabled):not(.disabled).active,
     .show > .btn-outline-primary.dropdown-toggle {
         color: #fff;
         background-color: #855eca;
         border-color: #855eca;
     }
-
 .page-item.active .page-link {
     z-index: 3;
     color: #fff;
     background-color: #855eca;
     border-color: #855eca;
 }
-
 .page-link {
     position: relative;
     display: block;
@@ -319,7 +259,6 @@ body {
     background-color: #fff;
     border: 1px solid #dee2e6;
 }
-
     .page-link:hover {
         z-index: 2;
         color: #fff;
@@ -327,13 +266,11 @@ body {
         background-color: #855eca;
         border-color: #855eca;
     }
-
 .btn-primary {
     color: #fff;
     background-color: #855eca;
     border-color: #6f42c1;
 }
-
     .btn-primary:hover {
         color: #fff;
         background-color: #6f42c1;
