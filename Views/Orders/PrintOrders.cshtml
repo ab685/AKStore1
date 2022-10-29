@@ -1,68 +1,89 @@
 ﻿@model IEnumerable<AKStore.Models.DistributorOrderDataModel>
-
+@using System.Globalization;
 @{
     ViewBag.Title = "Bills";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<br />
+<br />
 <div class="table-responsive small">
-    <table class="table table-bordered small">
-        <tr>
-            <th>
-                @Html.DisplayName("Picture")
-            </th>
-            <th>
-                @Html.DisplayName("Product")
-            </th>
-            <th>
-                @Html.DisplayName("Store")
-            </th>
-            <th>
-                @Html.DisplayName("Unit Price")
-            </th>
-            <th>
-                @Html.DisplayName("Qty")
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Total)
-            </th>
-            <th>
-                @Html.DisplayName("Date")
-            </th>
-            <th>
-                @Html.DisplayName("Status")
-            </th>
-        </tr>
-
-        @foreach (var item in Model)
-        {
+    <table class="table table-bordered small table-striped">
+        <thead class="bg-secondary text-white">
             <tr>
-                <td>
-                    <img class="thumbnail" src='/Documents/images/product/${((@item.FilePath == "" || @item.FilePath == null) ?"NoImage.png":@item.FilePath)}' />
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.StoreName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Price)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Quantity)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Total)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderDate)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.OrderStatusId)
-                </td>
+                <th>
+                    @Html.DisplayName("Picture")
+                </th>
+                <th>
+                    @Html.DisplayName("Product")
+                </th>
+                <th>
+                    @Html.DisplayName("Store")
+                </th>
+                <th>
+                    @Html.DisplayName("Unit Price")
+                </th>
+                <th>
+                    @Html.DisplayName("Qty")
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Total)
+                </th>
+                <th>
+                    @Html.DisplayName("Date")
+                </th>
+                <th>
+                    @Html.DisplayName("Status")
+                </th>
             </tr>
-        }
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        <img style="width:50px;height:50px;" src='~/Documents/images/product/@item.FilePath' />
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.StoreName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Quantity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Total)
+                    </td>
+                    <td>
+                        @item.OrderDate.Value.ToString("dd-MM-yyyy", CultureInfo.InvariantCulture)
+                    </td>
+                    <td>
+                        @if (item.OrderStatusId == 1)
+                        {
+                            <center><span style="background-color:#4e73df;color:white;padding:2px">Ordered</span></center>
+                        }
+                        else if (item.OrderStatusId == 2)
+                        {
+                            <center><span style="background-color:#00adff;color:white;padding:2px">Confirmed</span></center>
+                        }
+                        else if (item.OrderStatusId == 3)
+                        {
+                            <center><span style="background-color:#e7923b;color:white;padding:2px">Delivered</span></center>
+                        }
+                        else if (item.OrderStatusId == 4)
+                        {
+                            <center><span style="background-color:#666;color:white;padding:2px">Canceled</span></center>
+                        }
 
+
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
 @section scripts{
