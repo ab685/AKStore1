@@ -103,7 +103,7 @@
                 {
                     <div class="col-12 col-md-6 col-lg-4 p-3" data-category="@item.CategoryName" data-company="@item.CompanyName">
                         <div class="card h-100 shadow-lg border">
-                            <img class="card-img-top img-thumbnail" style="border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." />
+                            <img class="card-img-top img-thumbnail" style="border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." loading="lazy"/>
                             <div class="card-body p-4">
                                 <div class="text-center text-gray-700">
                                     <spna class="font-weight-bold">@item.Name @item.CategoryName @item.CompanyName</spna>
@@ -173,7 +173,7 @@
             }, 1000);
         }
         function isNumber(evt) {
-            debugger;
+            
             if (evt.charCode == 45 ||evt.charCode==101) {
                 return false;
             } else {
