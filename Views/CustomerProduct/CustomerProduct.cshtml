@@ -18,11 +18,23 @@
     }
 
         .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
-            background-image: linear-gradient( 135deg, #667eea 0%, #764ba2 100%);
+            background: #6f42c1 linear-gradient(180deg,#855eca,#6f42c1) repeat-x !important;
+            color: #fff !important;
+            border-color: #6f42c1;
         }
 
+        .pagination > li > a {
+            color: #855eca !important;
+            border-color: #6f42c1;
+        }
+
+            .pagination > li > a:hover {
+                color: #6f42c1 !important;
+                border-color: #855eca;
+            }
+
     .btn-number {
-        background-image: linear-gradient( 135deg, #667eea 0%, #764ba2 100%);
+        background: #6f42c1 linear-gradient(180deg,#855eca,#6f42c1) repeat-x !important;
         margin-left: 2px;
         margin-right: 2px;
     }
@@ -103,7 +115,7 @@
                 {
                     <div class="col-12 col-md-6 col-lg-4 p-3" data-category="@item.CategoryName" data-company="@item.CompanyName">
                         <div class="card h-100 shadow-lg border">
-                            <img class="card-img-top img-thumbnail" style="border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." loading="lazy"/>
+                            <img class="card-img-top img-thumbnail" style="border:none" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" alt="..." loading="lazy" />
                             <div class="card-body p-4">
                                 <div class="text-center text-gray-700">
                                     <spna class="font-weight-bold">@item.Name @item.CategoryName @item.CompanyName</spna>
@@ -142,6 +154,10 @@
 
 
                 }
+                <div class="col-12 mt-4">
+                    @Html.PagedListPager(Model, page => Url.Action("CustomerProduct", new { search = Request.QueryString["search"], company = Request.QueryString["company"], category = Request.QueryString["category"], page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded, DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded })
+
+                </div>
             </div>
         </div>
 
@@ -173,7 +189,7 @@
             }, 1000);
         }
         function isNumber(evt) {
-            
+
             if (evt.charCode == 45 ||evt.charCode==101) {
                 return false;
             } else {
