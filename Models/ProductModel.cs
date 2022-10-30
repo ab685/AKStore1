@@ -21,7 +21,7 @@ namespace AKStore.Models
 
         [Required(AllowEmptyStrings =false,ErrorMessage ="Price is required")]
         [Range(0.000001,10000000,ErrorMessage ="Please enter valid price")]
-        public decimal Price { get; set; } 
+        public decimal SellPrice { get; set; } 
 
         
       

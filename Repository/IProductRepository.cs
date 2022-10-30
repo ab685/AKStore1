@@ -12,6 +12,6 @@ namespace AKStore.Repository
         Tuple<bool, string> DeleteProduct(int productId);
         IEnumerable<ProductMaster> GetProducts(int distributorId);
         ProductMaster GetProductById(int id);
-        void ChangeProductData(int productId, decimal quantity, decimal price);
+        void AddPurchasedProduct(int productId, int quantity, decimal price);
     }
 }

@@ -36,9 +36,9 @@ namespace AKStore.Services
         {
             return _productRepository.DeleteProduct(productId);
         }
-        public void ChangeProductData(int productId, decimal quantity, decimal price)
+        public void AddPurchasedProduct(int productId, int quantity, decimal price)
         {
-            _productRepository.ChangeProductData(productId, quantity, price);
+            _productRepository.AddPurchasedProduct(productId, quantity, price);
         }
     }
 }

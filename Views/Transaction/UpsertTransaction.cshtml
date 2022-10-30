@@ -126,7 +126,8 @@
                 /*Id: Id,*/
                 CustomerId: customerId,
                 Amount: amount.trim(),
-                TransactionDate: ConvertDateToDDMMYY(orderDate)
+                TransactionDate: orderDate
+               // TransactionDate: ConvertDateToDDMMYY(orderDate)
             };
             $.ajax({
                 type: "POST",

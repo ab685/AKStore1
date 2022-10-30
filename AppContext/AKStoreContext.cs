@@ -10,6 +10,7 @@ namespace AKStore.AppContext
        
         public DbSet<RouteMaster> RouteMaster { get; set; }
         public DbSet<ProductMaster> ProductMaster { get; set; }
+        public DbSet<ProductPurchase> ProductPurchase { get; set; }
         public DbSet<Customer> Customer { get; set; }
         public DbSet<OrderMaster> OrderMaster { get; set; }
         public DbSet<Users> Users { get; set; }

@@ -158,11 +158,11 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
-        public ActionResult ChangeProductData(int id, decimal quantity, decimal price)
+        public ActionResult ChangeProductData(int id, int quantity, decimal price)
         {
             try
             {
-                productService.ChangeProductData(id, quantity, price);
+                productService.AddPurchasedProduct(id, quantity, price);
                 return RedirectToAction(nameof(Products));
 
                 // return Json(new { Success = true, Message = "Product data changed successfully" });

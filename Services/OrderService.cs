@@ -35,7 +35,7 @@ namespace AKStore.Services
             orderModels.ProductId = customerProductModel.ProductId;
             orderModels.Quantity = customerProductModel.Quantity;
             orderModels.OrderDate = customerProductModel.OrderDate;
-            orderModels.Price = _productRepository.GetProductById(customerProductModel.ProductId).Price;
+            orderModels.Price = _productRepository.GetProductById(customerProductModel.ProductId).SellPrice;
             orderModels.Total = orderModels.Price * orderModels.Quantity;
             orderModels.DistributorId = _customerRepository.GetCustomerById(customerProductModel.CustomerId).DistributorId;
             orderModels.OrderStatusId = Convert.ToInt32(OrderStatus.Odered);

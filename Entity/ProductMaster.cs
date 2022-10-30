@@ -15,7 +15,7 @@ namespace AKStore.Entity
         public int? CompanyId { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public decimal Price { get; set; }
+        public decimal SellPrice { get; set; }
         public int? Quantity { get; set; }
         [NotMapped]
         public int? OrderedQuantity { get; set; }
@@ -25,6 +25,6 @@ namespace AKStore.Entity
         public int? InsertedByUserId { get; set; }
         public int? UpdatedByUserId { get; set; }
         public bool? HasDiscount { get; set; }
-    }  
+    }
 }      
        

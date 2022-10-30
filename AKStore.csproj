@@ -161,9 +161,11 @@
     <Compile Include="Controllers\LoginController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
+    <Compile Include="Controllers\ProductPurchaseController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Entity\Admin.cs" />
     <Compile Include="Entity\Category.cs" />
+    <Compile Include="Entity\ProductPurchase.cs" />
     <Compile Include="Extension\EncryptionHelper.cs" />
     <Compile Include="Extension\OrderStatus.cs" />
     <Compile Include="Filters\AllowCrossSiteJsonAttribute.cs" />
@@ -201,6 +203,7 @@
     <Compile Include="Models\Login.cs" />
     <Compile Include="Models\OrderModels.cs" />
     <Compile Include="Models\ProductModel.cs" />
+    <Compile Include="Models\ProductPurchaseModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\RouteModel.cs" />
     <Compile Include="Models\SiteKeys.cs" />
@@ -224,11 +227,13 @@
     <Compile Include="Repository\ICustomerRepository.cs" />
     <Compile Include="Repository\IDistributorRepository.cs" />
     <Compile Include="Repository\IOrderRepository.cs" />
+    <Compile Include="Repository\IProductPurchaseRepository.cs" />
     <Compile Include="Repository\IProductRepository.cs" />
     <Compile Include="Repository\IRouteRepository.cs" />
     <Compile Include="Repository\ITransactionRepository.cs" />
     <Compile Include="Repository\IUserRepository.cs" />
     <Compile Include="Repository\OrderRepository.cs" />
+    <Compile Include="Repository\ProductPurchaseRepository.cs" />
     <Compile Include="Repository\ProductRepository.cs" />
     <Compile Include="Repository\RouteRepository.cs" />
     <Compile Include="Repository\TransactionRepository.cs" />
@@ -246,11 +251,13 @@
     <Compile Include="Services\ICustomerService.cs" />
     <Compile Include="Services\IDistributorService.cs" />
     <Compile Include="Services\IOrderService.cs" />
+    <Compile Include="Services\IProductPurchaseService.cs" />
     <Compile Include="Services\IProductService.cs" />
     <Compile Include="Services\IRouteService.cs" />
     <Compile Include="Services\ITransactionService.cs" />
     <Compile Include="Services\IUserService.cs" />
     <Compile Include="Services\OrderService.cs" />
+    <Compile Include="Services\ProductPurchaseService.cs" />
     <Compile Include="Services\ProductService.cs" />
     <Compile Include="Services\RouteService.cs" />
     <Compile Include="Services\TransactionService.cs" />
@@ -2146,6 +2153,7 @@
     <Content Include="Views\Common\DashBoard.cshtml" />
     <Content Include="Views\Bills\BillsHistory.cshtml" />
     <Content Include="Views\Orders\PrintOrders.cshtml" />
+    <Content Include="Views\ProductPurchase\ProductPurchase.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

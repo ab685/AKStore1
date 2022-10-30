@@ -1,7 +1,6 @@
-﻿@model IEnumerable<AKStore.Models.ProductModel>
-
+﻿@model IEnumerable<AKStore.Models.ProductPurchaseModel>
 @{
-    ViewBag.Title = "Products";
+    ViewBag.Title = "ProductPurchase";
 }
 <style>
     img.thumbnail {
@@ -11,68 +10,49 @@
         width: 100px; /* Set a small width */
         max-height: 120px;
     }
-
         /* Add a hover effect (blue shadow) */
         img.thumbnail:hover {
             box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
         }
 </style>
-@if (Convert.ToInt32(Session["RoleId"]) == 2)
-{
-    <p>
-        <a href="@Url.Action("UpsertProduct")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Product</a>
-    </p>
-}
-
+@*<p>
+    <a href="@Url.Action("UpsertProductPurchase")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New ProductPurchase</a>
+</p>*@
 <div class="card shadow-lg card-outline card-purple elevation-2">
     <div class="card-header">
-        <h6 class="m-0 font-weight-bold text-primary">Products</h6>
+        <h6 class="m-0 font-weight-bold text-primary">Product Purchase</h6>
     </div>
     <div class="card-body">
-
         <div class="table-responsive">
-            <table id="tblProduct" class="table table-bordered">
+            <table id="tblProductPurchase" class="table table-bordered">
                 <thead class="success">
                     <tr>
-                        <th>@Html.DisplayName("Product")</th>
-                        <th>@Html.DisplayName("Company")</th>
-                        <th>@Html.DisplayName("Category")</th>
+                        <th>@Html.DisplayName("Product Name")</th>
                         <th>@Html.DisplayName("Price")</th>
-                        <th>@Html.DisplayName("Avl Qty")</th>
-                        <th>@Html.DisplayName("Ordered Qty")</th>
-                        <th>@Html.DisplayName("Picture")</th>
-
+                        <th>@Html.DisplayName("Purchased Qty")</th>
+                        <th>@Html.DisplayName("Added By")</th>
+                        <th>@Html.DisplayName("Added Date")</th>
+                        <th>@Html.DisplayName("Updated By")</th>
+                        <th>@Html.DisplayName("Updated Date")</th>
                         <th></th>
-
-
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
                         <tr>
-                            <td><a class="text-decoration-none" href="@Url.Action("ProductPurchase","ProductPurchase",new { Id= item.Id})">@Html.DisplayFor(modelItem => item.Name)</a> </td>
-                            <td>@Html.DisplayFor(modelItem => item.CompanyName) </td>
-                            <td>@Html.DisplayFor(modelItem => item.CategoryName) </td>
-                            <td>@Html.DisplayFor(modelItem => item.SellPrice) </td>
+                            <td>@Html.DisplayFor(modelItem => item.ProductName)</td>
+                            <td>@Html.DisplayFor(modelItem => item.PurchasePrice)</td>
                             <td>@Html.DisplayFor(modelItem => item.Quantity) </td>
-                            <td>@Html.DisplayFor(modelItem => item.OrderedQuantity) </td>
-                            <td style="width:2%"><img class="thumbnail" loading="lazy" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
-                            @if (Convert.ToInt32(Session["RoleId"]) == 2)
-                            {
-                                <td style="display:flex">
-                                    <a href="@Url.Action("UpsertProduct","Product",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
-                                    <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
-                                </td>
-                            }
-                            @if (Convert.ToInt32(Session["RoleId"]) == 3)
-                            {
-                                <td style="display:flex">
-                                    <a onclick="OpenChangeProductModal(@item.Id,@item.Quantity,@item.SellPrice, '@item.Name')" href="#" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a>
-                                </td>
-                            }
-
-
+                            <td>@Html.DisplayFor(modelItem => item.AddedBy) </td>
+                            <td>@Html.DisplayFor(modelItem => item.AddedDate) </td>
+                            <td>@Html.DisplayFor(modelItem => item.UpdatedBy) </td>
+                            <td>@Html.DisplayFor(modelItem => item.UpdatedDate) </td>
+                            <td style="display:flex">
+                                <a onclick="OpenChangeProductPurchaseModal(@item.Id,@item.Quantity,@item.PurchasePrice, '@item.ProductName')" href="#" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                                @*<a href="@Url.Action("UpsertProductPurchase","ProductPurchase",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |*@
+                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
+                            </td>
                         </tr>
                     }
                 </tbody>
@@ -80,36 +60,33 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="ProductDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="ProductPurchaseDeleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header card-header">
-                <h5 class="modal-title" id="exampleModalLabel">Product</h5>
-
+                <h5 class="modal-title" id="exampleModalLabel">Product Purchase</h5>
             </div>
             <div class="modal-body card-body">
-                <label>Are you sure you want to delete product?</label>
-                <form method="post" action="@Url.Action("DeleteProduct","Product")">
+                <label>Are you sure you want to delete Product Purchase?</label>
+                <form method="post" action="@Url.Action("DeleteProductPurchase","ProductPurchase")">
                     <input type="hidden" name="id" id="hdnDelId" />
                     <button type="submit" class="btn btn-delete">Delete</button>
                     <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
                 </form>
-
             </div>
         </div>
     </div>
 </div>
-<div class="modal fade" id="ChangeProductModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
+<div class="modal fade" id="ChangeProductPurchaseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header card-header">
-                <h5 class="modal-title" id="exampleModalLabel">Product</h5>
-
+                <h5 class="modal-title" id="exampleModalLabel">Product Purchase</h5>
             </div>
             <div class="modal-body card-body">
-                <form method="post" action="@Url.Action("ChangeProductData","Product")">
+                <form method="post" action="@Url.Action("ChangeProductPurchaseData","ProductPurchase")">
                     <input type="hidden" name="id" id="hdnProdId" />
-                    <label id="productName" style="display:block"></label>
+                    <label id="ProductPurchaseName" style="display:block"></label>
                     <input type="number" class="form-control mr-1" name="quantity" id="txtQuantity" min="1" step="0" required style="width:45%;float:left" onkeypress="return isNumber(event)" placeholder="Enter Quantity" />
                     <input type="number" class="form-control" name="price" id="txtPrice" min="0" required style="width:45%;" onkeypress="return isNumber(event)" placeholder="Enter Price" />
                     <div class="mt-2">
@@ -117,7 +94,6 @@
                         <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
                     </div>
                 </form>
-
             </div>
         </div>
     </div>
@@ -125,24 +101,23 @@
 @section scripts {
     <script>
         $(document).ready(function () {
-            $('#tblProduct').DataTable({
+            $('#tblProductPurchase').DataTable({
                 "pageLength": 50,
                 "order": [],
             });
         });
-
         function OpenDeleteModal(id) {
-            $("#ProductDeleteModal").modal("show");
+            $("#ProductPurchaseDeleteModal").modal("show");
             $("#hdnDelId").val(id);
         }
-        function OpenChangeProductModal(id, quantity, price,pname) {
+        function OpenChangeProductPurchaseModal(id, quantity, price,pname) {
             $("#hdnProdId").val(id);
             $("#txtQuantity").val(quantity);
             $("#txtPrice").val(price);
-            $("#productName").text(pname);
-            $("#ChangeProductModal").modal("show");
+            $("#ProductPurchaseName").text(pname);
+            $("#ChangeProductPurchaseModal").modal("show");
         }
-        function SaveProductChangeData() {
+        function SaveProductPurchaseChangeData() {
             ClearControlsError();
             var Id = $("#hdnId").val();
             var quantity = $("#txtQuantity").val();
@@ -159,39 +134,36 @@
                 isValid = false;
                 $("#errorPrice").text("Please enter price");
             }
-
             if (!isValid) {
                 return;
             }
             var postedData = {
-                productId: Id,
+                ProductPurchaseId: Id,
                 quantity: quantity,
                 price: price
             };
             $.ajax({
                 type: "POST",
-                url: '@Url.Action("ChangeProductData", "Product")',
+                url: '@Url.Action("ChangeProductPurchaseData", "ProductPurchase")',
                 data: postedData,
                 success: function (response) {
                     if (response.Success) {
                         toastr.success(response.Message);
-                        window.location.href = '@Url.Action("Products", "Product")';
+                        window.location.href = '@Url.Action("ProductPurchases", "ProductPurchase")';
                     } else {
                         toastr.error(response.Message);
                     }
                 },
                 error: function (error) {
                     toastr.error(error.Message);
-
                 }
-            })
+            });
         }
         function ClearControlsError() {
             $("#errorQuantity").text("");
             $("#errorPrice").text("");
         }
         function isNumber(evt) {
-
             if (evt.charCode == 45 || evt.charCode == 101) {
                 return false;
             } else {
