@@ -16,8 +16,8 @@
         }
 </style>
 @*<p>
-    <a href="@Url.Action("UpsertProductPurchase")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New ProductPurchase</a>
-</p>*@
+        <a href="@Url.Action("UpsertProductPurchase")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New ProductPurchase</a>
+    </p>*@
 <div class="card shadow-lg card-outline card-purple elevation-2">
     <div class="card-header">
         <h6 class="m-0 font-weight-bold text-primary">Product Purchase</h6>
@@ -45,11 +45,21 @@
                             <td>@Html.DisplayFor(modelItem => item.PurchasePrice)</td>
                             <td>@Html.DisplayFor(modelItem => item.Quantity) </td>
                             <td>@Html.DisplayFor(modelItem => item.AddedBy) </td>
-                            <td>@Html.DisplayFor(modelItem => item.AddedDate) </td>
+                            <td>
+                                @if (item.AddedDate.HasValue == true)
+                                {
+                                    @item.AddedDate.Value.ToString("dd-MM-yyyy hh:ss tt");
+                                }
+                            </td>
                             <td>@Html.DisplayFor(modelItem => item.UpdatedBy) </td>
-                            <td>@Html.DisplayFor(modelItem => item.UpdatedDate) </td>
+                            <td>
+                                @if (item.UpdatedDate.HasValue == true)
+                                {
+                                    @item.UpdatedDate.Value.ToString("dd-MM-yyyy hh:ss tt");
+                                }
+                            </td>
                             <td style="display:flex">
-                                <a onclick="OpenChangeProductPurchaseModal(@item.Id,@item.Quantity,@item.PurchasePrice, '@item.ProductName')" href="#" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
+                                <a onclick="OpenChangeProductPurchaseModal(@item.Id, @item.ProductId,@item.Quantity,@item.PurchasePrice, '@item.ProductName')" href="#" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
                                 @*<a href="@Url.Action("UpsertProductPurchase","ProductPurchase",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |*@
                                 <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
                             </td>
@@ -81,15 +91,31 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header card-header">
-                <h5 class="modal-title" id="exampleModalLabel">Product Purchase</h5>
+                <h5 class="modal-title" id="exampleModalLabel" style="display:block">Product Purchase</h5>
+                <span id="ProductPurchaseName" style="display:block;" class="small"></span>
             </div>
             <div class="modal-body card-body">
                 <form method="post" action="@Url.Action("ChangeProductPurchaseData","ProductPurchase")">
-                    <input type="hidden" name="id" id="hdnProdId" />
-                    <label id="ProductPurchaseName" style="display:block"></label>
-                    <input type="number" class="form-control mr-1" name="quantity" id="txtQuantity" min="1" step="0" required style="width:45%;float:left" onkeypress="return isNumber(event)" placeholder="Enter Quantity" />
-                    <input type="number" class="form-control" name="price" id="txtPrice" min="0" required style="width:45%;" onkeypress="return isNumber(event)" placeholder="Enter Price" />
-                    <div class="mt-2">
+                    <input type="hidden" name="productPurchaseId" id="hdnProductPurchase" />
+                    <input type="hidden" name="productId" id="hdnProdId" />
+                    <div class="form-group">
+                        <label class="">Quantity</label>
+                        <input type="number" data-val="true" data-val-required="Quantity is required" class="form-control mr-1"
+                               name="quantity" id="txtQuantity" min="1" required onkeypress="return isNumber(event,true)"
+                               placeholder="Enter Quantity" 
+                               aria-describedby="quantity-error" aria-invalid="false" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="quantity" data-valmsg-replace="true"></span>
+
+                    </div>
+                    <div class="form-group">
+                        <label class="">Purchase Price</label>
+                        <input type="number" class="form-control" name="price" id="txtPrice" min="0.01" step="0.01" data-val="true" data-val-range-min="0.01"
+                               data-val-range="Purchase Price can't be Zero" required onkeypress="return isNumber(event)"
+                               placeholder="Enter Price" data-val-required="Purchase Price is required"
+                               aria-describedby="price-error" aria-invalid="false" />
+                        <span class="text-danger field-validation-valid" data-valmsg-for="price" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
                         <button type="submit" class="btn btn-primary">Save</button>
                         <button type="button" class="btn btn-secondary " data-dismiss="modal">Close</button>
                     </div>
@@ -110,8 +136,9 @@
             $("#ProductPurchaseDeleteModal").modal("show");
             $("#hdnDelId").val(id);
         }
-        function OpenChangeProductPurchaseModal(id, quantity, price,pname) {
-            $("#hdnProdId").val(id);
+        function OpenChangeProductPurchaseModal(id,ProductId, quantity, price,pname) {
+            $("#hdnProductPurchase").val(id);
+            $("#hdnProdId").val(ProductId);
             $("#txtQuantity").val(quantity);
             $("#txtPrice").val(price);
             $("#ProductPurchaseName").text(pname);
@@ -119,13 +146,18 @@
         }
         function SaveProductPurchaseChangeData() {
             ClearControlsError();
-            var Id = $("#hdnId").val();
+            var ProductPurchaseId = $("#hdnProductPurchase").val();
+            var ProductId = $("#hdnProdId").val();
             var quantity = $("#txtQuantity").val();
             var price = $("#txtPrice").val();
             var isValid = true;
-            if (!Id) {
+            if (!ProductPurchaseId) {
                 isValid = false;
             }
+            if (!ProductId) {
+                isValid = false;
+            }
+
             if (!quantity || Number(quantity)<  0) {
                 isValid = false;
                 $("#errorQuantity").text("Please enter quantity");
@@ -138,7 +170,8 @@
                 return;
             }
             var postedData = {
-                ProductPurchaseId: Id,
+                productPurchaseId: ProductPurchaseId,
+                productId: ProductId,
                 quantity: quantity,
                 price: price
             };
@@ -163,12 +196,21 @@
             $("#errorQuantity").text("");
             $("#errorPrice").text("");
         }
-        function isNumber(evt) {
-            if (evt.charCode == 45 || evt.charCode == 101) {
-                return false;
+        function isNumber(evt, allowIntOnly) {
+            if (allowIntOnly) {
+                if (evt.charCode == 45 || evt.charCode == 46 || evt.charCode == 101) {
+                    return false;
+                } else {
+                    return true;
+                }
             } else {
-                return true;
+                if (evt.charCode == 45 || evt.charCode == 101) {
+                    return false;
+                } else {
+                    return true;
+                }
             }
+           
         }
     </script>
 }

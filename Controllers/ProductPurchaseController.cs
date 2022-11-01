@@ -1,4 +1,5 @@
-﻿using AKStore.Services;
+﻿using AKStore.Models;
+using AKStore.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,6 +25,21 @@ namespace AKStore.Controllers
         {
             var productPurchases = _ProductPurchaseService.GetProductPurchase(Id);
             return View(productPurchases);
+        }
+
+       
+        [HttpPost]
+        public ActionResult ChangeProductPurchaseData(int productPurchaseId, int productId, int quantity, decimal price)
+        {
+            try
+            {
+                _ProductPurchaseService.ChangeProductPurchaseData(productPurchaseId, productId, quantity, price);
+                return RedirectToAction(nameof(ProductPurchase));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Data = new ProductPurchaseModel(), Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
         }
 
     }

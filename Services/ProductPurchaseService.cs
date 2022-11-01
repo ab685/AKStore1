@@ -17,5 +17,11 @@ namespace AKStore.Services
         {
             return _ProductPurchaseRepository.GetProductPurchase(ProductId);
         }
+        public void ChangeProductPurchaseData(int id, int productId, int quantity, decimal price)
+        {
+            _ProductPurchaseRepository.ChangeProductPurchaseData(id, productId, quantity, price);
+        }
+
+
     }
 }

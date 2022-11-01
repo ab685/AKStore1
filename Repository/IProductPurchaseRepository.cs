@@ -7,5 +7,6 @@ namespace AKStore.Repository
     public interface IProductPurchaseRepository : IBaseRepository<ProductPurchase>
     {
         List<ProductPurchaseModel> GetProductPurchase(int? ProductId);
+        void ChangeProductPurchaseData(int id, int productId, int quantity, decimal price);
     }
 }
