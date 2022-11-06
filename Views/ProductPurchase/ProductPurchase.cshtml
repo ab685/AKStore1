@@ -48,14 +48,14 @@
                             <td>
                                 @if (item.AddedDate.HasValue == true)
                                 {
-                                    @item.AddedDate.Value.ToString("dd-MM-yyyy hh:ss tt");
+                                    @item.AddedDate.Value.ToString("dd-MM-yyyy hh:mm tt");
                                 }
                             </td>
                             <td>@Html.DisplayFor(modelItem => item.UpdatedBy) </td>
                             <td>
                                 @if (item.UpdatedDate.HasValue == true)
                                 {
-                                    @item.UpdatedDate.Value.ToString("dd-MM-yyyy hh:ss tt");
+                                    @item.UpdatedDate.Value.ToString("dd-MM-yyyy hh:mm tt");
                                 }
                             </td>
                             <td style="display:flex">

@@ -162,7 +162,7 @@ namespace AKStore.Repository
 
             p.Add("@OrderStatusId", orderStatusId);
             p.Add("@UpdatedByUserId", Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]));
-            p.Add("@ProductIds", dt.AsTableValuedParameter("IntList"));
+            p.Add("@OrderIds", dt.AsTableValuedParameter("IntList"));
             var res = 0;
             using (var con = CommonOperations.GetConnection())
             {
