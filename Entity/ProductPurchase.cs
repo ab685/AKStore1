@@ -25,5 +25,4 @@ namespace AKStore.Entity
         public DateTime? UpdatedDate { get; set; }
 
         #endregion Instance Properties
-    }
-}
+    }  }
