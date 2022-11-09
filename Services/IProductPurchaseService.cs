@@ -6,5 +6,6 @@ namespace AKStore.Services
     {
         List<ProductPurchaseModel> GetProductPurchase(int? ProductId);
         void ChangeProductPurchaseData(int id, int productId, int quantity, decimal price);
+        void DeleteProductPurchase(int id);
     }
 }

@@ -21,6 +21,10 @@ namespace AKStore.Services
         {
             _ProductPurchaseRepository.ChangeProductPurchaseData(id, productId, quantity, price);
         }
+        public  void DeleteProductPurchase(int id)
+        {
+            _ProductPurchaseRepository.DeleteProductPurchase(id);
+        }
 
 
     }

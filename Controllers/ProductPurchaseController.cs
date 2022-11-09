@@ -26,8 +26,13 @@ namespace AKStore.Controllers
             var productPurchases = _ProductPurchaseService.GetProductPurchase(Id);
             return View(productPurchases);
         }
+        public ActionResult DeleteProductPurchase(int Id)
+        {
+            _ProductPurchaseService.DeleteProductPurchase(Id);
+            return RedirectToAction(nameof(ProductPurchase));
+        }
 
-       
+
         [HttpPost]
         public ActionResult ChangeProductPurchaseData(int productPurchaseId, int productId, int quantity, decimal price)
         {
