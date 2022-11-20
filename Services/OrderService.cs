@@ -167,6 +167,10 @@ namespace AKStore.Services
             }
             return new Tuple<bool, string>(success, message);
         }
+        public List<PurchaseSellReportModel> PurchaseSellReport(int customerId, int productId, DateTime? fromDate, DateTime? toDate)
+        {
+            return _orderRepository.PurchaseSellReport(customerId, productId, fromDate, toDate);
+        }
 
     }
 }

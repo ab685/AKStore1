@@ -156,7 +156,7 @@ namespace AKStore.Controllers
             distributorOrderModel.DistributorId = DistributorId;
             var distributorOrders = _orderService.GetOrderDataForDistributor(distributorOrderModel);
             HtmlToPdf converter = new HtmlToPdf();
-            var htmlPage = RenderRazorViewToString("~/Views/Orders/PrintOrders.cshtml", distributorOrders);
+            var htmlPage = RenderRazorViewToString("~/Views/Orders/PrintOrders.cshtml", distributorOrders.OrderBy(x => x.CustomerId));
             htmlPage = htmlPage.Replace("/Documents/images/product/", Server.MapPath("~/Documents/images/product/")); htmlPage.Replace("/Documents/images/product/", Server.MapPath("~/Documents/images/product/"));
             converter.Options.ExternalLinksEnabled = true;
             converter.Options.JavaScriptEnabled = true;

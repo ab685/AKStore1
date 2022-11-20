@@ -1,0 +1,244 @@
+﻿
+@{
+    ViewBag.Title = "Profit Report";
+}
+<div class="card shadow-lg card-outline card-purple elevation-2">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Profit Report</h6>
+    </div>
+    <div class="card-body">
+        <div class="form-horizontal">
+            <div class="row">
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display:block">From Date:</label>
+                        <input type="text" id="frmDate" class="form-control datepicker" style="max-width:80%;display:inline;margin-right:3px;background-color:white" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display:block">To Date:</label>
+                        <input type="text" id="toDate" name="toDate" class="form-control datepicker" style="max-width: 80%; display: inline; margin-right: 3px; background-color: white" readonly />
+                    </div>
+                </div>
+                <div class="col-12 col-md-3">
+                    <div class="form-group">
+                        <label class="col-form-label" style="display:block">@Html.DisplayName("Name"): </label>
+                        <input type="number" id="txtCustomerNo" onchange="ChangeCustomerSelection()" class="form-control" style="width:20%;display:inline" />
+                        <select id="drpCustomer" style="width:75%;float:right;display:inline" class="form-control" onchange="GetPurchaseSellReportData()"></select>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <br />
+                <div class="col-12">
+                    <button class="btn btn-sm btn-outline-dark" onclick="PrintOrders()">Print Orders</button>
+                   
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="table-responsive" id="divPurchaseSellReport">
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            var today = new Date();
+            var previoisMonthDate = new Date(new Date().getFullYear(), new Date().getMonth() - 1, new Date().getDate());
+            $("#frmDate").datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'mm/dd/yy'
+            })
+            $("#frmDate").datepicker("setDate", previoisMonthDate)
+                .on("change", function () {
+                      GetPurchaseSellReportData();
+                });
+            $("#toDate").datepicker({
+                showOtherMonths: true,
+                selectOtherMonths: true,
+                changeMonth: true,
+                changeYear: true,
+                dateFormat: 'mm/dd/yy'
+            })
+            $("#toDate").datepicker("setDate", today)
+              .on("change", function () {
+                      GetPurchaseSellReportData();
+              });
+            GetCustomerData();
+        });
+        function GetPurchaseSellReportData() {
+            var postData = {
+                fromDate:ConvertDateToDDMMYY($("#frmDate").val()),
+                toDate: ConvertDateToDDMMYY($("#toDate").val()),
+                customerId: $("#drpCustomer").val(),
+                productId:0
+           };
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetPurchaseSellReportData", "Reports")',
+                data: postData,
+                success: function (response) {
+                    if (response.Success) {
+                        var strHtml =`<table class="table table-bordered" id="tblPurchaseSellReport">
+                                    <thead class="success">
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Customer</th>
+                                            <th>QuantityDeliverd</th>
+                                            <th>TotalPurchasedPrice</th>
+                                            <th>TotalSellPrice</th>
+                                            <th>Profit</th>
+                                        </tr>
+                                    </thead>`;
+                        response.Data.forEach(function (item) {
+                            strHtml += `<tr>
+                                    <td>${item.ProductName}</td>
+                                    <td>${item.Customer}</td>
+                                    <td>${item.QuantityDeliverd}</td>
+                                    <td>${item.TotalPurchasedPrice}</td>
+                                    <td>${item.TotalSellPrice}</td>
+                                    <td>${item.Profit}</td>
+                               </tr>`;
+                        });
+                        strHtml += `</table>`;
+                        $("#divPurchaseSellReport").html(strHtml);
+                        $('#tblPurchaseSellReport').addClass("table-striped");
+                        $('#tblPurchaseSellReport').DataTable({
+                            "pageLength": 50,
+                            order: [[1, 'asc']],
+                        });
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+        function GetCustomerData() {
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("GetCustomers", "Transaction")',
+                success: function (response) {
+                    if (response.Success) {
+                        var htmlCustomers = "<option value=" + 0 + ">--Select--</option>";
+                        response.customers.filter(function (item) {
+                            htmlCustomers += GenrateDropDown(item.Id, (item.SerialNo + " " + item.FirstName + " " + (item.LastName == null ? "" : item.LastName)));
+                        });
+                        $("#drpCustomer").html(htmlCustomers);
+                        GetPurchaseSellReportData()
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            })
+        }
+        function GenrateDropDown(value, text) {
+            return "<option value=" + value + ">" + text + "</option>";
+        }
+        function ChangeCustomerSelection() {
+            var customerNo = $("#txtCustomerNo").val();
+            if (!isNaN(customerNo) && customerNo > 0) {
+                $.each($("#drpCustomer").children(), function (index, item) {
+                    var optionTextArr = item.innerText.split(' ');
+                    if (!isNaN(optionTextArr[0])) {
+                        if (optionTextArr[0] == customerNo) {
+                            $("#drpCustomer").val(item.value);
+                            GetPurchaseSellReportData();
+                            return false;
+                        } else {
+                            $("#drpCustomer").val(0);
+                           // GetPurchaseSellReportData();
+                        }
+                    }
+                });
+            } else {
+                $("#drpCustomer").val(0);
+                GetPurchaseSellReportData();
+            }
+        }
+        function downloadFile(blob, fileName) {
+            const link = document.createElement('a');
+            // create a blobURI pointing to our Blob
+            link.href = URL.createObjectURL(blob);
+            link.download = fileName;
+            // some browser needs the anchor to be in the doc
+            document.body.append(link);
+            link.click();
+            link.remove();
+            // in case the Blob uses a lot of memory
+            setTimeout(() => URL.revokeObjectURL(link.href), 5000);
+        };
+        function PrintOrders() {
+           
+            var postData = {
+                fromDate: ConvertDateToDDMMYY($("#frmDate").val()),
+                toDate: ConvertDateToDDMMYY($("#toDate").val()),
+                customerId: $("#drpCustomer").val(),
+                productId: 0
+            };
+            $.ajax({
+                type: "GET",
+                url: '@Url.Action("PrintProfitReport", "Reports")',
+                data: postData,
+                xhr: function () {
+                    var xhr = new XMLHttpRequest();
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState == 2) {
+                            if (xhr.status == 200) {
+                                xhr.responseType = "blob";
+                            } else {
+                                xhr.responseType = "text";
+                            }
+                        }
+                    };
+                    return xhr;
+                },
+                success: function (response) {
+                    if (response.Success) {
+
+                        BindOrdersGrid(response);
+                    }
+                    else {
+                        toastr.error(response.Message);
+                    }
+                },
+                success: function (response) {
+                    let date_ob = new Date();
+
+                    // adjust 0 before single digit date
+                    let date = ("0" + date_ob.getDate()).slice(-2);
+
+                    // current month
+                    let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+
+                    // current year
+                    let year = date_ob.getFullYear();
+
+                    // current hours
+                    let hours = date_ob.getHours();
+
+                    // current minutes
+                    let minutes = date_ob.getMinutes();
+
+                    // current seconds
+                    let seconds = date_ob.getSeconds();
+
+                    // prints date & time in YYYY-MM-DD HH:MM:SS format
+                    date_format_str = date_ob.toLocaleDateString('en-UK', { hour: 'numeric', minute: 'numeric', hour12: true, second: 'numeric' })
+                    //date_format_str= year + "-" + month + "-" + date + " " + hours + ":" + minutes + ":" + seconds;
+                    downloadFile(new Blob([response], { type: 'application/text' }), "ProfitReport" + date_format_str.replace(',', '_') + ".pdf");
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+    </script>
+}

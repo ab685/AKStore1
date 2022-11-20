@@ -162,6 +162,7 @@
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\ProductController.cs" />
     <Compile Include="Controllers\ProductPurchaseController.cs" />
+    <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\StocksController.cs" />
     <Compile Include="Controllers\TransactionController.cs" />
     <Compile Include="Entity\Admin.cs" />
@@ -206,6 +207,7 @@
     <Compile Include="Models\OrderModels.cs" />
     <Compile Include="Models\ProductModel.cs" />
     <Compile Include="Models\ProductPurchaseModel.cs" />
+    <Compile Include="Models\PurchaseSellReportModel.cs" />
     <Compile Include="Models\RolesModel.cs" />
     <Compile Include="Models\RouteModel.cs" />
     <Compile Include="Models\SiteKeys.cs" />
@@ -2162,6 +2164,8 @@
     <Content Include="Views\Orders\PrintOrders.cshtml" />
     <Content Include="Views\ProductPurchase\ProductPurchase.cshtml" />
     <Content Include="Views\Stocks\Stocks.cshtml" />
+    <Content Include="Views\Reports\PurchaseSellReport.cshtml" />
+    <Content Include="Views\Reports\PrintProfitReport.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

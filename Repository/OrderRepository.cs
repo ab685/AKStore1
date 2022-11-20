@@ -258,5 +258,20 @@ namespace AKStore.Repository
             billsViewModel.BillsItemModels = billsItemModels;
             return billsViewModel;
         }
+        public List<PurchaseSellReportModel> PurchaseSellReport(int customerId, int productId, DateTime? fromDate, DateTime? toDate)
+        {
+           
+            var p = new DynamicParameters();
+            p.Add("@CustomerId", customerId);
+            p.Add("@ProductId", productId);
+            p.Add("@fromDate", fromDate);
+            p.Add("@toDate", toDate);
+            List<PurchaseSellReportModel> purchaseSellReport = new List<PurchaseSellReportModel>();
+            using (var con = CommonOperations.GetConnection())
+            {
+                purchaseSellReport = con.Query<PurchaseSellReportModel>("GetProfitLossReport", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
+            }
+            return purchaseSellReport;
+        }
     }
 }

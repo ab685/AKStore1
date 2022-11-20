@@ -1,0 +1,67 @@
+﻿@model IEnumerable<AKStore.Models.PurchaseSellReportModel>
+@using System.Globalization;
+@{
+    ViewBag.Title = "Bills";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<br />
+<div class="table-responsive small">
+    <table class="table table-bordered small table-striped">
+        <thead class="bg-secondary text-white">
+            <tr>
+                <th>
+                    @Html.DisplayName("Product Name")
+                </th>
+                <th>
+                    @Html.DisplayName("Customer")
+                </th>
+                <th>
+                    @Html.DisplayName("QuantityDeliverd")
+                </th>
+                <th>
+                    @Html.DisplayName("TotalPurchasedPrice")
+                </th>
+                <th>
+                    @Html.DisplayName("TotalSellPrice")
+                </th>
+                <th>
+                    @Html.DisplayName("Profit")
+                </th>
+               
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                   
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Customer)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.QuantityDeliverd)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TotalPurchasedPrice)
+                    </td><td>
+                        @Html.DisplayFor(modelItem => item.TotalSellPrice)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Profit)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section scripts{
+    <script>
+        document.querySelector("#content > nav").style.display = "none"
+        document.querySelector("#accordionSidebar").style.display = "none"
+    </script>
+
+}

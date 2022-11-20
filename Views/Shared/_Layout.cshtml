@@ -60,9 +60,27 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("ProductPurchase","ProductPurchase")">
+                        <i class="fas fa-cart-plus"></i>
+                        <span>@Html.DisplayName("Purchase")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("Stocks","Stocks")">
+                        <i class="fas fa-list"></i>
+                        <span>@Html.DisplayName("Stocks")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link collapsed" href="@Url.Action("DistributorOrders","Orders")">
-                        <i class="fas fa-cart-arrow-down"></i>
+                        <i class="fas fa-arrow-circle-up"></i>
                         <span>@Html.DisplayName("Orders")</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="@Url.Action("PurchaseSellReport","Reports")">
+                        <i class="fas fa-file-excel"></i>
+                        <span>@Html.DisplayName("Profit Report")</span>
                     </a>
                 </li>
                 <li class="nav-item">
