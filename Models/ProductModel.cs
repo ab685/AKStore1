@@ -22,11 +22,7 @@ namespace AKStore.Models
         [Required(AllowEmptyStrings =false,ErrorMessage ="Price is required")]
         [Range(0.000001,10000000,ErrorMessage ="Please enter valid price")]
         public decimal SellPrice { get; set; } 
-
         
-      
-        [Required(AllowEmptyStrings = false, ErrorMessage="Please enter quantity")]
-        public int? Quantity { get; set; }
         public int? OrderedQuantity { get; set; }
 
         [MaxLength(100,ErrorMessage = "Description length should be maximum up to 100 characters.")]
@@ -39,6 +35,13 @@ namespace AKStore.Models
         public bool HasDiscount { get; set; }
 
         public SelectList Company { get; set; }
+
+        [Required]
+        public int DiscountType { get; set; } = 1;
+        [Required]
+        public decimal DiscountInNumbers { get; set; } = 0;
+        [Required]
+        public int MinQuantityForDiscount { get; set; } = 0;
 
     }
 }

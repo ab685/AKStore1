@@ -17,7 +17,7 @@
             box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
         }
 </style>
-@if (Convert.ToInt32(Session["RoleId"]) == 2)
+@if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3)
 {
     <p>
         <a href="@Url.Action("UpsertProduct")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Product</a>
@@ -34,6 +34,7 @@
             <table id="tblProduct" class="table table-bordered">
                 <thead class="success">
                     <tr>
+                        <th></th>
                         <th>@Html.DisplayName("Product")</th>
                         <th>@Html.DisplayName("Company")</th>
                         <th>@Html.DisplayName("Category")</th>
@@ -44,34 +45,31 @@
                         <th></th>
 
 
+
+
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var item in Model)
                     {
-                        <tr>
-                            <td><a class="text-decoration-none" href="@Url.Action("ProductPurchase","ProductPurchase",new { Id= item.Id})">@Html.DisplayFor(modelItem => item.Name)</a> </td>
-                            <td>@Html.DisplayFor(modelItem => item.CompanyName) </td>
-                            <td>@Html.DisplayFor(modelItem => item.CategoryName) </td>
-                            <td>@Html.DisplayFor(modelItem => item.SellPrice) </td>
-                            @*<td>@Html.DisplayFor(modelItem => item.OrderedQuantity) </td>*@
-                            <td style="width:2%"><img class="thumbnail" loading="lazy" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
-                            @if (Convert.ToInt32(Session["RoleId"]) == 2)
-                            {
-                                <td style="display:flex">
-                                    <a href="@Url.Action("UpsertProduct","Product",new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |
-                                    <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton"><i class="fas fa-trash"></i></a>
-                                </td>
-                            }
-                            @if (Convert.ToInt32(Session["RoleId"]) == 3)
-                            {
-                                <td style="display:flex">
-                                    <a onclick="OpenChangeProductModal(@item.Id,@item.Quantity,@item.SellPrice, '@item.Name')" href="#" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a>
-                                </td>
-                            }
-
-
-                        </tr>
+                    <tr>
+                        <td style="display:flex">
+                            <a onclick="OpenChangeProductModal(@item.Id, '@item.Name')" href="#" class="editbutton btn btn-outline-primary" title="Add Product Purchase"><i class="fas fa-cart-plus"></i></a>
+                        </td>
+                        <td><a class="text-decoration-none" href="@Url.Action("ProductPurchase","ProductPurchase",new { Id= item.Id})">@Html.DisplayFor(modelItem => item.Name)</a> </td>
+                        <td>@Html.DisplayFor(modelItem => item.CompanyName) </td>
+                        <td>@Html.DisplayFor(modelItem => item.CategoryName) </td>
+                        <td>@Html.DisplayFor(modelItem => item.SellPrice) </td>
+                        @*<td>@Html.DisplayFor(modelItem => item.OrderedQuantity) </td>*@
+                        <td style="width:2%"><img class="thumbnail" loading="lazy" src="@Url.Content("~/Documents/images/product/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
+                        @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3)
+                        {
+                            <td style="display:flex">
+                                <a href="@Url.Action("UpsertProduct","Product",new { id = item.Id })" class="editbutton btn btn-outline-primary" title="Edit Product"><i class="fas fa-pen-alt"></i></a> |
+                                <a onclick="OpenDeleteModal(@item.Id)" href="#" class="btn btn-outline-primary deletebutton" title="Delete Product"><i class="fas fa-trash"></i></a>
+                            </td>
+                        }
+                    </tr>
                     }
                 </tbody>
             </table>
@@ -146,10 +144,10 @@
             $("#ProductDeleteModal").modal("show");
             $("#hdnDelId").val(id);
         }
-        function OpenChangeProductModal(id, quantity, price,pname) {
+        function OpenChangeProductModal(id,pname) {
             $("#hdnProdId").val(id);
-            $("#txtQuantity").val(quantity);
-            $("#txtPrice").val(price);
+            $("#txtQuantity").val("");
+            $("#txtPrice").val("");
             $("#productName").text(pname);
             $("#ChangeProductModal").modal("show");
         }

@@ -23,7 +23,10 @@ namespace AKStore.Repository
             p.Add("@Name", productMaster.Name);
             p.Add("@Description", productMaster.Description);
             p.Add("@SellPrice", productMaster.SellPrice);
-            p.Add("@Quantity", productMaster.Quantity);
+            p.Add("@DiscountInNumbers", productMaster.DiscountInNumbers);
+            p.Add("@MinQuantityForDiscount", productMaster.MinQuantityForDiscount);
+            p.Add("@DiscountType", productMaster.DiscountType);
+         
             if (!string.IsNullOrEmpty(productMaster.FilePath))
             {
                 p.Add("@FilePath", productMaster.FilePath);

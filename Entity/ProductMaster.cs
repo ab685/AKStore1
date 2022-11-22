@@ -16,7 +16,9 @@ namespace AKStore.Entity
         public string Name { get; set; }
         public string Description { get; set; }
         public decimal SellPrice { get; set; }
-        public int? Quantity { get; set; }
+        public int DiscountType { get; set; }
+        public decimal DiscountInNumbers { get; set; }
+        public int MinQuantityForDiscount { get; set; }
         [NotMapped]
         public int? OrderedQuantity { get; set; }
         public string FilePath { get; set; }
@@ -26,5 +28,4 @@ namespace AKStore.Entity
         public int? UpdatedByUserId { get; set; }
         public bool? HasDiscount { get; set; }
     }
-}      
-       
+}

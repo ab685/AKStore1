@@ -30,12 +30,32 @@ namespace AKStore.Services
         }
         public Tuple<bool, string> UpsertOrder(CustomerProductModel customerProductModel)
         {
+            var product = _productRepository.GetProductById(customerProductModel.ProductId);
+            var sellprice= product.SellPrice;
+            try
+            {
+                if (product.HasDiscount == true && customerProductModel.Quantity >= product.MinQuantityForDiscount)
+                {
+                    if (product.DiscountType == 1)//In percentage
+                    {
+                        product.SellPrice = product.SellPrice - (product.SellPrice * product.DiscountInNumbers / 100);
+                    }
+                    else if (product.DiscountType == 2)
+                    {
+                        product.SellPrice = product.SellPrice - product.DiscountInNumbers;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                product.SellPrice = sellprice;
+            }
             OrderModels orderModels = new OrderModels();
             orderModels.CustomerId = customerProductModel.CustomerId;
             orderModels.ProductId = customerProductModel.ProductId;
             orderModels.Quantity = customerProductModel.Quantity;
             orderModels.OrderDate = customerProductModel.OrderDate;
-            orderModels.Price = _productRepository.GetProductById(customerProductModel.ProductId).SellPrice;
+            orderModels.Price = product.SellPrice;
             orderModels.Total = orderModels.Price * orderModels.Quantity;
             orderModels.DistributorId = _customerRepository.GetCustomerById(customerProductModel.CustomerId).DistributorId;
             orderModels.OrderStatusId = Convert.ToInt32(OrderStatus.Odered);

@@ -57,7 +57,7 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpGet]
         public ActionResult UpsertProduct(int? id)
         {
@@ -81,7 +81,7 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpPost]
         public ActionResult UpsertProduct(ProductModel productModel)
         {
@@ -138,7 +138,7 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpPost]
         public ActionResult DeleteProduct(int id)
         {
