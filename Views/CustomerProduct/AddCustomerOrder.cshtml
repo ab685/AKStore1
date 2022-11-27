@@ -1,0 +1,259 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@using AKStore.Models;
+@model IPagedList<AKStore.Models.ProductModel>
+
+@{
+    <link href="~/Content/PagedList.css" rel="stylesheet" />
+    ViewBag.Title = "Products";
+}
+<style>
+    .col.mb-5 {
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .pagination {
+        margin: 0;
+    }
+
+        .pagination > .active > a, .pagination > .active > span, .pagination > .active > a:hover, .pagination > .active > span:hover, .pagination > .active > a:focus, .pagination > .active > span:focus {
+            background: #6f42c1 linear-gradient(180deg,#855eca,#6f42c1) repeat-x !important;
+            color: #fff !important;
+            border-color: #6f42c1;
+        }
+
+        .pagination > li > a {
+            color: #855eca !important;
+            border-color: #6f42c1;
+        }
+
+            .pagination > li > a:hover {
+                color: #6f42c1 !important;
+                border-color: #855eca;
+            }
+
+    .btn-number {
+        background: #6f42c1 linear-gradient(180deg,#855eca,#6f42c1) repeat-x !important;
+        margin-left: 2px;
+        margin-right: 2px;
+    }
+
+    @@media only screen and (device-width: 768px) {
+        /* default iPad screens */
+        .qtytext {
+            margin-top: 0.4% !important;
+        }
+    }
+
+    @@media only screen and (min-width: 960px) {
+        .qtytext {
+            margin-top: 0% !important;
+        }
+    }
+
+    @@media only screen and (min-width: 1440px) {
+        .qtytext {
+            margin-top: 0% !important;
+        }
+    }
+
+    @@media only screen and (max-device-width: 480px) {
+        .qtytext {
+            margin-top: -0.8% !important;
+        }
+    }
+</style>
+<div class="card shadow-lg card-outline card-purple elevation-2">
+    <div class="card-header">
+        <h6 class="m-0 font-weight-bold text-primary">Orders</h6>
+    </div>
+    <div class="card-body">
+        <div class="p-2 bg-white">
+            <div class="mt-2">
+                <form class="" method="get">
+                    <div class="container">
+                        <div class="row">
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 mt-5 ">
+                                <input type="search" id="form1" name="search" value="@ViewBag.search" class="form-control" placeholder="Search" />
+                            </div>
+
+                            <div class="col-lg-3 col-md-3 col-sm-6 mt-3">
+                                <label for="category" style="display: block">Category</label>
+                                <select name="category" id="category" class="form-control">
+                                    <option value="">--Select--</option>
+                                    @foreach (var item in (List<CategoryModel>)ViewBag.CategoryModels)
+                                    {
+                                        var selectedcat = item.Name == ViewBag.category ? true : false;
+                                        <option value="@item.Name" selected="@selectedcat">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 mt-3">
+                                <label for="company" style="display:block">Company</label>
+                                <select name="company" id="company" class="form-control">
+                                    <option value="">--Select--</option>
+                                    @foreach (var item in (List<CompanyModel>)ViewBag.CompanyModels)
+                                    {
+                                        var selectedcom = item.Name == ViewBag.company ? true : false;
+                                        <option value="@item.Name" selected="@selectedcom">@item.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 mt-4 pt-3">
+                                <button type="submit" class="btn btn-grad">
+                                    Search
+                                </button>
+                            </div>
+                            <div class="col-12 mt-4">
+                                @Html.PagedListPager(Model, page => Url.Action("AddCustomerOrder", new { search = Request.QueryString["search"], company = Request.QueryString["company"], category = Request.QueryString["category"], customer = Request.QueryString["customer"], page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded, DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded })
+
+                            </div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-2 col-md-2 col-sm-6 mt-3">
+                                <label for="customer" style="display: block">Customer</label>
+                                <select name="customer" id="customer" class="form-control">
+                                    <option value="0">--Select--</option>
+                                    @foreach (var item in (List<CustomerModel>)ViewBag.CustomerModel)
+                                    {
+                                        var selectedcat = Convert.ToString(item.Id) == ViewBag.customer ? true : false;
+                                        var drpText = string.Empty; if (item.LastName == null) { drpText = item.SerialNo + " " + item.FirstName; } else { drpText = item.SerialNo + " " + item.FirstName + " " + item.LastName; }
+                                        <option value="@item.Id" selected="@selectedcat">@drpText </option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <section class="py-5">
+                <div class="container" style="padding:0 !important">
+                    <div class="row" style="padding:0!important">
+                        @foreach (var item in Model)
+                        {
+                            <div class="col-12 col-md-6 col-lg-4 p-3" data-category="@item.CategoryName" data-company="@item.CompanyName">
+                                <div class="card h-100 shadow-lg border">
+                                    <img class="card-img-top img-thumbnail" style="border:none" src="@Url.Content("~/Documents/images/product/" + (string.IsNullOrEmpty(item.FilePath) ? "NoImage.png" : item.FilePath))" alt="..." loading="lazy" />
+                                    <div class="card-body p-4">
+                                        <div class="text-center text-gray-700">
+                                            <spna class="font-weight-bold">@item.Name @item.CategoryName @item.CompanyName</spna>
+                                            <span class="font-weight-bolder d-block">&pound;@item.SellPrice</span>
+                                        </div>
+                                    </div>
+                                    <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
+                                        <div class="text-center">
+
+                                            @using (Html.BeginForm("AddOrder", "CustomerProduct", new { productId = item.Id }, FormMethod.Post, new { @Id = "frmOrder_" + item.Id }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <div class="input-group justify-content-center mb-3">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="quantity-left-minus btn btn-sm btn-primary btn-number" id="btnMinus_@item.Id" onclick="ChangeQuantity('@item.Id',false)" data-type="minus" data-field="">
+                                                            <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </span>
+                                                    <input type="hidden" name="productId" value="@item.Id" />
+                                                    <input type="number" id="txtQuantity_@item.Id" style="max-width: 80%; height: 26px; padding: 0px !important; margin-top: -1.6%" name="Quantity" class="form-control text-center qtytext" autocomplete="off" min="1" required onkeypress="return isNumber(event)">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" class="quantity-right-plus btn btn-sm btn-primary btn-number" id="btnPlus_@item.Id" onclick="ChangeQuantity('@item.Id',true)" data-type="plus" data-field="">
+                                                            <i class="fas fa-plus"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                                <button type="button" class="btn btn-block btn-grad " onclick="SaveCustomerOrderByDistributor('@item.Id')">
+                                                    <i class="fas fa-shopping-cart"></i>
+                                                    Buy now
+                                                </button>
+                                            }
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        }
+                        <div class="col-12 mt-4">
+                            @Html.PagedListPager(Model, page => Url.Action("AddCustomerOrder", new { search = Request.QueryString["search"], company = Request.QueryString["company"], category = Request.QueryString["category"], customer = Request.QueryString["customer"], page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayLinkToFirstPage = PagedListDisplayMode.IfNeeded, DisplayLinkToLastPage = PagedListDisplayMode.IfNeeded })
+
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function ChangeQuantity(id, flag) {
+            var quantity=Number( $(`#txtQuantity_${id}`).val());
+            if (flag) {
+                quantity += 1;
+            } else if(!flag){
+                if(quantity>0)
+                quantity -= 1;
+            }
+            $(`#txtQuantity_${id}`).val(quantity);
+        }
+
+        var message= '@ViewBag.Messeage';
+        var IsError='@ViewBag.IsError' =='True' ?true :false;
+        if (message && IsError) {
+            setTimeout(() => {
+                toastr.warning(message);
+            }, 1000);
+
+        } else if (message && !IsError) {
+            setTimeout(() => {
+                toastr.success(message);
+            }, 1000);
+        }
+        function isNumber(evt) {
+
+            if (evt.charCode == 45 ||evt.charCode==101) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function SaveCustomerOrderByDistributor(productId) {
+            var formCollection = getFormData($("#frmOrder_" + productId));
+            var customerId = $("#customer").val();
+            if (!customerId) {
+                toastr.error("Please Select Customer");
+                return;
+            } else if (customerId == 0) {
+                toastr.error("Please Select Customer");
+                return;
+            }
+
+            if (!formCollection["Quantity"]) {
+                toastr.error("Please Enter Quantity");
+                return;
+            }
+            formCollection["CustomerId"] = customerId;
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("AddOrderByDistributor", "CustomerProduct")',
+                data: formCollection,
+                success: function (response) {
+                    if (response.Success) {
+                        $("#txtQuantity_" + productId).val("");
+                        toastr.success(response.Message);
+                    }
+                    else {
+                        $("#txtQuantity_" + productId).val("");
+                        toastr.error(response.Message);
+                    }
+                },
+                error: function (error) {
+                    alert(error);
+                }
+            });
+        }
+    </script>
+}

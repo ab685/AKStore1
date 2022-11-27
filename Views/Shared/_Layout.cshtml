@@ -320,6 +320,14 @@
         function GenrateDropDown(value, text) {
             return "<option value=" + value + ">" + text + "</option>";
         }
+        function getFormData($form) {
+            var unindexed_array = $form.serializeArray();
+            var indexed_array = {};
+            $.map(unindexed_array, function (n, i) {
+                indexed_array[n['name']] = n['value'] == "on" ? true : n['value'] == "off" ? false : n['value'];
+            });
+            return indexed_array;
+        }
     </script>
 </body>
 </html>

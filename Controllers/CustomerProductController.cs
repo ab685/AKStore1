@@ -11,7 +11,7 @@ using System.Web.UI;
 
 namespace AKStore.Controllers
 {
-    [CustomAuthorize(Role.Customer)]
+   
     public class CustomerProductController : Controller
     {
         private readonly ICustomerService customerService;
@@ -28,6 +28,7 @@ namespace AKStore.Controllers
             distributorService = new DistributorService();
         }
         [HttpGet]
+        [CustomAuthorize(Role.Customer)]
         public ActionResult CustomerProduct(string search, string company, string category, int? page)
         {
             var customerId = Convert.ToInt32(Session["CustomerId"]);
@@ -42,7 +43,10 @@ namespace AKStore.Controllers
             ViewBag.IsError = TempData["IsError"];
             return View(products);
         }
+      
+
         [HttpPost]
+        [CustomAuthorize(Role.Customer)]
         [ValidateAntiForgeryToken]
         public ActionResult AddOrder(CustomerProductModel ordersModel)
         {
@@ -72,6 +76,8 @@ namespace AKStore.Controllers
         }
 
 
+
+        [CustomAuthorize(Role.Customer)]
         public ActionResult OrderedProducts()
         {
             var customerId = Convert.ToInt32(Session["CustomerId"]);
@@ -79,6 +85,7 @@ namespace AKStore.Controllers
             return View();
         }
 
+        [CustomAuthorize(Role.Customer)]
         public ActionResult OrderedProductsData(DistributorOrderModel distributorOrderModel)
         {
             try
@@ -101,6 +108,7 @@ namespace AKStore.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [CustomAuthorize(Role.Customer)]
         public ActionResult CancelOrderByCustmer(int id)
         {
             if (id <= 0)
@@ -115,6 +123,54 @@ namespace AKStore.Controllers
             var tuple = orderService.UpdateOrderStatusById(ids, orderStatusId);
             TempData["Messeage"] = tuple.Item2;
             return RedirectToAction(nameof(OrderedProducts));
+        }
+
+
+
+        [HttpGet]
+        [CustomAuthorize(Role.Distributor)]
+        public ActionResult AddCustomerOrder(string search, string company, string category, string customer, int? page)
+        {
+            var customerId = Convert.ToInt32(Session["CustomerId"]);
+            var products = customerService.GetProductDataByCustomerId(customerId, search, company, category, page);
+            var distributor = distributorService.FirstDistributor();
+            ViewBag.CompanyModels = companyService.GetCompanyByDistributorId(distributor.Id).OrderBy(x => x.Name).ToList();
+            ViewBag.CustomerModel = customerService.GetCustomerData(distributor.Id).OrderBy(x => x.SerialNo).ToList();
+            ViewBag.CategoryModels = categoryService.GetCategoryByDistributorId(distributor.Id).OrderBy(x => x.Name).ToList();
+            ViewBag.search = search;
+            ViewBag.company = company;
+            ViewBag.customer = customer;
+            ViewBag.category = category;
+            ViewBag.Messeage = TempData["Messeage"];
+            ViewBag.IsError = TempData["IsError"];
+            return View(products);
+        }
+
+        [HttpPost]
+        [CustomAuthorize(Role.Distributor)]
+        [ValidateAntiForgeryToken]
+        public ActionResult AddOrderByDistributor(CustomerProductModel ordersModel)
+        {
+            var url = Request.UrlReferrer.AbsoluteUri.ToString();
+            if (ordersModel.Quantity == null || ordersModel.Quantity <= 0)
+            {
+                ModelState.AddModelError("Quantity", "Please enter valid quantity");
+                return Json(new { Success = false, Message = "Please enter valid quantity" }, JsonRequestBehavior.AllowGet);
+            }
+            else if (!ModelState.IsValid)
+            {
+
+                return Json(new { Success = false, Message = "Please enter valid quantity" }, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+
+                ordersModel.OrderDate = DateTime.Now;
+                var tuple = orderService.UpsertOrder(ordersModel);
+
+                return Json(new { Success = true, Message = tuple.Item2 }, JsonRequestBehavior.AllowGet);
+            }
+
         }
     }
 }

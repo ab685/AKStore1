@@ -24,6 +24,7 @@ namespace AKStore.Repository
         List<BillsViewModel> BillsHistoryData(DateTime fromDate, DateTime toDate, int customerId = 0);
         BillsViewModel GetBillsHistoryPDF(int id);
         List<PurchaseSellReportModel> PurchaseSellReport(int customerId, int productId,DateTime? fromDate, DateTime? toDate);
+        void ChangeOrderData(int id, decimal price);
     }
 
 }

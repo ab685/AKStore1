@@ -181,6 +181,19 @@ namespace AKStore.Controllers
                 return sw.GetStringBuilder().ToString();
             }
         }
+        public ActionResult ChangeOrderData(int id , decimal price)
+        {
+            try
+            {
+                _orderService.ChangeOrderData(id, price);
+                return RedirectToAction(nameof(DistributorOrders));
+            }
+            catch (Exception ex)
+            {
+                return Json(new { Data = new ProductModel(), Success = false, Message = ex.Message }, JsonRequestBehavior.AllowGet);
+            }
+            
+        }
 
     }
 }

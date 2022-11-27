@@ -260,7 +260,7 @@ namespace AKStore.Repository
         }
         public List<PurchaseSellReportModel> PurchaseSellReport(int customerId, int productId, DateTime? fromDate, DateTime? toDate)
         {
-           
+
             var p = new DynamicParameters();
             p.Add("@CustomerId", customerId);
             p.Add("@ProductId", productId);
@@ -272,6 +272,15 @@ namespace AKStore.Repository
                 purchaseSellReport = con.Query<PurchaseSellReportModel>("GetProfitLossReport", p, commandType: System.Data.CommandType.StoredProcedure).ToList();
             }
             return purchaseSellReport;
+        }
+        public void ChangeOrderData(int id, decimal price)
+        {
+            var p = new DynamicParameters();
+            p.Add("@Id", id);
+            p.Add("@Price", price);
+            p.Add("@UserId", Convert.ToInt32(HttpContext.Current.Session["LoggedInUserId"]));
+
+            var msg = CommonOperations.Query<string>("ChangeOrderData", p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
         }
     }
 }

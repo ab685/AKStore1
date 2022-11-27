@@ -191,6 +191,10 @@ namespace AKStore.Services
         {
             return _orderRepository.PurchaseSellReport(customerId, productId, fromDate, toDate);
         }
+        public void ChangeOrderData(int id, decimal price)
+        {
+             _orderRepository.ChangeOrderData(id, price);
+        }
 
     }
 }
