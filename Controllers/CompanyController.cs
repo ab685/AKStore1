@@ -32,7 +32,7 @@ namespace AKStore.Controllers
             var CompanyModels = _companyService.GetCompanyByDistributorId(DistributorId);
             return View(CompanyModels);
         }
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpGet]
         public ActionResult UpsertCompany(int? id)
         {
@@ -57,7 +57,7 @@ namespace AKStore.Controllers
         }
 
         [HttpPost]
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         public ActionResult UpsertCompany(CompanyModel companyModel)
         {
             try
@@ -112,7 +112,7 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpPost]
         public ActionResult DeleteCompany(int id)
         {

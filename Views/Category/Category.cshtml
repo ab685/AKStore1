@@ -16,7 +16,7 @@
             box-shadow: 0 0 2px 1px rgba(0, 140, 186, 0.5);
         }
 </style>
-@if (Convert.ToInt32(Session["RoleId"]) == 2)
+@if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3)
 {
     <p>
         <a href="@Url.Action("UpsertCategory")" class="btn btn-grad"><i class="fas fa-plus-circle"></i> Add New Category</a>
@@ -35,7 +35,7 @@
                     <tr>
                         <th>@Html.DisplayName("Category")</th>
                         <th>@Html.DisplayName("Picture")</th>
-                        @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                        @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3)
                         {
                             <th></th>
                         }
@@ -47,7 +47,7 @@
                         <tr>
                             <td>@Html.DisplayFor(modelItem => item.Name)</td>
                             <td style="width:2%"><img class="thumbnail" src="@Url.Content("~/Documents/images/category/"+(string.IsNullOrEmpty(item.FilePath) ?"NoImage.png":item.FilePath))" /> </td>
-                            @if (Convert.ToInt32(Session["RoleId"]) == 2)
+                            @if (Convert.ToInt32(Session["RoleId"]) == 2 || Convert.ToInt32(Session["RoleId"]) == 3)
                             {
                                 <td style="display:flex">
                                     <a href="@Url.Action("UpsertCategory", "Category", new { id = item.Id })" class="editbutton btn btn-outline-primary"><i class="fas fa-pen-alt"></i></a> |

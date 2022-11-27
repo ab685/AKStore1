@@ -30,7 +30,7 @@ namespace AKStore.Controllers
             var categoryModels = _categoryService.GetCategoryByDistributorId(DistributorId);
             return View(categoryModels);
         }
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpGet]
         public ActionResult UpsertCategory(int? id)
         {
@@ -48,7 +48,7 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpPost]
         public ActionResult UpsertCategory(CategoryModel categoryModel)
         {
@@ -102,7 +102,7 @@ namespace AKStore.Controllers
             }
         }
 
-        [CustomAuthorize(Role.Admin)]
+        [CustomAuthorize(Role.Distributor, Role.Admin)]
         [HttpPost]
         public ActionResult DeleteCategory(int id)
         {
